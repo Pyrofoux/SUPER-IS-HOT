@@ -69,8 +69,8 @@ public class RuleHandler : MonoBehaviour
         //Time is always flowing, unless it is stopped
         //and it can only be stopped by killing it
         //getting existentialist vibes rn
-        triggers["Time is Stop"] = CheckEffectAndAssert("Time is Stop");
-        triggers["Time is Move"] = !CheckEffectAndAssert("Time is Stop");
+        triggers["Time is Stop"] = !CanXMove("Time");
+        triggers["Time is Move"] = CanXMove("Time");
         // && !babaWorld.isBabaMode();
 
         //Player movement
@@ -85,7 +85,7 @@ public class RuleHandler : MonoBehaviour
           }
         }
 
-        triggers["You is Stop"] = !triggers["You is Move"] || CheckEffectAndAssert("You is Dead");
+        triggers["You is Stop"] = !triggers["You is Move"];
 
         // OLDER Bullet shoot
         // GameObject[] playerBullets = GameObject.FindGameObjectsWithTag("PlayerBullet");
@@ -255,10 +255,20 @@ public class RuleHandler : MonoBehaviour
       //Default behaviour is to follow Time unless its explicitel stated otherwise
       //Plus, effects have priority other asserts
 
-      bool test1 = CheckEffectAndAssert("Time is Move") && !CheckEffectAndAssert(X+" is Stop");
-      bool test2 = CheckEffectAndAssert("Time is Stop") && CheckEffectAndAssert(X+" is Move");
-      bool test3 = CheckEffect(X+" is Move") && !CheckEffect(X+" is Stop");
-      return test1 || test2;
+      if(CheckEffect(X+" is Stop")) return false;
+      if(CheckEffect(X+" is Move")) return true;
+      if(CheckAssert(X+" is Stop")) return false;
+      if(CheckAssert(X+" is Move")) return true;
+
+      if(dead["Time"]) return false;
+      if(CheckEffect("Time is Stop")) return false;
+      if(CheckEffect("Time is Move")) return true;
+      if(CheckAssert("Time is Stop")) return false;
+      if(CheckAssert("Time is Move")) return true;
+
+      Debug.Log("Move check fails");
+      return false;
+
     }
 
 

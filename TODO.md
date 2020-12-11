@@ -34,15 +34,17 @@
 - [ ] Level selection screen
 
 - Implement all interactions as Assert, Trigger and Effect (EAT)
-  - [x]  You is Move
-  - [x] Time is Move
+  - [x] You   is Move
+  - [x] Time  is Move
   - [x] Shoot is Move
-  - [X] You is Stop
-  - [X] Time is Stop
+  - [X] You   is Stop
+  - [X] Time  is Stop
   - [ ] Shoot is Stop
-  - [ ] You is Dead
-  - [ ] Time is Dead
+  - [ ] You   is Dead
+  - [ ] Time  is Dead
   - [ ] Shoot is Dead
+  - [ ] You   is Shoot
+  - [ ] Shoot is You
   - [ ] Super is Hot
 
   - [ ] You is Shoot

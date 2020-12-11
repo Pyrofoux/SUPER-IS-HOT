@@ -8,14 +8,27 @@ using System.Linq;
 public class BabaWorld : MonoBehaviour
 {
 
+/*
+
+#Test conditionals
+@____________
+____Y=M<T=S__
+____Y=S<T=M__
+____T=M<s=M__
+_______T=S___
+_______s=M___
+
+
+*/
+
 [TextArea(8,12)]
 private string layout =@"
 @____________
-____T=M<Y=M__
-_____________
-____s=M______
+____Y=M<T=S__
+____Y=S<T=M__
+____T=M<s=M__
 _______T=S___
-Y=M__________
+_______s=M___
 ";
 
   public Text textPrefab;
