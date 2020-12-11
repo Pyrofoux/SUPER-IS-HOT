@@ -9,10 +9,11 @@ public class SuperHotScript : MonoBehaviour
 
     public static SuperHotScript instance;
 
+    public float pickupDistance = 5;
     public float charge;
     public bool canShoot = true;
     public bool action;
-    public bool babaMode = true;
+    public bool babaMode = false;
     public GameObject bullet;
     public Transform bulletSpawner;
 
@@ -33,16 +34,18 @@ public class SuperHotScript : MonoBehaviour
 
     private GameObject hud;
     private RuleHandler ruleHandler;
+    private BabaWorld babaWorld;
 
     // Time constants
     // Constants
     private float timeFastConst = 1f;
-    private float timeSlowConst = .00003f;
+    private float timeSlowConst = 0.00003f; //0.00003f
 
     private float lerpSlow = .05f;
     private float lerpFastest = .5f;
     private float lerpFast = .1f;
 
+    //
 
     private void Awake()
     {
@@ -54,8 +57,23 @@ public class SuperHotScript : MonoBehaviour
 
     void Start()
     {
+      //IMPORTANT: set framerate or the speed will be whatever the machine can handle
+      Application.targetFrameRate = 60;
+
+
       hud = (GameObject) GameObject.Find("HUD_Baba");
       ruleHandler = GetComponent<RuleHandler>();
+      babaWorld = GetComponent<BabaWorld>();
+
+      // Disable Canvas at first
+      // if(babaMode)
+      // {
+      //   hud.SetActive(true);
+      // }
+      // else
+      // {
+      //   hud.SetActive(false);
+      // }
     }
 
     // Update is called once per frame
@@ -70,6 +88,7 @@ public class SuperHotScript : MonoBehaviour
         if(babaMode)
         {
           hud.SetActive(true);
+          babaWorld.UpdateDisplay();
         }
         else
         {
@@ -109,9 +128,9 @@ public class SuperHotScript : MonoBehaviour
             }
         }
 
-        //Pick up
+        //Pick up weapons
         RaycastHit hit;
-        if(Physics.Raycast(Camera.main.transform.position, Camera.main.transform.forward, out hit,10, weaponLayer))
+        if(Physics.Raycast(Camera.main.transform.position, Camera.main.transform.forward, out hit, pickupDistance, weaponLayer))
         {
             if (Input.GetMouseButtonDown(0) && weapon == null)
             {
@@ -122,7 +141,7 @@ public class SuperHotScript : MonoBehaviour
 
 
         // Time move rules + check game not paused
-        bool timeIsMove = ruleHandler.CheckEffect("Time is Move") && !babaMode;
+        bool timeIsMove = !babaMode && ruleHandler.CanXMove("Time");
 
         float timeSpeed;
         float lerpTime;
@@ -156,7 +175,7 @@ public class SuperHotScript : MonoBehaviour
     IEnumerator ActionE(float time)
     {
         action = true;
-        yield return new WaitForSecondsRealtime(.06f);
+        yield return new WaitForSecondsRealtime(time);
         action = false;
     }
 

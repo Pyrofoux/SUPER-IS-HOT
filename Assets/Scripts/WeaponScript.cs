@@ -134,7 +134,7 @@ public class WeaponScript : MonoBehaviour
                 Instantiate(SuperHotScript.instance.hitParticlePrefab, transform.position, transform.rotation);
 
             bp.HidePartAndReplace();
-            bp.enemy.Ragdoll();
+            bp.enemy.Kill();
         }
 
     }

@@ -8,29 +8,40 @@ using System.Linq;
 public class BabaWorld : MonoBehaviour
 {
 
-  public Text textPrefab;
-
-  private string layout =@"
-____________
-_____@______
-____________
-___T=S<Y=M__
-____________
+[TextArea(8,12)]
+private string layout =@"
+@____________
+____T=M<Y=M__
+_____________
+____s=M______
+_______T=S___
+Y=M__________
 ";
 
-  private int width =0;
-  private int height =0;
-  private Tile[,] map;
+  public Text textPrefab;
 
 
-  private Vector3 hudCenter;
-  private Vector2Int baba = new Vector2Int(0,0);
+  //Display Settings
+  private string babaDisplayString = ":D";
+  float startpointX = -500;
+  float startpointY = 0;
+  float horizontalSpacing = 80;
+  float verticalSpacing = 50;
 
   //Config
   //The interval you want your player to be able to fire input.
   static float inputRate = 0.03f;
   static float inputRateStop = inputRate*0.0001f;
   static string[] wordList = new string[]{"Time","Move","You","Super","Hot","Shoot","Stop"};
+
+  private int width =0;
+  private int height =0;
+  private Tile[,] map;
+  private Vector2Int baba = new Vector2Int(0,0);
+  private int currentUnlockId = 1;
+
+  // HUD
+  private Vector3 hudCenter;
 
   // GameObjects
   private SuperHotScript superhotScript;
@@ -53,7 +64,7 @@ ____________
 
       //Convert ASCII to tiles
       char[] n = {'\n'};
-      string[] templines = layout.Split(n);
+      string[] templines = layout.Split(n); // remove last item here
       string[] lines = new string[templines.Length-2];
 
        // Don't count first and last line
@@ -80,7 +91,7 @@ ____________
         }
       }
       ParseRules();
-      Display();
+      UpdateDisplay();
     }
 
     // Update is called once per frame
@@ -102,7 +113,7 @@ ____________
         if(needReload)
         {
           ParseRules();
-          Display();
+          UpdateDisplay();
         }
       }
     }
@@ -301,6 +312,36 @@ ____________
   }
 
 // Interact
+
+
+  // Unlock variable tiles and replace them by a word
+  public void UnlockNext(string unlockedWord)
+  {
+    bool didReplace = false;
+    for(int y = 0; y < height; y++)
+    {
+      for(int x = 0; x < width; x++)
+      {
+        Tile tile = getTile(x,y);
+        if(tile.lockedId == currentUnlockId)
+        {
+          Debug.Log("Unlocked lock "+tile.lockedId.ToString()+ " for "+currentUnlockId.ToString());
+          Tile replacement = new Word(unlockedWord);
+          setTile(x,y, replacement);
+          didReplace = true;
+        }
+      }
+    }
+
+    if(didReplace)
+    {
+      ParseRules();
+      //UpdateDisplay();
+      currentUnlockId++;
+    }
+  }
+
+
    //The actual time the player will be able to fire input.
     private float nextInput;
     private Vector2Int checkInput()
@@ -315,7 +356,7 @@ ____________
 
 
         // When Time is slowed, so is the inputRate because of time speed mess
-        if(ruleHandler.CheckEffect("Time is Move"))
+        if(ruleHandler.CheckEffectAndAssert("Time is Move"))
         {
           nextInput = Time.time + inputRate;
         }
@@ -355,7 +396,7 @@ ____________
 
 
 //UI
-    public void Display()
+    public void UpdateDisplay()
     {
       Clear();
 
@@ -367,16 +408,17 @@ ____________
 
            if(x == baba.x && y == baba.y)
            {
-             charUI.text = "@";
+             charUI.text = babaDisplayString;
            }
            else
            {
              charUI.text = getTile(x,y).name;
            }
 
+
            charUI.transform.SetParent(hud.transform);
            //Positionning
-           charUI.transform.position = hudCenter + new Vector3(-200+x*40,y*-50,0);
+           charUI.transform.position = hudCenter + new Vector3(startpointX+x*horizontalSpacing,startpointY+y*-verticalSpacing,0);
          }
        }
 
@@ -411,6 +453,7 @@ public class Tile
   public bool empty;
   public bool statik;
   public string txt = "";
+  public int lockedId = -1;
 
   public Tile(string name, bool empty, bool statik)
   {
@@ -428,16 +471,19 @@ public class Tile
     if(ascii == '_') return new Empty();
     if(ascii == 'o') return new Box();
     if(ascii == '@') return new Spawn();
-    if(ascii == '=') return new Txt(ascii, "is");
-    if(ascii == '<') return new Txt(ascii, "when");
-    if(ascii == 'T') return new Txt(ascii, "Time");
-    if(ascii == 'M') return new Txt(ascii, "Move");
-    if(ascii == 'Y') return new Txt(ascii, "You");
-    if(ascii == 's') return new Txt(ascii, "Shoot");
-    if(ascii == 'S') return new Txt(ascii, "Stop");
-    if(ascii == '$') return new Txt(ascii, "Super");
-    if(ascii == 'H') return new Txt(ascii, "Hot");
+    if(ascii == '=') return new Word("is");
+    if(ascii == '<') return new Word("when");
+    if(ascii == 'T') return new Word("Time");
+    if(ascii == 'M') return new Word("Move");
+    if(ascii == 'Y') return new Word("You");
+    if(ascii == 'S') return new Word("Stop");
+    if(ascii == 's') return new Word("Shoot");
+    if(ascii == '$') return new Word("Super");
+    if(ascii == 'H') return new Word("Hot");
+    if(ascii == 'D') return new Word("Dead");
+    if(char.IsDigit(ascii)) return new Locked((int)char.GetNumericValue(ascii));
 
+    // TODO: rechange to "*"
     return new Tile("*",true,true);
   }
 
@@ -467,11 +513,25 @@ public class Box : Tile
   public Box():base("o",false,false){}
 }
 
-public class Txt : Box
+// Text word
+public class Word : Box
 {
-  public Txt(char ascii, string txt):base()
+  public Word(string txt):base()
   {
-    this.name = ascii.ToString();
+    // this.name = ascii.ToString();
+    this.name = txt.ToUpper();
     this.txt = txt;
+  }
+}
+
+// Locked variable
+public class Locked : Box
+{
+  public Locked(int id):base()
+  {
+    // this.name = ascii.ToString();
+    this.name = "["+id.ToString()+"]";
+    this.txt = "["+id.ToString()+"]";
+    this.lockedId = id;
   }
 }

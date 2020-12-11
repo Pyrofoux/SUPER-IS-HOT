@@ -9,6 +9,7 @@ public class RuleHandler : MonoBehaviour
     public Dictionary<string,Dictionary<string,bool>> implies;
     public Dictionary<string,bool> triggers;
     public Dictionary<string,bool> effects;
+    public Dictionary<string,bool> dead;
     private BabaWorld babaWorld;
 
     // Start is called before the first frame update
@@ -40,7 +41,12 @@ public class RuleHandler : MonoBehaviour
        // effects["You is Move"] = true;
        // effects["Shoot is You"] = false;
 
-       //Parse();
+       // Stores things that can be killed only once
+       dead = new Dictionary<string, bool>();
+       dead["Time"] = false;
+       dead["You"] = false;
+       //dead["Shoot"] = false;
+
     }
 
     // Update is called once per frame
@@ -48,35 +54,60 @@ public class RuleHandler : MonoBehaviour
     {
 
 
+      // Once You or Time is dead, its always dead
+      if(!dead["Time"]) dead["Time"] = CheckEffectAndAssert("Time is Dead");
+      if(!dead["You"]) dead["You"] = CheckEffectAndAssert("You is Dead");
+
+
+
+
       //Triggers checks
 
-          //Time is always flowing, unless it is stopped
-          //getting existentialist vibes rn
-          triggers["Time is Move"] = !CheckEffect("Time is Stop") && !babaWorld.isBabaMode();
+      triggers["Time is Dead"] = dead["Time"];
+      triggers["You is Dead"] = dead["You"];
 
+        //Time is always flowing, unless it is stopped
+        //and it can only be stopped by killing it
+        //getting existentialist vibes rn
+        triggers["Time is Stop"] = CheckEffectAndAssert("Time is Stop");
+        triggers["Time is Move"] = !CheckEffectAndAssert("Time is Stop");
+        // && !babaWorld.isBabaMode();
 
-          //Player movement
-          triggers["You is Move"] = false;
-          if(!babaWorld.isBabaMode()) // Check game unpaused
+        //Player movement
+        triggers["You is Move"] = false;
+        if(!babaWorld.isBabaMode()) // Check game unpaused
+        {
+          if(!CheckEffectAndAssert("You is Stop")) //Check movement is controlled + currently moving
           {
-            if(!CheckEffect("You is Stop")) //Check movement is controlled + currently moving
-            {
-              float x = Input.GetAxisRaw("Horizontal");
-              float y = Input.GetAxisRaw("Vertical");
-              triggers["You is Move"] = (x != 0 || y != 0);
-            }
-
+            float x = Input.GetAxisRaw("Horizontal");
+            float y = Input.GetAxisRaw("Vertical");
+            triggers["You is Move"] = (x != 0 || y != 0);
           }
+        }
 
-          //triggers["You is Stop"] = !triggers["You is Move"];
+        triggers["You is Stop"] = !triggers["You is Move"] || CheckEffectAndAssert("You is Dead");
 
-          //Bullet shoot
-          GameObject[] playerBullets = GameObject.FindGameObjectsWithTag("PlayerBullet");
-          triggers["You is Shoot"] = playerBullets.Length > 0;
-          Debug.Log(triggers["You is Shoot"]);
+        // OLDER Bullet shoot
+        // GameObject[] playerBullets = GameObject.FindGameObjectsWithTag("PlayerBullet");
+        // triggers["You is Shoot"] = playerBullets.Length > 0;
+        // //Debug.Log(triggers["You is Shoot"]);
 
-          //Should detect when the teleportion occurs
-          //triggers["Shoot is You"];
+        //Bullet shoot
+        GameObject[] playerBullets = GameObject.FindGameObjectsWithTag("PlayerBullet");
+        if(playerBullets.Length > 0 && CanXMove("Shoot"))
+        {
+          triggers["Shoot is Move"] = true;
+        }
+        else
+        {
+          triggers["Shoot is Move"] = false;
+        }
+
+        //trigger for Shoot is stop when it is destroyed
+
+        //Should detect when the teleportion occurs
+        //effect and assert + there is at least one bullet
+        //triggers["Shoot is You"];
 
 
 
@@ -84,18 +115,18 @@ public class RuleHandler : MonoBehaviour
       //notes: rules order have importance, graph of dependency
       //a rule being conditional or not has an importance
       //ex: player is move VS player is move when time is move
-      // ---> difference between asserts and implies
-
-      //effects["Player is Move"] = triggers["You is Shoot"];
-      //effects["Time is Move"] = false;
-      //effects["You is Shoot"] = true;
-      //effects["You is Move"] = triggers["You is Shoot"] ;
-      //effects["Shoot is You"] = true;
-
-      //asserts["Time is Move"] = true;
+      // ---> difference between assertions (fact) and implications (trigger => effect)
 
       //Erase all current effects
       effects = new Dictionary<string,bool>();
+
+
+      // Apply dead effects -- implicit trigger
+      if(CheckEvent("Time is Dead")) effects["Time is Stop"] = true;
+      if(CheckEvent("You is Dead")) effects["You is Stop"] = true;
+      if(CheckEvent("Shoot is Dead")) effects["Shoot is Stop"] = true;
+
+      if(!CheckEffectAndAssert("Time is Stop")) effects["Time is Move"] = true;
 
 
       // Effect takes value based on trigger
@@ -117,6 +148,8 @@ public class RuleHandler : MonoBehaviour
             }
           }
       }
+
+
 
     }
 
@@ -152,7 +185,7 @@ public class RuleHandler : MonoBehaviour
 
     }
 
-    public bool CheckEffect(string rule)
+    public bool CheckEffectAndAssert(string rule)
     {
       if(asserts.ContainsKey(rule) && asserts[rule])
       {
@@ -166,12 +199,31 @@ public class RuleHandler : MonoBehaviour
       return false;
     }
 
-    public bool CheckEvent(string rule)
+    public bool CheckEffect(string rule)
+    {
+      if(effects.ContainsKey(rule) && effects[rule])
+      {
+        return effects[rule];
+      }
+      return false;
+    }
+
+    public bool CheckEventAndAssert(string rule)
     {
       if(asserts.ContainsKey(rule) && asserts[rule])
       {
         if(asserts[rule]) return true;
       }
+
+      if(triggers.ContainsKey(rule) && triggers[rule])
+      {
+        return triggers[rule];
+      }
+      return false;
+    }
+
+    public bool CheckEvent(string rule)
+    {
 
       if(triggers.ContainsKey(rule) && triggers[rule])
       {
@@ -189,5 +241,26 @@ public class RuleHandler : MonoBehaviour
 
       return false;
     }
+
+    public bool CanXMove(string X)
+    {
+      // X can move ?
+      // Time is Move and not X is stop
+      //  or
+      // Time is Stop and X is Move
+
+      // Time is stop and X is stop => FALSE
+      // Time is move and X is move => true
+
+      //Default behaviour is to follow Time unless its explicitel stated otherwise
+      //Plus, effects have priority other asserts
+
+      bool test1 = CheckEffectAndAssert("Time is Move") && !CheckEffectAndAssert(X+" is Stop");
+      bool test2 = CheckEffectAndAssert("Time is Stop") && CheckEffectAndAssert(X+" is Move");
+      bool test3 = CheckEffect(X+" is Move") && !CheckEffect(X+" is Stop");
+      return test1 || test2;
+    }
+
+
 
 }

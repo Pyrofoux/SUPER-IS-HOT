@@ -865,10 +865,20 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 2668014774958356387, guid: 2b98b784042c42640a3edbe4a63f9ac1,
+        type: 3}
+      propertyPath: m_Mesh
+      value: 
+      objectReference: {fileID: 0}
     - target: {fileID: 7510370701940658436, guid: 2b98b784042c42640a3edbe4a63f9ac1,
         type: 3}
       propertyPath: m_Name
       value: Enemy (3)
+      objectReference: {fileID: 0}
+    - target: {fileID: 7510370701940658437, guid: 2b98b784042c42640a3edbe4a63f9ac1,
+        type: 3}
+      propertyPath: lockWord
+      value: is
       objectReference: {fileID: 0}
     - target: {fileID: 7510370701940658439, guid: 2b98b784042c42640a3edbe4a63f9ac1,
         type: 3}
@@ -1474,7 +1484,7 @@ GameObject:
   - component: {fileID: 655098426}
   - component: {fileID: 655098425}
   - component: {fileID: 655098424}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: Cube (4)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1691,7 +1701,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0cd44c1031e13a943bb63640046fad76, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_UiScaleMode: 0
+  m_UiScaleMode: 1
   m_ReferencePixelsPerUnit: 100
   m_ScaleFactor: 1
   m_ReferenceResolution: {x: 800, y: 600}
@@ -2372,7 +2382,7 @@ GameObject:
   - component: {fileID: 1192423253}
   - component: {fileID: 1192423252}
   - component: {fileID: 1192423251}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: Cube (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2665,6 +2675,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 2668014774958356387, guid: 2b98b784042c42640a3edbe4a63f9ac1,
+        type: 3}
+      propertyPath: m_Mesh
+      value: 
+      objectReference: {fileID: 0}
     - target: {fileID: 3385280808856845992, guid: 2b98b784042c42640a3edbe4a63f9ac1,
         type: 3}
       propertyPath: reloadTime
@@ -2694,6 +2709,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Enemy (2)
+      objectReference: {fileID: 0}
+    - target: {fileID: 7510370701940658437, guid: 2b98b784042c42640a3edbe4a63f9ac1,
+        type: 3}
+      propertyPath: lockWord
+      value: yoU
       objectReference: {fileID: 0}
     - target: {fileID: 7510370701940658439, guid: 2b98b784042c42640a3edbe4a63f9ac1,
         type: 3}
@@ -3283,7 +3303,7 @@ GameObject:
   - component: {fileID: 1910846792}
   - component: {fileID: 1910846791}
   - component: {fileID: 1910846790}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: Cube (5)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3376,7 +3396,7 @@ GameObject:
   - component: {fileID: 1956267792}
   - component: {fileID: 1956267791}
   - component: {fileID: 1956267790}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: Cube (3)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3543,7 +3563,7 @@ GameObject:
   - component: {fileID: 1976897977}
   - component: {fileID: 1976897976}
   - component: {fileID: 1976897975}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: Cube (6)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3870,6 +3890,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 2668014774958356387, guid: 2b98b784042c42640a3edbe4a63f9ac1,
+        type: 3}
+      propertyPath: m_Mesh
+      value: 
+      objectReference: {fileID: 0}
     - target: {fileID: 3385280808856845992, guid: 2b98b784042c42640a3edbe4a63f9ac1,
         type: 3}
       propertyPath: reloadTime
@@ -3904,6 +3929,11 @@ PrefabInstance:
         type: 3}
       propertyPath: dead
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7510370701940658437, guid: 2b98b784042c42640a3edbe4a63f9ac1,
+        type: 3}
+      propertyPath: lockWord
+      value: when
       objectReference: {fileID: 0}
     - target: {fileID: 7510370701940658439, guid: 2b98b784042c42640a3edbe4a63f9ac1,
         type: 3}
@@ -4326,6 +4356,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 2668014774958356387, guid: 2b98b784042c42640a3edbe4a63f9ac1,
+        type: 3}
+      propertyPath: m_Mesh
+      value: 
+      objectReference: {fileID: 0}
     - target: {fileID: 3385280808856845992, guid: 2b98b784042c42640a3edbe4a63f9ac1,
         type: 3}
       propertyPath: reloadTime
@@ -4475,6 +4510,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Enemy
+      objectReference: {fileID: 0}
+    - target: {fileID: 7510370701940658437, guid: 2b98b784042c42640a3edbe4a63f9ac1,
+        type: 3}
+      propertyPath: lockWord
+      value: stop
       objectReference: {fileID: 0}
     - target: {fileID: 7510370701940658439, guid: 2b98b784042c42640a3edbe4a63f9ac1,
         type: 3}
@@ -4985,9 +5025,9 @@ MonoBehaviour:
   CameraPosition: {fileID: 8378566736604888452}
   WeaponPosition: {fileID: 8378566736106974335}
   MouseSensitivity: 2.4
-  PlayerSpeed: 5
+  PlayerSpeed: 7
   RunningSpeed: 7
-  JumpSpeed: 4
+  JumpSpeed: 6
   JumpingAudioCLip: {fileID: 0}
   LandingAudioClip: {fileID: 0}
 --- !u!114 &8378566737487892316
@@ -5002,6 +5042,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 27da9129c3cb2cf48a12ff8fde8b332a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  pickupDistance: 5
   charge: 0
   canShoot: 1
   action: 0
