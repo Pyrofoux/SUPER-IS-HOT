@@ -83,6 +83,16 @@ public class SuperHotScript : MonoBehaviour
     void Update()
     {
 
+      ruleHandler.CalculateRules();
+      ApplyEffects();
+      ruleHandler.PostCalculation();
+        //ApplyEffects();
+
+
+    }
+
+    public void ApplyEffects()
+    {
 
       //Switch baba mode
       if(Input.GetKeyDown(KeyCode.E))
@@ -100,7 +110,7 @@ public class SuperHotScript : MonoBehaviour
       }
 
 
-        //Retstart
+        //Restart
         if (Input.GetKeyDown(KeyCode.R))
         {
             UnityEngine.SceneManagement.SceneManager.LoadSceneAsync(UnityEngine.SceneManagement.SceneManager.GetActiveScene().name);
@@ -176,13 +186,17 @@ public class SuperHotScript : MonoBehaviour
         //lerpTime = action ? lerpFast : lerpTime;
 
 
-        CheckTeleport();
+      /*
+        Effects for which effects are important even if they're activated only for a frame
+        eg:
+        Shoot is You (Teleportation)
+        Super is Hot (Win Condition)
+        You is Dead (Loose condition)
 
+        Teleportation
 
-    }
+      */
 
-    public void CheckTeleport()
-    {
       if(ruleHandler.CheckEffectAndAssert("Shoot is You"))
       {
         if(bulletList.Count > 0)

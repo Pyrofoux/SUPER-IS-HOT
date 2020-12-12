@@ -9,6 +9,7 @@ public class BulletMovement : MonoBehaviour
     RuleHandler ruleHandler;
     SuperHotScript superhotScript;
 
+    private bool destroyingMyself = false;
     // Start is called before the first frame update
     void Start()
     {
@@ -126,13 +127,28 @@ public class BulletMovement : MonoBehaviour
         {
           if(gameObject.CompareTag("PlayerBullet"))
           {
-            ruleHandler.triggers["Shoot is Dead"] = true;
+            /*ruleHandler.triggers["Shoot is Dead"] = true;
             ruleHandler.CalculateRules();
-            superhotScript.CheckTeleport();
+            superhotScript.ApplyEffects();
             ruleHandler.triggers["Shoot is Dead"] = false;
             superhotScript.bulletList.Remove(gameObject);
+            Destroy(gameObject);
+            */
+
+            ruleHandler.triggerOnce["Shoot is Dead"] = true;
+            destroyingMyself = true;
+
           }
 
-          Destroy(gameObject);
+
         }
+
+    private void LateUpdate()
+    {
+      if(destroyingMyself)
+      {
+        superhotScript.bulletList.Remove(gameObject);
+        Destroy(gameObject);
+      }
+    }
 }

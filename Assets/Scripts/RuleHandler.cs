@@ -9,7 +9,9 @@ public class RuleHandler : MonoBehaviour
     public Dictionary<string,Dictionary<string,bool>> implies;
     public Dictionary<string,bool> triggers;
     public Dictionary<string,bool> effects;
-    public Dictionary<string,bool> dead;
+    public Dictionary<string,bool> deadOnce;
+    public Dictionary<string,bool> triggerOnce;
+    private string[] triggerOnceEvents;
     private BabaWorld babaWorld;
 
     // Start is called before the first frame update
@@ -43,32 +45,45 @@ public class RuleHandler : MonoBehaviour
        // effects["Shoot is You"] = false;
 
        // Stores things that can be killed only once
-       dead = new Dictionary<string, bool>();
-       dead["Time"] = false;
-       dead["You"] = false;
-       //dead["Shoot"] = false;
+       deadOnce = new Dictionary<string, bool>();
+
+       deadOnce["Time"] = false;
+       deadOnce["You"] = false;
+       //deadOnce["Shoot"] = false;
+
+       triggerOnce = new Dictionary<string, bool>();
+       triggerOnceEvents = new string[]{"Shoot is Dead", "You is Shoot"};
+       PostCalculation();
 
     }
 
     // Update is called once per frame
     void Update()
     {
-      CalculateRules();
+      //CalculateRules();
     }
 
     public void CalculateRules()
     {
+
+      //Rule effects <-- deduced from rules in Baba
+      //notes: rules order have importance, graph of dependency
+      //a rule being conditional or not has an importance
+      //ex: player is move VS player is move when time is move
+      // ---> difference between assertions (fact) and implications (trigger => effect)
+
+
       // Once You or Time is dead, its always dead
-      if(!dead["Time"]) dead["Time"] = CheckEffectAndAssert("Time is Dead");
-      if(!dead["You"]) dead["You"] = CheckEffectAndAssert("You is Dead");
+      if(!deadOnce["Time"]) deadOnce["Time"] = CheckEffectAndAssert("Time is Dead");
+      if(!deadOnce["You"]) deadOnce["You"] = CheckEffectAndAssert("You is Dead");
 
 
 
 
       //Triggers checks
 
-      triggers["Time is Dead"] = dead["Time"];
-      triggers["You is Dead"] = dead["You"];
+      triggers["Time is Dead"] = deadOnce["Time"];
+      triggers["You is Dead"] = deadOnce["You"];
 
         //Time is always flowing, unless it is stopped
         //and it can only be stopped by killing it
@@ -116,19 +131,11 @@ public class RuleHandler : MonoBehaviour
           triggers["Shoot is Stop"] = false;
         }
 
-        //trigger for Shoot is stop when it is destroyed
-
-        //Should detect when the teleportion occurs
-        //effect and assert + there is at least one bullet
-        //triggers["Shoot is You"];
-
-
-
-      //Rule effects <-- deduced from rules in Baba
-      //notes: rules order have importance, graph of dependency
-      //a rule being conditional or not has an importance
-      //ex: player is move VS player is move when time is move
-      // ---> difference between assertions (fact) and implications (trigger => effect)
+        //Detect every trigger once
+        for(int i =0; i < triggerOnceEvents.Length; i++)
+        {
+          triggers[triggerOnceEvents[i]] = triggerOnce[triggerOnceEvents[i]];
+        }
 
       //Erase all current effects
       effects = new Dictionary<string,bool>();
@@ -173,6 +180,16 @@ public class RuleHandler : MonoBehaviour
                 effects[effect.Key] = CheckEvent(trigger);
             }
           }
+      }
+    }
+
+    public void PostCalculation()
+    {
+      // Clear TriggerOnce events
+
+      for(int i =0; i < triggerOnceEvents.Length; i++)
+      {
+        triggerOnce[triggerOnceEvents[i]] = false;
       }
     }
 
@@ -284,7 +301,7 @@ public class RuleHandler : MonoBehaviour
       if(CheckAssert(X+" is Stop")) return false;
       if(CheckAssert(X+" is Move")) return true;
 
-      if(dead["Time"]) return false;
+      if(deadOnce["Time"]) return false;
       if(CheckEffect("Time is Stop")) return false;
       if(CheckEffect("Time is Move")) return true;
       if(CheckAssert("Time is Stop")) return false;
