@@ -129,10 +129,8 @@ public class MovementController : MonoBehaviour
             // Move effect based on rules
             RuleHandler ruleHandler = GetComponent<RuleHandler>();
 
-              //Debug.Log(ruleHandler.CheckEffectAndAssert("You is Move"));
             //TODO: put back
             if(ruleHandler.CanXMove("You"))
-            /* && ruleHandler.CheckAssert("You is Move")*/ // Controlled movement
             {
 
               if(ruleHandler.CheckEffect("You is Move")) // Forced movement

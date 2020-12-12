@@ -13,10 +13,11 @@ public class BulletMovement : MonoBehaviour
     void Start()
     {
         rb = GetComponent<Rigidbody>();
-        ruleHandler = (RuleHandler)GameObject.FindObjectOfType(typeof(RuleHandler));
 
         //get time handling script -- for game pause
         superhotScript = (SuperHotScript)GameObject.FindObjectOfType(typeof(SuperHotScript));
+        //get ruleHandler -- to modify rules in SuperHot
+        ruleHandler = (RuleHandler)GameObject.FindObjectOfType(typeof(RuleHandler));
 
     }
 
@@ -29,18 +30,28 @@ public class BulletMovement : MonoBehaviour
         }
         else
         {
-          if(gameObject.CompareTag("PlayerBullet") && !superhotScript.babaMode) // Your bullets are affected by rule changes
-          {
-            if(ruleHandler.CanXMove("Shoot"))
+         // Your bullets are affected by rule changes
+            if(!superhotScript.babaMode && ruleHandler.CanXMove("Shoot"))
             {
               transform.position += transform.forward * speed * Time.fixedDeltaTime;
               CheckCollisionManual();
             }
-          }
+
+            //Destroy player bullet when Shoot is Dead
+            if(ruleHandler.CheckEffectAndAssert("Shoot is Dead"))
+            {
+              DestroyMyself();
+            }
         }
 
     }
 
+
+    // public void SetScripts(RuleHandler ruleHandler, SuperHotScript superhotScript)
+    // {
+    //   this.ruleHandler = ruleHandler;
+    //   this.superhotScript = superhotScript;
+    // }
 
     private void OnCollisionEnter(Collision collision)
     {
@@ -69,7 +80,7 @@ public class BulletMovement : MonoBehaviour
           // Can kill ennemy if bullets are moving
           if (target.CompareTag("Enemy") && ruleHandler.CanXMove("Shoot"))
           {
-            Debug.Log("Collision with enemy !");
+
               BodyPartScript bp = target.GetComponent<BodyPartScript>();
 
               //if (!bp.enemy.dead)
@@ -79,24 +90,28 @@ public class BulletMovement : MonoBehaviour
               bp.enemy.Kill();
           }
 
-          // if(gameObject.CompareTag("PlayerBullet"))
-          // {
-          //   if(ruleHandler.CheckEffectAndAssert("Shoot is You"))
-          //   {
-          //     //Teleport player where bullet collides
-          //     GameObject player = (GameObject)GameObject.Find("Player");
-          //
-          //     Vector3 deltaPosition = gameObject.transform.position - player.transform.position;
-          //
-          //     //Only 90% of distance in order not to go though the ground and most walls
-          //     player.transform.position += deltaPosition*0.9f;
-          //   }
-          //
-          // }
-
           //bullets don't destroy other bullets
-          if(!target.CompareTag("PlayerBullet") && !target.CompareTag("EnnemyBullet"))
+          if(target.CompareTag("PlayerBullet") ||  target.CompareTag("EnnemyBullet"))
           {
+            //
+          }
+          // own bullets don't diseappear because of player when Shoot is You
+          else if(gameObject.CompareTag("PlayerBullet") && target.CompareTag("Player") && ruleHandler.CheckEffectAndAssert("Shoot is You"))
+          {
+            //
+          }
+          // Don't make guns destroy bullets
+          else if(target.CompareTag("Gun"))
+          {
+            //
+          }
+          else
+          {
+            if(gameObject.CompareTag("PlayerBullet"))
+            {
+              Debug.Log(target);
+            }
+
             DestroyMyself();
           }
 
@@ -104,9 +119,20 @@ public class BulletMovement : MonoBehaviour
 
         }
 
+
+
         //TODO: Add event "Shoot is Dead" and find a way to activate it only once
         private void DestroyMyself()
         {
+          if(gameObject.CompareTag("PlayerBullet"))
+          {
+            ruleHandler.triggers["Shoot is Dead"] = true;
+            ruleHandler.CalculateRules();
+            superhotScript.CheckTeleport();
+            ruleHandler.triggers["Shoot is Dead"] = false;
+            superhotScript.bulletList.Remove(gameObject);
+          }
+
           Destroy(gameObject);
         }
 }

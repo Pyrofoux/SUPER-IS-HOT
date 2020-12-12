@@ -45,7 +45,8 @@ public class SuperHotScript : MonoBehaviour
     private float lerpFastest = .5f;
     private float lerpFast = .1f;
 
-    //
+    [Header("DO NOT TOUCH")]
+    public List<GameObject> bulletList;
 
     private void Awake()
     {
@@ -64,6 +65,8 @@ public class SuperHotScript : MonoBehaviour
       hud = (GameObject) GameObject.Find("HUD_Baba");
       ruleHandler = GetComponent<RuleHandler>();
       babaWorld = GetComponent<BabaWorld>();
+
+      bulletList = new List<GameObject>();
 
       // Disable Canvas at first
       // if(babaMode)
@@ -106,12 +109,17 @@ public class SuperHotScript : MonoBehaviour
         //Shoot
         if (!babaMode && canShoot)
         {
-            if (Input.GetMouseButtonDown(0) || (ruleHandler.CheckEffect("You is Shoot")))
+            // Check wants to shoot or is forced too
+            if (Input.GetMouseButtonDown(0) || (ruleHandler.CheckEffect("You is Shoot"))) //Forced shooting
             {
+                // Might have to rework how time affects this
                 StopCoroutine(ActionE(.03f));
                 StartCoroutine(ActionE(.03f));
                 if (weapon != null)
+                {
                     weapon.Shoot(SpawnPos(), Camera.main.transform.rotation, false);
+                    GameObject lastBullet = weapon.lastBullet;
+                }
             }
         }
 
@@ -168,7 +176,22 @@ public class SuperHotScript : MonoBehaviour
         //lerpTime = action ? lerpFast : lerpTime;
 
 
+        CheckTeleport();
 
+
+    }
+
+    public void CheckTeleport()
+    {
+      if(ruleHandler.CheckEffectAndAssert("Shoot is You"))
+      {
+        if(bulletList.Count > 0)
+        {
+          GameObject lastShotBullet = bulletList[bulletList.Count -1];
+          gameObject.transform.position = lastShotBullet.transform.position;
+        }
+
+      }
     }
 
 

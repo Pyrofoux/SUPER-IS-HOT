@@ -10,6 +10,12 @@ public class BabaWorld : MonoBehaviour
 
 /*
 
+@____________
+_____________
+_____________
+_____________
+_____________
+
 #Test conditionals
 @____________
 ____Y=M<T=S__
@@ -18,17 +24,37 @@ ____T=M<s=M__
 _______T=S___
 _______s=M___
 
+Good solution for $=H<Y=D
+@____________
+____Y=S<s=M__
+____s=M<Y=S__
+_____________
+Y=M___s=S____
+
+
+Test: teleport when hit
+@____________
+____s=Y<s=S___
+_____________
+_____________
+Y=M___s=M____
+
+Test: you are carried by bullets
+@____________
+____s=Y______
+_____________
+_____________
+Y=M___s=M____
 
 */
 
 [TextArea(8,12)]
 private string layout =@"
 @____________
-____Y=M<T=S__
-____Y=S<T=M__
-____T=M<s=M__
-_______T=S___
-_______s=M___
+____s=Y<s=S___
+_____________
+_____________
+Y=M___s=M____
 ";
 
   public Text textPrefab;
@@ -45,7 +71,7 @@ _______s=M___
   //The interval you want your player to be able to fire input.
   static float inputRate = 0.03f;
   static float inputRateStop = inputRate*0.0001f;
-  static string[] wordList = new string[]{"Time","Move","You","Super","Hot","Shoot","Stop"};
+  static string[] wordList = new string[]{"Time","Move","You","Super","Hot","Shoot","Stop","Dead"};
 
   private int width =0;
   private int height =0;

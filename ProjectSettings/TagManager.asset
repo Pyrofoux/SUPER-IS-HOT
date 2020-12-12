@@ -8,6 +8,7 @@ TagManager:
   - PlayerBullet
   - EnnemyBullet
   - BabaUI
+  - Gun
   layers:
   - Default
   - TransparentFX

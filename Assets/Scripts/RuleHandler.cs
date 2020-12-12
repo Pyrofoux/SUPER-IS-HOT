@@ -31,6 +31,7 @@ public class RuleHandler : MonoBehaviour
        implies = new Dictionary<string,Dictionary<string,bool>>();
 
        triggers = new Dictionary<string, bool>();
+       triggers["Shoot is Dead"] = false;
        // triggers["You is Move"] = false;
        // triggers["Super is Hot"] = false;
        // triggers["Time is Move"] = false;
@@ -52,8 +53,11 @@ public class RuleHandler : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+      CalculateRules();
+    }
 
-
+    public void CalculateRules()
+    {
       // Once You or Time is dead, its always dead
       if(!dead["Time"]) dead["Time"] = CheckEffectAndAssert("Time is Dead");
       if(!dead["You"]) dead["You"] = CheckEffectAndAssert("You is Dead");
@@ -103,6 +107,15 @@ public class RuleHandler : MonoBehaviour
           triggers["Shoot is Move"] = false;
         }
 
+        if(playerBullets.Length > 0 && !CanXMove("Shoot"))
+        {
+          triggers["Shoot is Stop"] = true;
+        }
+        else
+        {
+          triggers["Shoot is Stop"] = false;
+        }
+
         //trigger for Shoot is stop when it is destroyed
 
         //Should detect when the teleportion occurs
@@ -122,10 +135,23 @@ public class RuleHandler : MonoBehaviour
 
 
       // Apply dead effects -- implicit trigger
-      if(CheckEvent("Time is Dead")) effects["Time is Stop"] = true;
-      if(CheckEvent("You is Dead")) effects["You is Stop"] = true;
-      if(CheckEvent("Shoot is Dead")) effects["Shoot is Stop"] = true;
+      if(CheckEvent("Time is Dead"))
+      {
+        effects["Time is Stop"] = true;
+        triggers["Time is Stop"] = true;
+      }
+      if(CheckEvent("You is Dead"))
+      {
+        effects["You is Stop"] = true;
+        triggers["You is Stop"] = true;
+      }
+      if(CheckEvent("Shoot is Dead"))
+      {
+        effects["Shoot is Stop"] = true;
+        triggers["Shoot is Stop"] = true;
+      }
 
+      // Time always moves, unless it is stopped
       if(!CheckEffectAndAssert("Time is Stop")) effects["Time is Move"] = true;
 
 
@@ -148,10 +174,8 @@ public class RuleHandler : MonoBehaviour
             }
           }
       }
-
-
-
     }
+
 
     public void UpdateRules(Dictionary<string,bool> _asserts, Dictionary<string,Dictionary<string,bool>> _implies)
     {

@@ -33,39 +33,30 @@
 - [ ] Map out levels
 - [ ] Level selection screen
 
-- Implement all interactions as Assert, Trigger and Effect (EAT)
+- [ ] Implement all interactions as Assert, Trigger and Effect (EAT)
   - [x] You   is Move
   - [x] Time  is Move
   - [x] Shoot is Move
   - [X] You   is Stop
   - [X] Time  is Stop
-  - [ ] Shoot is Stop
-  - [ ] You   is Dead
-  - [ ] Time  is Dead
-  - [ ] Shoot is Dead
-  - [ ] You   is Shoot
-  - [ ] Shoot is You
+  - [X] Shoot is Stop
+  - [~] You   is Dead
+  - [?] Time  is Dead
+  - [T] Shoot is Dead
   - [ ] Super is Hot
 
-  - [ ] You is Shoot
+  - [EA] You is Shoot
     => Activates only when you shoot (~once)
     => Makes you shoot done
 
-  - [ ] Shoot is You
+  - [~AE] Shoot is You
     => Teleport you to the (last) bullet
     => Thrust you ?
 
 # Notes
 
-- Ambiguity with default behaviour
-  Maybe everything moves when TIME IS MOVE un less if they are STOP
-  And if TIME IS STOP then they are STOP too, unless they explicitely have X IS MOVE
-  Check this logic with basic examples:
-  T=S < Y=S
-  T=M < Y=M
-  are bullets moving ? can you move ?
 
-- Y=s<s=S, this teleportation might excplicitely contain that you teleport to this bullet when a bullet stops
+- Y=s<s=S, this teleportation might explicitly contain that you teleport to this bullet when a bullet stops
 Might make it so you teleport to the first bullet (the one that hit first the wall)
 
 Have to maintain a List of current bullets.
@@ -74,6 +65,18 @@ When they destroy themselves, they remove themselves from the list.
 Variable in RuleHandler that detects when event style "Shoot is Dead" happens
 Shoot is Dead => Shoot is Stop ~=> Shoot is You should be possible
 Might have issue that a bullet destroys itself, and you loose the reference to teleport to it
+List done!
+
+Consider:
+- Making player immune to their bullets when Shoot is You ==> solve that don't follow
+  special detection is already happening in Shoot is You, can detect player even without collider
+- Making player follow the LAST bullet. (Intent can change things, a way to navigate space by flying)
+- taking time to organize things :)
+  - gather level ideas
+    - +one where shoot bullet through wall, make it become after going through wall of ennemies
+  - create temp project page
+  -
+
 
 - Guns can't fire more than one bullet when Time is stopped
 Because of reloading time. ==> Make cursor in another color when ready/not
@@ -93,7 +96,15 @@ Because of reloading time. ==> Make cursor in another color when ready/not
   - Player speed is quite high. Check if it happens in Fixed Update or not
   FIXED: Set Applciation.targetFrameRate to 60
   NOTE: If you put Players update in FixedUpdate, it will depend on time flowing or not
-  which may break a lot of things. Keep it in Update.
+  which may break a lot of things. Keep it in Update.*
+
+  - Ambiguity with default behaviour
+    Maybe everything moves when TIME IS MOVE un less if they are STOP
+    And if TIME IS STOP then they are STOP too, unless they explicitely have X IS MOVE
+    Check this logic with basic examples:
+    T=S < Y=S
+    T=M < Y=M
+    are bullets moving ? can you move ?
 
 # Possible future dev
 

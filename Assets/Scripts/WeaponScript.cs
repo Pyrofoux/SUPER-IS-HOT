@@ -21,6 +21,10 @@ public class WeaponScript : MonoBehaviour
     public float reloadTime = .3f;
     public int bulletAmount = 6;
 
+    [Header("DO NOT TOUCH")]
+    RuleHandler ruleHandler;
+    SuperHotScript superhotScript;
+    public GameObject lastBullet;
 
     void Start()
     {
@@ -28,9 +32,16 @@ public class WeaponScript : MonoBehaviour
         collider = GetComponent<Collider>();
         renderer = GetComponent<Renderer>();
 
+        //get time handling script -- for game pause
+
+        superhotScript = (SuperHotScript)GameObject.FindObjectOfType(typeof(SuperHotScript));
+        //get ruleHandler -- to modify rules in SuperHot
+        ruleHandler = (RuleHandler)GameObject.FindObjectOfType(typeof(RuleHandler));
+
         ChangeSettings();
     }
 
+    // Change physics based on it being the main weapon or not
     void ChangeSettings()
     {
         if (transform.parent != null)
@@ -56,12 +67,15 @@ public class WeaponScript : MonoBehaviour
 
         if(! isEnemy)
         {
+          //bullet.GetComponent<BulletMovement>().SetScripts(ruleHandler, superhotScript);
           bullet.tag = "PlayerBullet";
+          superhotScript.bulletList.Add(bullet);
         }
         else
         {
           bullet.tag = "EnnemyBullet";
         }
+
         if (GetComponentInChildren<ParticleSystem>() != null)
             GetComponentInChildren<ParticleSystem>().Play();
 
@@ -77,6 +91,7 @@ public class WeaponScript : MonoBehaviour
 
     public void Throw()
     {
+        //Throwing animation
         Sequence s = DOTween.Sequence();
         s.Append(transform.DOMove(transform.position - transform.forward, .01f)).SetUpdate(true);
         s.AppendCallback(() => transform.parent = null);
@@ -138,5 +153,6 @@ public class WeaponScript : MonoBehaviour
         }
 
     }
+
 
 }
