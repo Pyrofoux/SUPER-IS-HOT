@@ -5,10 +5,13 @@
 
 # Bugfix
 
+
+- SHoot is You assert => bullet have weird trajectories.
+Are they colliding with something ?
+Pistes: Collision layers -- PlayerBullet and EnnemyBullet ?
+
 - "*" tile at each end of line
 
-- bullet can disappear by hitting each other.
-  Nice if they are not both from Player, but prevent it otherwise
 
 - Weapons picked up from ennemies can shoot infinite bullet without reloading time
   + cross gets bigger each time
@@ -56,16 +59,8 @@
 # Notes
 
 
-- Y=s<s=S, this teleportation might explicitly contain that you teleport to this bullet when a bullet stops
-Might make it so you teleport to the first bullet (the one that hit first the wall)
-
-Have to maintain a List of current bullets.
-Bullets can know if they are the first on the list.
-When they destroy themselves, they remove themselves from the list.
-Variable in RuleHandler that detects when event style "Shoot is Dead" happens
-Shoot is Dead => Shoot is Stop ~=> Shoot is You should be possible
-Might have issue that a bullet destroys itself, and you loose the reference to teleport to it
-List done!
+- If you make bullet don't destroy they can have cute/weird trajectories, even with just
+  straight lines!
 
 Consider:
 - Making player immune to their bullets when Shoot is You ==> solve that don't follow
@@ -105,6 +100,9 @@ Because of reloading time. ==> Make cursor in another color when ready/not
     T=S < Y=S
     T=M < Y=M
     are bullets moving ? can you move ?
+
+    - Shoot is Dead doesn't trigger Shoot is You correctly
+    FIXED: had to specify the order of Scripts (BulletControl before SuperHotScript) in Project Settings
 
 # Possible future dev
 

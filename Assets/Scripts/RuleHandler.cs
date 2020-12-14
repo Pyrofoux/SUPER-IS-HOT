@@ -73,14 +73,19 @@ public class RuleHandler : MonoBehaviour
       // ---> difference between assertions (fact) and implications (trigger => effect)
 
 
+
       // Once You or Time is dead, its always dead
       if(!deadOnce["Time"]) deadOnce["Time"] = CheckEffectAndAssert("Time is Dead");
       if(!deadOnce["You"]) deadOnce["You"] = CheckEffectAndAssert("You is Dead");
 
 
+        //Triggers checks
 
-
-      //Triggers checks
+      //Detect every trigger once and apply it
+      for(int i =0; i < triggerOnceEvents.Length; i++)
+      {
+        triggers[triggerOnceEvents[i]] = triggerOnce[triggerOnceEvents[i]];
+      }
 
       triggers["Time is Dead"] = deadOnce["Time"];
       triggers["You is Dead"] = deadOnce["You"];
@@ -89,6 +94,7 @@ public class RuleHandler : MonoBehaviour
         //and it can only be stopped by killing it
         //getting existentialist vibes rn
         triggers["Time is Stop"] = !CanXMove("Time");
+        //|| triggers["Time is Dead"];
         triggers["Time is Move"] = CanXMove("Time");
         // && !babaWorld.isBabaMode();
 
@@ -105,6 +111,7 @@ public class RuleHandler : MonoBehaviour
         }
 
         triggers["You is Stop"] = !triggers["You is Move"];
+        // || triggers["You is Dead"];
 
         // OLDER Bullet shoot
         // GameObject[] playerBullets = GameObject.FindGameObjectsWithTag("PlayerBullet");
@@ -131,11 +138,8 @@ public class RuleHandler : MonoBehaviour
           triggers["Shoot is Stop"] = false;
         }
 
-        //Detect every trigger once
-        for(int i =0; i < triggerOnceEvents.Length; i++)
-        {
-          triggers[triggerOnceEvents[i]] = triggerOnce[triggerOnceEvents[i]];
-        }
+        //Additional trigger for stop when
+        triggers["Shoot is Stop"] = triggers["Shoot is Stop"] || triggers["Shoot is Dead"];
 
       //Erase all current effects
       effects = new Dictionary<string,bool>();

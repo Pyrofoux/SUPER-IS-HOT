@@ -203,6 +203,7 @@ public class SuperHotScript : MonoBehaviour
         {
           GameObject lastShotBullet = bulletList[bulletList.Count -1];
           gameObject.transform.position = lastShotBullet.transform.position;
+          Debug.Log("ACTIVATED");
         }
 
       }

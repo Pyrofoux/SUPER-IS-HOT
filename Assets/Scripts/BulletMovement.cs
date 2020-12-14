@@ -9,7 +9,7 @@ public class BulletMovement : MonoBehaviour
     RuleHandler ruleHandler;
     SuperHotScript superhotScript;
 
-    private bool destroyingMyself = false;
+    private bool destroyingMyself;
     // Start is called before the first frame update
     void Start()
     {
@@ -19,6 +19,8 @@ public class BulletMovement : MonoBehaviour
         superhotScript = (SuperHotScript)GameObject.FindObjectOfType(typeof(SuperHotScript));
         //get ruleHandler -- to modify rules in SuperHot
         ruleHandler = (RuleHandler)GameObject.FindObjectOfType(typeof(RuleHandler));
+
+        destroyingMyself = false;
 
     }
 
@@ -89,34 +91,34 @@ public class BulletMovement : MonoBehaviour
 
               bp.HidePartAndReplace();
               bp.enemy.Kill();
+              DestroyMyself();
           }
 
-          //bullets don't destroy other bullets
-          if(target.CompareTag("PlayerBullet") ||  target.CompareTag("EnnemyBullet"))
+          //bullets don't destroy other bullets => might be source of weir trahectories
+          if(target.CompareTag("PlayerBullet") &&  gameObject.CompareTag("PlayerBullet"))
           {
-            //
+            //Don't destroy
+            //Debug.Log("Ignored 1");
           }
           // own bullets don't diseappear because of player when Shoot is You
-          else if(gameObject.CompareTag("PlayerBullet") && target.CompareTag("Player") && ruleHandler.CheckEffectAndAssert("Shoot is You"))
+          else if(target.CompareTag("Player") && gameObject.CompareTag("PlayerBullet") && ruleHandler.CheckEffectAndAssert("Shoot is You"))
           {
-            //
+            //Don't destroy
+            //Debug.Log("Ignored 2");
           }
-          // Don't make guns destroy bullets
-          else if(target.CompareTag("Gun"))
+          // Don't make guns destroy bullets -- for your own
+          else if(target.CompareTag("Gun") && gameObject.CompareTag("PlayerBullet"))
           {
-            //
+            //Don't destroy
+            //Debug.Log("Ignored 3");
           }
           else
           {
-            if(gameObject.CompareTag("PlayerBullet"))
-            {
-              Debug.Log(target);
-            }
-
             DestroyMyself();
           }
 
-
+          if(gameObject.CompareTag("PlayerBullet"))
+          Debug.Log(target);
 
         }
 
@@ -134,11 +136,9 @@ public class BulletMovement : MonoBehaviour
             superhotScript.bulletList.Remove(gameObject);
             Destroy(gameObject);
             */
-
             ruleHandler.triggerOnce["Shoot is Dead"] = true;
-            destroyingMyself = true;
-
           }
+          destroyingMyself = true;
 
 
         }

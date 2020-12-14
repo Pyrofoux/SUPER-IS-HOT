@@ -51,7 +51,7 @@ Y=M___s=M____
 [TextArea(8,12)]
 private string layout =@"
 @____________
-____s=Y<s=S__
+____s=Y<s=D__
 _T=M_________
 _____________
 Y=M___s=M____
