@@ -18,13 +18,13 @@ TagManager:
   - UI
   - 
   - 
-  - Weapon
+  - Gun
   - Player
   - PostProcessing
-  - Bullet
+  - Player Bullet
   - Wall
-  - 
-  - 
+  - Ennemy Bullet
+  - Ennemy
   - 
   - 
   - 

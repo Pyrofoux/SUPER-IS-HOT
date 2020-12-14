@@ -23,7 +23,7 @@ public class WeaponScript : MonoBehaviour
 
     [Header("DO NOT TOUCH")]
     RuleHandler ruleHandler;
-    SuperHotScript superhotScript;
+    EffectsApplicator effectsApplicator;
     public GameObject lastBullet;
 
     void Start()
@@ -34,7 +34,7 @@ public class WeaponScript : MonoBehaviour
 
         //get time handling script -- for game pause
 
-        superhotScript = (SuperHotScript)GameObject.FindObjectOfType(typeof(SuperHotScript));
+        effectsApplicator = (EffectsApplicator)GameObject.FindObjectOfType(typeof(EffectsApplicator));
         //get ruleHandler -- to modify rules in SuperHot
         ruleHandler = (RuleHandler)GameObject.FindObjectOfType(typeof(RuleHandler));
 
@@ -47,9 +47,9 @@ public class WeaponScript : MonoBehaviour
         if (transform.parent != null)
             return;
 
-        rb.isKinematic = (SuperHotScript.instance.weapon == this) ? true : false;
-        rb.interpolation = (SuperHotScript.instance.weapon == this) ? RigidbodyInterpolation.None : RigidbodyInterpolation.Interpolate;
-        collider.isTrigger = (SuperHotScript.instance.weapon == this);
+        rb.isKinematic = (effectsApplicator.weapon == this) ? true : false;
+        rb.interpolation = (effectsApplicator.weapon == this) ? RigidbodyInterpolation.None : RigidbodyInterpolation.Interpolate;
+        collider.isTrigger = (effectsApplicator.weapon == this);
     }
 
     public void Shoot(Vector3 pos,Quaternion rot, bool isEnemy)
@@ -60,16 +60,17 @@ public class WeaponScript : MonoBehaviour
         if (bulletAmount <= 0)
             return;
 
-        if(!SuperHotScript.instance.weapon == this)
+        if(!effectsApplicator.weapon == this)
             bulletAmount--;
 
-        GameObject bullet = Instantiate(SuperHotScript.instance.bulletPrefab, pos, rot);
+        GameObject bullet = Instantiate(effectsApplicator.bulletPrefab, pos, rot);
 
         if(! isEnemy)
         {
-          //bullet.GetComponent<BulletMovement>().SetScripts(ruleHandler, superhotScript);
+          //bullet.GetComponent<BulletMovement>().SetScripts(ruleHandler, EffectsApplicator);
           bullet.tag = "PlayerBullet";
-          superhotScript.bulletList.Add(bullet);
+          bullet.layer = LayerMask.NameToLayer("Player Bullet");
+          effectsApplicator.bulletList.Add(bullet);
         }
         else
         {
@@ -79,13 +80,13 @@ public class WeaponScript : MonoBehaviour
         if (GetComponentInChildren<ParticleSystem>() != null)
             GetComponentInChildren<ParticleSystem>().Play();
 
-        if(SuperHotScript.instance.weapon == this)
+        if(effectsApplicator.weapon == this)
             StartCoroutine(Reload());
 
         Camera.main.transform.DOComplete();
         Camera.main.transform.DOShakePosition(.2f, .01f, 10, 90, false, true).SetUpdate(true);
 
-        if(SuperHotScript.instance.weapon == this)
+        if(effectsApplicator.weapon == this)
             transform.DOLocalMoveZ(-.1f, .05f).OnComplete(()=>transform.DOLocalMoveZ(0,.2f));
     }
 
@@ -106,10 +107,10 @@ public class WeaponScript : MonoBehaviour
         if (!active)
             return;
 
-        SuperHotScript.instance.weapon = this;
+        effectsApplicator.weapon = this;
         ChangeSettings();
 
-        transform.parent = SuperHotScript.instance.weaponHolder;
+        transform.parent = effectsApplicator.weaponHolder;
 
         transform.DOLocalMove(Vector3.zero, .25f).SetEase(Ease.OutBack).SetUpdate(true);
         transform.DOLocalRotate(Vector3.zero, .25f).SetUpdate(true);
@@ -130,9 +131,9 @@ public class WeaponScript : MonoBehaviour
 
     IEnumerator Reload()
     {
-        if (SuperHotScript.instance.weapon != this)
+        if (effectsApplicator.weapon != this)
             yield break;
-        SuperHotScript.instance.ReloadUI(reloadTime);
+        effectsApplicator.ReloadUI(reloadTime);
         reloading = true;
         yield return new WaitForSeconds(reloadTime);
         reloading = false;
@@ -146,7 +147,7 @@ public class WeaponScript : MonoBehaviour
             BodyPartScript bp = collision.gameObject.GetComponent<BodyPartScript>();
 
             if (!bp.enemy.dead)
-                Instantiate(SuperHotScript.instance.hitParticlePrefab, transform.position, transform.rotation);
+                Instantiate(effectsApplicator.hitParticlePrefab, transform.position, transform.rotation);
 
             bp.HidePartAndReplace();
             bp.enemy.Kill();

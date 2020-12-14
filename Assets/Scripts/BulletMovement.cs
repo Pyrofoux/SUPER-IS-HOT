@@ -7,7 +7,7 @@ public class BulletMovement : MonoBehaviour
     public float speed;
     Rigidbody rb;
     RuleHandler ruleHandler;
-    SuperHotScript superhotScript;
+    EffectsApplicator effectsApplicator;
 
     private bool destroyingMyself;
     // Start is called before the first frame update
@@ -16,7 +16,7 @@ public class BulletMovement : MonoBehaviour
         rb = GetComponent<Rigidbody>();
 
         //get time handling script -- for game pause
-        superhotScript = (SuperHotScript)GameObject.FindObjectOfType(typeof(SuperHotScript));
+        effectsApplicator = (EffectsApplicator)GameObject.FindObjectOfType(typeof(EffectsApplicator));
         //get ruleHandler -- to modify rules in SuperHot
         ruleHandler = (RuleHandler)GameObject.FindObjectOfType(typeof(RuleHandler));
 
@@ -34,7 +34,7 @@ public class BulletMovement : MonoBehaviour
         else
         {
          // Your bullets are affected by rule changes
-            if(!superhotScript.babaMode && ruleHandler.CanXMove("Shoot"))
+            if(!effectsApplicator.babaMode && ruleHandler.CanXMove("Shoot"))
             {
               transform.position += transform.forward * speed * Time.fixedDeltaTime;
               CheckCollisionManual();
@@ -50,10 +50,10 @@ public class BulletMovement : MonoBehaviour
     }
 
 
-    // public void SetScripts(RuleHandler ruleHandler, SuperHotScript superhotScript)
+    // public void SetScripts(RuleHandler ruleHandler, effectsApplicator effectsApplicator)
     // {
     //   this.ruleHandler = ruleHandler;
-    //   this.superhotScript = superhotScript;
+    //   this.effectsApplicator = effectsApplicator;
     // }
 
     private void OnCollisionEnter(Collision collision)
@@ -87,7 +87,7 @@ public class BulletMovement : MonoBehaviour
               BodyPartScript bp = target.GetComponent<BodyPartScript>();
 
               //if (!bp.enemy.dead)
-                  Instantiate(SuperHotScript.instance.hitParticlePrefab, transform.position, transform.rotation);
+                  Instantiate(EffectsApplicator.instance.hitParticlePrefab, transform.position, transform.rotation);
 
               bp.HidePartAndReplace();
               bp.enemy.Kill();
@@ -131,12 +131,12 @@ public class BulletMovement : MonoBehaviour
           {
             /*ruleHandler.triggers["Shoot is Dead"] = true;
             ruleHandler.CalculateRules();
-            superhotScript.ApplyEffects();
+            effectsApplicator.ApplyEffects();
             ruleHandler.triggers["Shoot is Dead"] = false;
-            superhotScript.bulletList.Remove(gameObject);
+            effectsApplicator.bulletList.Remove(gameObject);
             Destroy(gameObject);
             */
-            ruleHandler.triggerOnce["Shoot is Dead"] = true;
+            ruleHandler.triggerFrame["Shoot is Dead"] = 1;
           }
           destroyingMyself = true;
 
@@ -147,7 +147,7 @@ public class BulletMovement : MonoBehaviour
     {
       if(destroyingMyself)
       {
-        superhotScript.bulletList.Remove(gameObject);
+        effectsApplicator.bulletList.Remove(gameObject);
         Destroy(gameObject);
       }
     }

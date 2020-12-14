@@ -1,14 +1,18 @@
 # Todo
 
+- All trigger once events:
+You is Shoot (when you fire)
+Shoot is Dead (on impact)
+You is Dead (when you die) // maybe thats not the case ?
+Shoot is You (on teleport)
+
+
 - Recheck all interactions. Which are implemented? Ambiguity? Distinction between asserts and effects? Which ones should be there/ are the core ?
 
 
 # Bugfix
 
-
-- SHoot is You assert => bullet have weird trajectories.
-Are they colliding with something ?
-Pistes: Collision layers -- PlayerBullet and EnnemyBullet ?
+- Rules are not parsed at startup
 
 - "*" tile at each end of line
 
@@ -45,14 +49,14 @@ Pistes: Collision layers -- PlayerBullet and EnnemyBullet ?
   - [X] Shoot is Stop
   - [~] You   is Dead
   - [?] Time  is Dead
-  - [T] Shoot is Dead
+  - [X] Shoot is Dead
   - [ ] Super is Hot
 
-  - [EA] You is Shoot
+  - [X] You is Shoot
     => Activates only when you shoot (~once)
-    => Makes you shoot done
+    => Makes you shoot once
 
-  - [~AE] Shoot is You
+  - [X] Shoot is You
     => Teleport you to the (last) bullet
     => Thrust you ?
 
@@ -70,14 +74,19 @@ Consider:
   - gather level ideas
     - +one where shoot bullet through wall, make it become after going through wall of ennemies
   - create temp project page
-  -
-
 
 - Guns can't fire more than one bullet when Time is stopped
 Because of reloading time. ==> Make cursor in another color when ready/not
 
+==> You can't shoot if your gun is not reloaded, even if you're forced to !
+In flipper level, this means the Teleportations stop if you're teleporting too quickly !  
+
+-
+
+
  - You is Stop could be bypassed when falling. Could be an interesting puzzle
   ==> need to implement movement detection based on speed or if falling
+Puzzle: You can only shoot when you move, but enabling this rule makes you stop.
 
 # Done
 
@@ -102,7 +111,7 @@ Because of reloading time. ==> Make cursor in another color when ready/not
     are bullets moving ? can you move ?
 
     - Shoot is Dead doesn't trigger Shoot is You correctly
-    FIXED: had to specify the order of Scripts (BulletControl before SuperHotScript) in Project Settings
+    FIXED: had to specify the order of Scripts (BulletControl before EffectsApplicator) in Project Settings
 
 # Possible future dev
 

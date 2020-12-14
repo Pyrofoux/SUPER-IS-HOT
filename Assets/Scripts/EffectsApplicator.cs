@@ -4,10 +4,10 @@ using UnityEngine;
 using UnityEngine.UI;
 using DG.Tweening;
 
-public class SuperHotScript : MonoBehaviour
+public class EffectsApplicator : MonoBehaviour
 {
 
-    public static SuperHotScript instance;
+    public static EffectsApplicator instance;
 
     public float pickupDistance = 5;
     public float charge;
@@ -85,6 +85,8 @@ public class SuperHotScript : MonoBehaviour
 
       ruleHandler.CalculateRules();
       ApplyEffects();
+      //ruleHandler.CalculateRules();
+      //ApplyEffects();
       ruleHandler.PostCalculation();
         //ApplyEffects();
 
@@ -117,18 +119,21 @@ public class SuperHotScript : MonoBehaviour
         }
 
         //Shoot
+        canShoot = canShoot && ruleHandler.CheckAssert("You is Shoot");
         if (!babaMode && canShoot)
         {
             // Check wants to shoot or is forced too
             if (Input.GetMouseButtonDown(0) || (ruleHandler.CheckEffect("You is Shoot"))) //Forced shooting
             {
                 // Might have to rework how time affects this
-                StopCoroutine(ActionE(.03f));
-                StartCoroutine(ActionE(.03f));
+                StopCoroutine(ShootWaitCoroutine(.03f));
+                StartCoroutine(ShootWaitCoroutine(.03f));
                 if (weapon != null)
                 {
                     weapon.Shoot(SpawnPos(), Camera.main.transform.rotation, false);
                     GameObject lastBullet = weapon.lastBullet;
+
+                    ruleHandler.triggerFrame["You is Shoot"] = 30;
                 }
             }
         }
@@ -136,8 +141,8 @@ public class SuperHotScript : MonoBehaviour
         //Throw
         if (Input.GetMouseButtonDown(1))
         {
-            StopCoroutine(ActionE(.4f));
-            StartCoroutine(ActionE(.4f));
+            StopCoroutine(ShootWaitCoroutine(.4f));
+            StartCoroutine(ShootWaitCoroutine(.4f));
 
             if(weapon != null)
             {
@@ -193,24 +198,25 @@ public class SuperHotScript : MonoBehaviour
         Super is Hot (Win Condition)
         You is Dead (Loose condition)
 
-        Teleportation
-
       */
 
-      if(ruleHandler.CheckEffectAndAssert("Shoot is You"))
+      //Shoot is You effect & trigger
+
+      if(!babaMode && ruleHandler.CheckEffectAndAssert("Shoot is You"))
       {
         if(bulletList.Count > 0)
         {
           GameObject lastShotBullet = bulletList[bulletList.Count -1];
           gameObject.transform.position = lastShotBullet.transform.position;
-          Debug.Log("ACTIVATED");
+
+          ruleHandler.triggerFrame["Shoot is You"] = 1;
         }
 
       }
     }
 
 
-    IEnumerator ActionE(float time)
+    IEnumerator ShootWaitCoroutine(float time)
     {
         action = true;
         yield return new WaitForSecondsRealtime(time);

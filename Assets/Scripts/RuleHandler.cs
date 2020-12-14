@@ -10,15 +10,15 @@ public class RuleHandler : MonoBehaviour
     public Dictionary<string,bool> triggers;
     public Dictionary<string,bool> effects;
     public Dictionary<string,bool> deadOnce;
-    public Dictionary<string,bool> triggerOnce;
-    private string[] triggerOnceEvents;
-    private BabaWorld babaWorld;
+    public Dictionary<string,int> triggerFrame;
+    private string[] triggerFrameEvents;
+    //private BabaWorld babaWorld;
 
     // Start is called before the first frame update
     void Start()
     {
 
-      babaWorld = GetComponent<BabaWorld>();
+      //babaWorld = GetComponent<BabaWorld>();
 
        //3 different concepts
        //Rule checks (checks if player is moving)
@@ -33,7 +33,7 @@ public class RuleHandler : MonoBehaviour
        implies = new Dictionary<string,Dictionary<string,bool>>();
 
        triggers = new Dictionary<string, bool>();
-       triggers["Shoot is Dead"] = false;
+       //triggers["Shoot is Dead"] = false;
        // triggers["You is Move"] = false;
        // triggers["Super is Hot"] = false;
        // triggers["Time is Move"] = false;
@@ -51,8 +51,12 @@ public class RuleHandler : MonoBehaviour
        deadOnce["You"] = false;
        //deadOnce["Shoot"] = false;
 
-       triggerOnce = new Dictionary<string, bool>();
-       triggerOnceEvents = new string[]{"Shoot is Dead", "You is Shoot"};
+       triggerFrame = new Dictionary<string, int>();
+       triggerFrameEvents = new string[]{"Shoot is Dead", "You is Shoot", "Shoot is You"};
+       for(int i =0; i < triggerFrameEvents.Length; i++)
+       {
+         triggerFrame[triggerFrameEvents[i]] = 0;
+       }
        PostCalculation();
 
     }
@@ -82,9 +86,19 @@ public class RuleHandler : MonoBehaviour
         //Triggers checks
 
       //Detect every trigger once and apply it
-      for(int i =0; i < triggerOnceEvents.Length; i++)
+      for(int i =0; i < triggerFrameEvents.Length; i++)
       {
-        triggers[triggerOnceEvents[i]] = triggerOnce[triggerOnceEvents[i]];
+        string eventName= triggerFrameEvents[i];
+        if(triggerFrame[eventName] > 0)
+        {
+          triggers[eventName] = true;
+          triggerFrame[eventName]--; // Event style, not compatible with propagation loop
+        }
+        else
+        {
+          triggers[eventName] = false;
+        }
+
       }
 
       triggers["Time is Dead"] = deadOnce["Time"];
@@ -96,19 +110,18 @@ public class RuleHandler : MonoBehaviour
         triggers["Time is Stop"] = !CanXMove("Time");
         //|| triggers["Time is Dead"];
         triggers["Time is Move"] = CanXMove("Time");
-        // && !babaWorld.isBabaMode();
 
         //Player movement
         triggers["You is Move"] = false;
-        if(!babaWorld.isBabaMode()) // Check game unpaused
-        {
+        // if(!babaWorld.isBabaMode()) // Check game unpaused
+        // {
           if(!CheckEffectAndAssert("You is Stop")) //Check movement is controlled + currently moving
           {
             float x = Input.GetAxisRaw("Horizontal");
             float y = Input.GetAxisRaw("Vertical");
             triggers["You is Move"] = (x != 0 || y != 0);
           }
-        }
+        // }
 
         triggers["You is Stop"] = !triggers["You is Move"];
         // || triggers["You is Dead"];
@@ -140,6 +153,13 @@ public class RuleHandler : MonoBehaviour
 
         //Additional trigger for stop when
         triggers["Shoot is Stop"] = triggers["Shoot is Stop"] || triggers["Shoot is Dead"];
+
+        //triggers["Shoot is You"] = triggers["Shoot is You"] || CheckEventA
+
+      if(triggers["You is Shoot"])
+      {
+        Debug.Log("TRIGGZ");
+      }
 
       //Erase all current effects
       effects = new Dictionary<string,bool>();
@@ -189,12 +209,12 @@ public class RuleHandler : MonoBehaviour
 
     public void PostCalculation()
     {
-      // Clear TriggerOnce events
+      // Clear triggerFrame events
 
-      for(int i =0; i < triggerOnceEvents.Length; i++)
+      /*for(int i =0; i < triggerFrameEvents.Length; i++)
       {
-        triggerOnce[triggerOnceEvents[i]] = false;
-      }
+        triggerFrame[triggerFrameEvents[i]] = false;
+      }*/
     }
 
 
@@ -311,7 +331,7 @@ public class RuleHandler : MonoBehaviour
       if(CheckAssert("Time is Stop")) return false;
       if(CheckAssert("Time is Move")) return true;
 
-      Debug.Log("Move check fails");
+      Debug.Log(X+" -> Move check fails");
       return false;
 
     }

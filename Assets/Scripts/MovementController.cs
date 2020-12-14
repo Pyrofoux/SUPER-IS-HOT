@@ -46,7 +46,7 @@ public class MovementController : MonoBehaviour
     float m_GroundedTimer;
     float m_SpeedAtJump = 0.0f;
 
-    SuperHotScript superhotScript;
+    EffectsApplicator effectsApplicator;
 
     void Awake()
     {
@@ -70,7 +70,7 @@ public class MovementController : MonoBehaviour
         m_HorizontalAngle = transform.localEulerAngles.y;
 
         //get time handling script -- for game pause
-        superhotScript = GetComponent<SuperHotScript>();
+        effectsApplicator = GetComponent<EffectsApplicator>();
 
     }
 
@@ -78,7 +78,7 @@ public class MovementController : MonoBehaviour
     {
 
       //Handle pause and control stop
-      m_IsPaused = superhotScript.babaMode;
+      m_IsPaused = effectsApplicator.babaMode;
 
 
         bool wasGrounded = m_Grounded;

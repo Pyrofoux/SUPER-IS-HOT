@@ -46,15 +46,32 @@ _____________
 _____________
 Y=M___s=M____
 
+To test: Flipper style
+@____________
+____Y=s<s=Y__
+____s=Y<s=D__
+_____________
+Y=M___s=M_T=M
+
+idea: clusterlevel with lots of text and very few space
+
+
+mitraillette
+@____________
+___Y=s<Y=s____
+_____________
+_____________
+Y=MY=ss=M_T=M
+";
 */
 
 [TextArea(8,12)]
 private string layout =@"
 @____________
-____s=Y<s=D__
-_T=M_________
+___s=Y<Y=s____
 _____________
-Y=M___s=M____
+_____________
+Y=MY=ss=M_T=M
 ";
 
   public Text textPrefab;
@@ -83,7 +100,7 @@ Y=M___s=M____
   private Vector3 hudCenter;
 
   // GameObjects
-  private SuperHotScript superhotScript;
+  private EffectsApplicator effectsApplicator;
   private RuleHandler ruleHandler;
   private GameObject hud;
 
@@ -96,7 +113,7 @@ Y=M___s=M____
       hudCenter = hud.transform.position;
 
       //get time handling script -- for game pause
-      superhotScript = GetComponent<SuperHotScript>();
+      effectsApplicator = GetComponent<EffectsApplicator>();
 
       //get ruleHandler -- to modify rules in SuperHot
        ruleHandler = GetComponent<RuleHandler>();
@@ -137,7 +154,7 @@ Y=M___s=M____
     void Update()
     {
 
-      if(superhotScript.babaMode)
+      if(effectsApplicator.babaMode)
       {
         Vector2Int move = checkInput();
         bool needReload = false;
@@ -471,11 +488,6 @@ Y=M___s=M____
        {
          GameObject.Destroy(ui);
        }
-    }
-
-    public bool isBabaMode()
-    {
-      return superhotScript.babaMode;
     }
 
 }
