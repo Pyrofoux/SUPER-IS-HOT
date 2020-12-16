@@ -1,32 +1,19 @@
 # Todo
 
-- All trigger once events:
-You is Shoot (when you fire)
-Shoot is Dead (on impact)
-You is Dead (when you die) // maybe thats not the case ?
-Shoot is You (on teleport)
-
-
-- Recheck all interactions. Which are implemented? Ambiguity? Distinction between asserts and effects? Which ones should be there/ are the core ?
 
 
 # Bugfix
 
-- Rules are not parsed at startup
+- Time is Move by default might change ?
+Clearer that Time is Move impacts time, an objective to remove
 
 - "*" tile at each end of line
-
-
-- Weapons picked up from ennemies can shoot infinite bullet without reloading time
-  + cross gets bigger each time
-  => might be cause it happens when time is paused -- delay for recharging isn't paused ?
-  ==> infact, the bullet limit doesn't work -- might just have to fix the limit
 
 
 # Roadmap
 
 - [ ] Ergonomy
-  - [ ] Sphere cast instead of raycast for picking objects ?
+  - [X] Sphere cast instead of raycast for picking objects ?
   - [ ] See rules activated
   - [ ] Cancel button for baba
   - [ ] Choose: images (style) or text (have to scale, can make them lit)
@@ -36,29 +23,45 @@ Shoot is You (on teleport)
   - [ ] Win condition
   - [ ] Loose condition
 
+- [ ] Levels
+  - [ ] Map out ~10 levels
+  - [ ] Level selection screen
 
-- [ ] Map out levels
-- [ ] Level selection screen
+-  General Design
+  - [X] Bullet limit in guns (3 to 6)
+  - [X] Sphere cast for picking gun
+    [X] Highlighting pickable gun
+  - [X] Ennemy shoot you if there's a line of sight
+  - [X] Parametrizable frequency and delay for shooting
+    ===> can only delay animation
+  - [X] Controls for Baba: FixedUpdate, check frequency and consistency
+  ==> kinda no choice but to use a key up way
+
 
 - [ ] Implement all interactions as Assert, Trigger and Effect (EAT)
-  - [x] You   is Move
+  - [~] You   is Move => Detects when falling
   - [x] Time  is Move
   - [x] Shoot is Move
   - [X] You   is Stop
   - [X] Time  is Stop
   - [X] Shoot is Stop
-  - [~] You   is Dead
+  - [T] You   is Dead
   - [?] Time  is Dead
   - [X] Shoot is Dead
   - [ ] Super is Hot
 
   - [X] You is Shoot
-    => Activates only when you shoot (~once)
+    => Activates only when you shoot (~once = 30 frames)
     => Makes you shoot once
 
   - [X] Shoot is You
     => Teleport you to the (last) bullet
-    => Thrust you ?
+
+
+  - Dead is Shoot
+  Makes bullets deadly ?
+  - Dead is You (?)
+  Makes you kill on touch ?
 
 # Notes
 
@@ -87,6 +90,20 @@ In flipper level, this means the Teleportations stop if you're teleporting too q
  - You is Stop could be bypassed when falling. Could be an interesting puzzle
   ==> need to implement movement detection based on speed or if falling
 Puzzle: You can only shoot when you move, but enabling this rule makes you stop.
+
+- Design notes: What is hard/challenging when making this game ?
+
+have to make working systems for two games + their coupling
+time/difficulty is > than making each game separately
+
+Coupling
+* Logic code: physics events vs rules propagation
+* Interaction Design: Which keys are common, behave the same -- coherence in UI
++ Two UIs to make with different target action spaces
+* Level Design: Be interesting in interaction between the two design spaces
+
+Time management => Can interrupt things, use unusual ways
+Logic breaking => everything had to be flexible, detectable, manipulatable which is not that easy in Unity (JavaScript.. ;n;)
 
 # Done
 

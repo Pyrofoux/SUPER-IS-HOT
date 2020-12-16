@@ -117,8 +117,8 @@ public class BulletMovement : MonoBehaviour
             DestroyMyself();
           }
 
-          if(gameObject.CompareTag("PlayerBullet"))
-          Debug.Log(target);
+          // if(gameObject.CompareTag("PlayerBullet"))
+          // Debug.Log(target);
 
         }
 

@@ -47,6 +47,7 @@ public class MovementController : MonoBehaviour
     float m_SpeedAtJump = 0.0f;
 
     EffectsApplicator effectsApplicator;
+    RuleHandler ruleHandler;
 
     void Awake()
     {
@@ -71,6 +72,9 @@ public class MovementController : MonoBehaviour
 
         //get time handling script -- for game pause
         effectsApplicator = GetComponent<EffectsApplicator>();
+
+        // Move effect based on rules
+        ruleHandler = GetComponent<RuleHandler>();
 
     }
 
@@ -110,7 +114,7 @@ public class MovementController : MonoBehaviour
         if (!m_IsPaused && !LockControl)
         {
             // Jump (we do it first as
-            if (m_Grounded && Input.GetButtonDown("Jump"))
+            if (m_Grounded && Input.GetButtonDown("Jump") && ruleHandler.CanXMove("You"))
             {
                 m_VerticalSpeed = JumpSpeed;
                 m_Grounded = false;
@@ -126,10 +130,13 @@ public class MovementController : MonoBehaviour
                 m_SpeedAtJump = actualSpeed;
             }
 
-            // Move effect based on rules
-            RuleHandler ruleHandler = GetComponent<RuleHandler>();
+            if(!m_Grounded)
+            { // Detect when jumping
+              ruleHandler.triggerFrame["You is Move"] = 3;
+            }
 
-            //TODO: put back
+
+
             if(ruleHandler.CanXMove("You"))
             {
 

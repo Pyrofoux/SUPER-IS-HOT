@@ -4921,7 +4921,7 @@ GameObject:
   - component: {fileID: 7946492565493964173}
   - component: {fileID: 5098317397982148997}
   m_Layer: 8
-  m_Name: Gun 1
+  m_Name: Gun
   m_TagString: Gun
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4984,8 +4984,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cec25e3c1d22af64e8127064eb9ebbd2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  reloadTime: 0.3
+  bulletAmount: 3
   active: 1
   reloading: 0
-  reloadTime: 0.3
-  bulletAmount: 6
+  cursorTransform: {fileID: 0}
   lastBullet: {fileID: 0}

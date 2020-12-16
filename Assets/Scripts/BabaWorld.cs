@@ -67,11 +67,11 @@ Y=MY=ss=M_T=M
 
 [TextArea(8,12)]
 private string layout =@"
-@____________
-___s=Y<Y=s____
+_____Y=s_____
 _____________
-_____________
-Y=MY=ss=M_T=M
+_____T=M<Y=M_
+_@___________
+Y=M____T=S___
 ";
 
   public Text textPrefab;
@@ -86,8 +86,9 @@ Y=MY=ss=M_T=M
 
   //Config
   //The interval you want your player to be able to fire input.
-  static float inputRate = 0.03f;
-  static float inputRateStop = inputRate*0.0001f;
+  static float inputRate = 1f;
+  //static float inputRate = 0.03f;
+  //static float inputRateStop = inputRate*0.0001f;
   static string[] wordList = new string[]{"Time","Move","You","Super","Hot","Shoot","Stop","Dead"};
 
   private int width =0;
@@ -406,20 +407,26 @@ Y=MY=ss=M_T=M
       float horiz = Input.GetAxisRaw("Horizontal");
       float verti = -Input.GetAxisRaw("Vertical");
       bool inputDown = (horiz != 0 || verti != 0);
-      if(inputDown && Time.time > nextInput)
+
+      //Debug.Log(nextInput-Time.fixedTime);
+      if(inputDown && nextInput - Time.fixedTime <= 0.01f)
       {
 
 
 
-        // When Time is slowed, so is the inputRate because of time speed mess
-        if(ruleHandler.CheckEffectAndAssert("Time is Move"))
-        {
-          nextInput = Time.time + inputRate;
-        }
-        else
-        {
-          nextInput = Time.time + inputRateStop;
-        }
+        nextInput = Time.fixedTime + inputRate;
+
+        //Before Fixating the FPS:
+
+        // // When Time is slowed, so is the inputRate because of time speed mess
+        // if(ruleHandler.CheckEffectAndAssert("Time is Move"))
+        // {
+        //   nextInput = Time.fixedTime + inputRate;
+        // }
+        // else
+        // {
+        //   nextInput = Time.fixedTime + inputRateStop;
+        // }
 
         if(horiz > 0)
         {
@@ -441,9 +448,12 @@ Y=MY=ss=M_T=M
         return Vector2Int.zero;
       }
       //allow to re-move if all is released
-      else if(horiz == 0 && verti == 0)
+      else
       {
-        nextInput = Time.time;
+        bool latency = horiz == 0 && verti == 0;
+        //latency = true;
+        if(latency)
+        nextInput = Time.fixedTime;
       }
 
 

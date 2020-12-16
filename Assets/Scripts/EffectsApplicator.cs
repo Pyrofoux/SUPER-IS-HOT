@@ -9,9 +9,10 @@ public class EffectsApplicator : MonoBehaviour
 
     public static EffectsApplicator instance;
 
-    public float pickupDistance = 5;
+    public float pickupDistance = 3;
+    public float pickupSphereRadius = 0.5f;
     public float charge;
-    public bool canShoot = true;
+    //public bool canShoot = true;
     public bool action;
     public bool babaMode = false;
     public GameObject bullet;
@@ -24,17 +25,15 @@ public class EffectsApplicator : MonoBehaviour
 
 
     [Space]
-    [Header("UI")]
-    public Image indicator;
-
-    [Space]
     [Header("Prefabs")]
     public GameObject hitParticlePrefab;
     public GameObject bulletPrefab;
+    public Image weaponCursor;
 
     private GameObject hud;
     private RuleHandler ruleHandler;
     private BabaWorld babaWorld;
+
 
     // Time constants
     // Constants
@@ -47,6 +46,7 @@ public class EffectsApplicator : MonoBehaviour
 
     [Header("DO NOT TOUCH")]
     public List<GameObject> bulletList;
+
 
     private void Awake()
     {
@@ -65,6 +65,7 @@ public class EffectsApplicator : MonoBehaviour
       hud = (GameObject) GameObject.Find("HUD_Baba");
       ruleHandler = GetComponent<RuleHandler>();
       babaWorld = GetComponent<BabaWorld>();
+
 
       bulletList = new List<GameObject>();
 
@@ -87,9 +88,9 @@ public class EffectsApplicator : MonoBehaviour
       ApplyEffects();
       //ruleHandler.CalculateRules();
       //ApplyEffects();
-      ruleHandler.PostCalculation();
         //ApplyEffects();
 
+      UpdateCursor();
 
     }
 
@@ -118,12 +119,20 @@ public class EffectsApplicator : MonoBehaviour
             UnityEngine.SceneManagement.SceneManager.LoadSceneAsync(UnityEngine.SceneManagement.SceneManager.GetActiveScene().name);
         }
 
+
+        int bulletAmount = -1;
+        if(weapon != null)bulletAmount = weapon.bulletAmount;
         //Shoot
-        canShoot = canShoot && ruleHandler.CheckAssert("You is Shoot");
+        bool canShoot = ruleHandler.CheckAssert("You is Shoot") &&  bulletAmount > 0;
+        bool canThrow = true;
+
+        bool askShoot = Input.GetMouseButtonDown(0);
+        bool askThrow = (Input.GetMouseButtonDown(1) || (Input.GetMouseButtonDown(0) && bulletAmount <= 0));
+
         if (!babaMode && canShoot)
         {
             // Check wants to shoot or is forced too
-            if (Input.GetMouseButtonDown(0) || (ruleHandler.CheckEffect("You is Shoot"))) //Forced shooting
+            if (askShoot || (ruleHandler.CheckEffect("You is Shoot"))) //Forced shooting
             {
                 // Might have to rework how time affects this
                 StopCoroutine(ShootWaitCoroutine(.03f));
@@ -139,10 +148,11 @@ public class EffectsApplicator : MonoBehaviour
         }
 
         //Throw
-        if (Input.GetMouseButtonDown(1))
+        //bool canThrow = !action;
+        if ( !babaMode && askThrow && canThrow)
         {
-            StopCoroutine(ShootWaitCoroutine(.4f));
-            StartCoroutine(ShootWaitCoroutine(.4f));
+            /*StopCoroutine(ShootWaitCoroutine(.4f));
+            StartCoroutine(ShootWaitCoroutine(.4f));*/
 
             if(weapon != null)
             {
@@ -153,7 +163,16 @@ public class EffectsApplicator : MonoBehaviour
 
         //Pick up weapons
         RaycastHit hit;
+
+        //try with ray first then Sphere
         if(Physics.Raycast(Camera.main.transform.position, Camera.main.transform.forward, out hit, pickupDistance, weaponLayer))
+        {
+            if (Input.GetMouseButtonDown(0) && weapon == null)
+            {
+                hit.transform.GetComponent<WeaponScript>().Pickup();
+            }
+        }
+        else if(Physics.SphereCast(Camera.main.transform.position, pickupSphereRadius, Camera.main.transform.forward, out hit, pickupDistance, weaponLayer))
         {
             if (Input.GetMouseButtonDown(0) && weapon == null)
             {
@@ -183,23 +202,6 @@ public class EffectsApplicator : MonoBehaviour
         //Smoothen time acceleration or deceleration
         Time.timeScale = Mathf.Lerp(Time.timeScale, timeSpeed, lerpTime);
 
-        // Old logic code
-        //float timeSpeed = moving ? timeFastConst : timeSlowConst;
-        //float lerpTime = moving ? lerpSlow : lerpFast;
-
-        //timeSpeed = action ? timeFastConst : timeSpeed;
-        //lerpTime = action ? lerpFast : lerpTime;
-
-
-      /*
-        Effects for which effects are important even if they're activated only for a frame
-        eg:
-        Shoot is You (Teleportation)
-        Super is Hot (Win Condition)
-        You is Dead (Loose condition)
-
-      */
-
       //Shoot is You effect & trigger
 
       if(!babaMode && ruleHandler.CheckEffectAndAssert("Shoot is You"))
@@ -223,17 +225,31 @@ public class EffectsApplicator : MonoBehaviour
         action = false;
     }
 
-    //Reloading icon
-    public void ReloadUI(float time)
-    {
-        indicator.transform.DORotate(new Vector3(0, 0, 90), time, RotateMode.LocalAxisAdd).SetEase(Ease.Linear).OnComplete(() => indicator.transform.DOPunchScale(Vector3.one / 3, .2f, 10, 1).SetUpdate(true));
-    }
-
-
     //Spawn position for bullets
     Vector3 SpawnPos()
     {
         return Camera.main.transform.position + (Camera.main.transform.forward * .5f) + (Camera.main.transform.up * -.02f);
+    }
+
+
+    // Gun UI stuff, could be placed somewhere else ideally
+    public void ResetCursor()
+    {
+      weaponCursor.transform.localEulerAngles = new Vector3(0,0,0);
+      weaponCursor.transform.localScale = WeaponScript.baseScale;
+    }
+
+    public void UpdateCursor()
+    {
+      if(weapon == null)
+      {
+        ResetCursor();
+      }
+      else
+      {
+        weaponCursor.transform.localEulerAngles = weapon.cursorTransform.transform.localEulerAngles;
+        weaponCursor.transform.localScale = weapon.cursorTransform.transform.localScale;
+      }
     }
 
 

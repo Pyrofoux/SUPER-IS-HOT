@@ -14,17 +14,23 @@ public class EnemyScript : MonoBehaviour
 
     [Header("State")]
     public string lockWord = "";
+    public float sightDistance = 8f;
+    public LayerMask obstacleLayer;
     public bool dead;
+
+
     private BabaWorld babaWorld;
 
     private float stopped_time = 0.01f;
-    private float rotSpeed = 0.0002f;
+    private float rotSpeed = 0.000002f;
+
+    private float randomDelay;
 
 
     void Start()
     {
         anim = GetComponent<Animator>();
-        StartCoroutine(RandomAnimation());
+        anim.enabled = true;
 
         if (weaponHolder.GetComponentInChildren<WeaponScript>() != null)
             weaponHolder.GetComponentInChildren<WeaponScript>().active = false;
@@ -40,10 +46,22 @@ public class EnemyScript : MonoBehaviour
           wordDisplayed.text = "";
         }
 
+        // Might cause some T-posing
+        randomDelay = Random.Range(0, 5f);
     }
 
     void Update()
     {
+
+        //randomdelay before shooting
+        if(randomDelay > 0)
+        {
+          anim.enabled = false;
+          randomDelay = randomDelay - 1;
+          if(randomDelay < 0) anim.enabled = true;
+          return ;
+        }
+
         // Follow player
         if(!dead && Time.deltaTime > stopped_time)
         {
@@ -61,7 +79,7 @@ public class EnemyScript : MonoBehaviour
     public void Kill()
     {
 
-        if(dead) return; //Fix cause Kill() will be killed multiple times during the whole collision
+         //Fix cause Kill() will be killed multiple times during the whole collision
 
         //Ragdoll
         anim.enabled = false;
@@ -72,7 +90,7 @@ public class EnemyScript : MonoBehaviour
             bp.rb.isKinematic = false;
             bp.rb.interpolation = RigidbodyInterpolation.Interpolate;
         }
-
+        if(dead) return;
         // Throw gun towards player
         if (weaponHolder.GetComponentInChildren<WeaponScript>() != null)
         {
@@ -95,18 +113,17 @@ public class EnemyScript : MonoBehaviour
 
     public void Shoot()
     {
+        // Check if dead
         if (dead)
             return;
 
+        //Check line of sight
+        RaycastHit hit;
+        if(Physics.Raycast(gameObject.transform.position, gameObject.transform.forward, out hit, sightDistance, obstacleLayer))
+        return ;
+
+        // Actually shoot
         if (weaponHolder.GetComponentInChildren<WeaponScript>() != null)
             weaponHolder.GetComponentInChildren<WeaponScript>().Shoot(GetComponentInChildren<ParticleSystem>().transform.position, transform.rotation, true);
-    }
-
-    IEnumerator RandomAnimation()
-    {
-        anim.enabled = false;
-        yield return new WaitForSecondsRealtime(Random.Range(.1f, .5f));
-        anim.enabled = true;
-
     }
 }

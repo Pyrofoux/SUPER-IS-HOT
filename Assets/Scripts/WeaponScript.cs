@@ -8,22 +8,25 @@ using DG.Tweening;
 [SelectionBase]
 public class WeaponScript : MonoBehaviour
 {
-    [Header("Bools")]
-    public bool active = true;
-    public bool reloading;
+
 
     private Rigidbody rb;
     private Collider collider;
     private Renderer renderer;
+    private  IEnumerator reloadCouroutine;
 
     [Space]
     [Header("Weapon Settings")]
     public float reloadTime = .3f;
-    public int bulletAmount = 6;
+    public int bulletAmount = 3;
+    static public Vector3 baseScale = new Vector3(5,5,0);
 
     [Header("DO NOT TOUCH")]
     RuleHandler ruleHandler;
     EffectsApplicator effectsApplicator;
+    public bool active = true;
+    public bool reloading;
+    public GameObject cursorTransform;
     public GameObject lastBullet;
 
     void Start()
@@ -37,6 +40,9 @@ public class WeaponScript : MonoBehaviour
         effectsApplicator = (EffectsApplicator)GameObject.FindObjectOfType(typeof(EffectsApplicator));
         //get ruleHandler -- to modify rules in SuperHot
         ruleHandler = (RuleHandler)GameObject.FindObjectOfType(typeof(RuleHandler));
+
+        cursorTransform = new GameObject();
+        cursorTransform.transform.localScale = WeaponScript.baseScale;
 
         ChangeSettings();
     }
@@ -60,8 +66,12 @@ public class WeaponScript : MonoBehaviour
         if (bulletAmount <= 0)
             return;
 
-        if(!effectsApplicator.weapon == this)
-            bulletAmount--;
+
+        if(effectsApplicator.weapon == this)
+        {
+          bulletAmount--;
+        }
+
 
         GameObject bullet = Instantiate(effectsApplicator.bulletPrefab, pos, rot);
 
@@ -81,7 +91,12 @@ public class WeaponScript : MonoBehaviour
             GetComponentInChildren<ParticleSystem>().Play();
 
         if(effectsApplicator.weapon == this)
-            StartCoroutine(Reload());
+        {
+          reloading = true;
+          reloadCouroutine = Reload();
+          StartCoroutine(reloadCouroutine);
+        }
+
 
         Camera.main.transform.DOComplete();
         Camera.main.transform.DOShakePosition(.2f, .01f, 10, 90, false, true).SetUpdate(true);
@@ -92,7 +107,8 @@ public class WeaponScript : MonoBehaviour
 
     public void Throw()
     {
-        //Throwing animation
+
+        //Throwing gun animation
         Sequence s = DOTween.Sequence();
         s.Append(transform.DOMove(transform.position - transform.forward, .01f)).SetUpdate(true);
         s.AppendCallback(() => transform.parent = null);
@@ -100,6 +116,7 @@ public class WeaponScript : MonoBehaviour
         s.AppendCallback(() => ChangeSettings());
         s.AppendCallback(() => rb.AddForce(Camera.main.transform.forward * 10, ForceMode.Impulse));
         s.AppendCallback(() => rb.AddTorque(transform.transform.right + transform.transform.up * 20, ForceMode.Impulse));
+
     }
 
     public void Pickup()
@@ -131,12 +148,18 @@ public class WeaponScript : MonoBehaviour
 
     IEnumerator Reload()
     {
-        if (effectsApplicator.weapon != this)
-            yield break;
-        effectsApplicator.ReloadUI(reloadTime);
-        reloading = true;
+        /*if (effectsApplicator.weapon != this)
+            yield break;*/
+        ReloadUI(reloadTime);
+
         yield return new WaitForSeconds(reloadTime);
         reloading = false;
+    }
+
+    //Reloading icon
+    public void ReloadUI(float time)
+    {
+        cursorTransform.transform.DORotate(new Vector3(0, 0, 90), time, RotateMode.LocalAxisAdd).SetEase(Ease.Linear).OnComplete(() => cursorTransform.transform.DOPunchScale(Vector3.one / 3, .2f, 10, 1).SetUpdate(true));
     }
 
     private void OnCollisionEnter(Collision collision)

@@ -52,12 +52,11 @@ public class RuleHandler : MonoBehaviour
        //deadOnce["Shoot"] = false;
 
        triggerFrame = new Dictionary<string, int>();
-       triggerFrameEvents = new string[]{"Shoot is Dead", "You is Shoot", "Shoot is You"};
+       triggerFrameEvents = new string[]{"Shoot is Dead", "You is Shoot", "Shoot is You", "You is Move"};
        for(int i =0; i < triggerFrameEvents.Length; i++)
        {
          triggerFrame[triggerFrameEvents[i]] = 0;
        }
-       PostCalculation();
 
     }
 
@@ -112,14 +111,14 @@ public class RuleHandler : MonoBehaviour
         triggers["Time is Move"] = CanXMove("Time");
 
         //Player movement
-        triggers["You is Move"] = false;
+
         // if(!babaWorld.isBabaMode()) // Check game unpaused
         // {
           if(!CheckEffectAndAssert("You is Stop")) //Check movement is controlled + currently moving
           {
             float x = Input.GetAxisRaw("Horizontal");
             float y = Input.GetAxisRaw("Vertical");
-            triggers["You is Move"] = (x != 0 || y != 0);
+            triggers["You is Move"] = triggers["You is Move"] || (x != 0 || y != 0);
           }
         // }
 
@@ -156,10 +155,6 @@ public class RuleHandler : MonoBehaviour
 
         //triggers["Shoot is You"] = triggers["Shoot is You"] || CheckEventA
 
-      if(triggers["You is Shoot"])
-      {
-        Debug.Log("TRIGGZ");
-      }
 
       //Erase all current effects
       effects = new Dictionary<string,bool>();
@@ -206,17 +201,6 @@ public class RuleHandler : MonoBehaviour
           }
       }
     }
-
-    public void PostCalculation()
-    {
-      // Clear triggerFrame events
-
-      /*for(int i =0; i < triggerFrameEvents.Length; i++)
-      {
-        triggerFrame[triggerFrameEvents[i]] = false;
-      }*/
-    }
-
 
     public void UpdateRules(Dictionary<string,bool> _asserts, Dictionary<string,Dictionary<string,bool>> _implies)
     {
@@ -325,7 +309,7 @@ public class RuleHandler : MonoBehaviour
       if(CheckAssert(X+" is Stop")) return false;
       if(CheckAssert(X+" is Move")) return true;
 
-      if(deadOnce["Time"]) return false;
+      //if(deadOnce["Time"]) return false;
       if(CheckEffect("Time is Stop")) return false;
       if(CheckEffect("Time is Move")) return true;
       if(CheckAssert("Time is Stop")) return false;
