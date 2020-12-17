@@ -45,6 +45,7 @@ GameObject:
   - component: {fileID: 6925908573982296524}
   - component: {fileID: 8873542470460256696}
   - component: {fileID: 7861846816735875584}
+  - component: {fileID: 5062934358785970782}
   m_Layer: 9
   m_Name: Player
   m_TagString: Player
@@ -132,7 +133,6 @@ MonoBehaviour:
   pickupDistance: 3
   pickupSphereRadius: 0.5
   charge: 0
-  canShoot: 0
   action: 0
   babaMode: 1
   bullet: {fileID: 8914353279888130421, guid: 6e746ae9237f68243a2eb541a3b83455, type: 3}
@@ -172,7 +172,55 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 917b036bfe027a4478a102a7aedd8f9f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  textPrefab: {fileID: 1470587691653059665, guid: 6466033baaa137640aa5e84468a10802,
+  width: 0
+  height: 0
+  baba: {x: 0, y: 0}
+  lastMove: {x: 0, y: -1}
+--- !u!114 &5062934358785970782
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2744785550390402877}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3f1ee45230d58e44592552d164da85e4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tilePrefab: {fileID: 45532683776483607, guid: 09dccf5766327084e9197f50a8f27b9d,
+    type: 3}
+  BabaUpSprite: {fileID: -7486092956772349302, guid: e8f6988542c6aa746b3f275f69dd0d1b,
+    type: 3}
+  BabaDownSprite: {fileID: -3627264120405484348, guid: e8f6988542c6aa746b3f275f69dd0d1b,
+    type: 3}
+  BabaLeftSprite: {fileID: 6007627129536956325, guid: e8f6988542c6aa746b3f275f69dd0d1b,
+    type: 3}
+  BabaRightSprite: {fileID: 5663061954668274717, guid: e8f6988542c6aa746b3f275f69dd0d1b,
+    type: 3}
+  IsSprite: {fileID: -4815885190406460031, guid: e8f6988542c6aa746b3f275f69dd0d1b,
+    type: 3}
+  WhenSprite: {fileID: -396035294860175646, guid: e8f6988542c6aa746b3f275f69dd0d1b,
+    type: 3}
+  TimeSprite: {fileID: 8233071653059976297, guid: e8f6988542c6aa746b3f275f69dd0d1b,
+    type: 3}
+  YouSprite: {fileID: 7477116942032994148, guid: e8f6988542c6aa746b3f275f69dd0d1b,
+    type: 3}
+  ShootSprite: {fileID: -6985117363303071740, guid: e8f6988542c6aa746b3f275f69dd0d1b,
+    type: 3}
+  MoveSprite: {fileID: -781294158744790408, guid: e8f6988542c6aa746b3f275f69dd0d1b,
+    type: 3}
+  StopSprite: {fileID: 9061651696941551919, guid: e8f6988542c6aa746b3f275f69dd0d1b,
+    type: 3}
+  DeadSprite: {fileID: 8642771837104280003, guid: e8f6988542c6aa746b3f275f69dd0d1b,
+    type: 3}
+  SuperSprite: {fileID: -317771678647371661, guid: e8f6988542c6aa746b3f275f69dd0d1b,
+    type: 3}
+  HotSprite: {fileID: -7775419718026629507, guid: e8f6988542c6aa746b3f275f69dd0d1b,
+    type: 3}
+  WallSprite: {fileID: 11442893378838041, guid: e8f6988542c6aa746b3f275f69dd0d1b,
+    type: 3}
+  EmptySprite: {fileID: -1762573714345474896, guid: e8f6988542c6aa746b3f275f69dd0d1b,
     type: 3}
 --- !u!1 &3460660920331530078
 GameObject:

@@ -16,7 +16,9 @@ Clearer that Time is Move impacts time, an objective to remove
   - [X] Sphere cast instead of raycast for picking objects ?
   - [ ] See rules activated
   - [ ] Cancel button for baba
-  - [ ] Choose: images (style) or text (have to scale, can make them lit)
+  - [X] Choose: images (style) or text (have to scale, can make them lit)
+  ==> Todo fix: create individual images for doodle shader to work
+    OR add black outlines 
 
 
 - Gameplay Loop:
@@ -39,14 +41,14 @@ Clearer that Time is Move impacts time, an objective to remove
 
 
 - [ ] Implement all interactions as Assert, Trigger and Effect (EAT)
-  - [~] You   is Move => Detects when falling
-  - [x] Time  is Move
-  - [x] Shoot is Move
+  - [X] You   is Move => Detects when falling
+  - [X] Time  is Move
+  - [X] Shoot is Move
   - [X] You   is Stop
   - [X] Time  is Stop
   - [X] Shoot is Stop
-  - [T] You   is Dead
-  - [?] Time  is Dead
+  - [?T] You   is Dead
+  - [X] Time  is Dead
   - [X] Shoot is Dead
   - [ ] Super is Hot
 
@@ -134,5 +136,15 @@ Logic breaking => everything had to be flexible, detectable, manipulatable which
 
 - REVERSE: path is reversed, if you go back to origin you disappear
 - LOOP: path loops: you must choose your first steps wisely
-- SKIP: skips ??
+- SKIP: skips time ??
 - RED: impact ennemies. could make them reverse, loop, invisible or invincible
+
+
+
+#Credits
+- Pyrofoux
+- Baba is You dev
+- Superhot team
+- Guy's music
+- The Spriter Ressource
+- Shader guy - https://www.youtube.com/watch?v=GXE0VqH08sc

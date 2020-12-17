@@ -65,24 +65,17 @@ Y=MY=ss=M_T=M
 ";
 */
 
+[Header("DO NOT TOUCH")]
+
 [TextArea(8,12)]
 private string layout =@"
 _____Y=s_____
-_____________
+T= D__________
 _____T=M<Y=M_
-_@___________
-Y=M____T=S___
+_@____$=H__#_
+Y=M____S=T__#
 ";
 
-  public Text textPrefab;
-
-
-  //Display Settings
-  private string babaDisplayString = ":D";
-  float startpointX = -500;
-  float startpointY = 0;
-  float horizontalSpacing = 80;
-  float verticalSpacing = 50;
 
   //Config
   //The interval you want your player to be able to fire input.
@@ -91,33 +84,31 @@ Y=M____T=S___
   //static float inputRateStop = inputRate*0.0001f;
   static string[] wordList = new string[]{"Time","Move","You","Super","Hot","Shoot","Stop","Dead"};
 
-  private int width =0;
-  private int height =0;
+  public int width =0;
+  public int height =0;
   private Tile[,] map;
-  private Vector2Int baba = new Vector2Int(0,0);
+  public Vector2Int baba = new Vector2Int(0,0);
   private int currentUnlockId = 1;
+  public Vector2Int lastMove = Vector2Int.down;
 
-  // HUD
-  private Vector3 hudCenter;
 
   // GameObjects
   private EffectsApplicator effectsApplicator;
   private RuleHandler ruleHandler;
-  private GameObject hud;
+  private BabaRenderer renderer;
+
 
     // Start is called before the first frame update
     void Start()
     {
-
-      //get canvas HUD
-      hud = (GameObject) GameObject.Find("HUD_Baba");
-      hudCenter = hud.transform.position;
 
       //get time handling script -- for game pause
       effectsApplicator = GetComponent<EffectsApplicator>();
 
       //get ruleHandler -- to modify rules in SuperHot
        ruleHandler = GetComponent<RuleHandler>();
+
+       renderer = GetComponent<BabaRenderer>();
 
       //Convert ASCII to tiles
       char[] n = {'\n'};
@@ -148,7 +139,7 @@ Y=M____T=S___
         }
       }
       ParseRules();
-      UpdateDisplay();
+      renderer.UpdateDisplay();
     }
 
     // Update is called once per frame
@@ -170,13 +161,13 @@ Y=M____T=S___
         if(needReload)
         {
           ParseRules();
-          UpdateDisplay();
+          renderer.UpdateDisplay();
         }
       }
     }
 
 
-    private Tile getTile(int x, int y)
+    public Tile getTile(int x, int y)
     {
       if (x<0 ||  y<0 || x>=width || y >= height)
       {
@@ -250,6 +241,8 @@ Y=M____T=S___
         Vector2Int front = baba+move;
         setTile(front,new Empty());
         baba = front;
+
+        lastMove = move;
         return true;
       }
       else
@@ -460,47 +453,13 @@ Y=M____T=S___
       return Vector2Int.zero;
     }
 
-
-//UI
     public void UpdateDisplay()
     {
-      Clear();
-
-       for(int y = 0; y < height; y++)
-       {
-         for(int x = 0; x < width; x++)
-         {
-           Text charUI = (Text)Instantiate(textPrefab, new Vector3(0, 0, 0), Quaternion.identity);
-
-           if(x == baba.x && y == baba.y)
-           {
-             charUI.text = babaDisplayString;
-           }
-           else
-           {
-             charUI.text = getTile(x,y).name;
-           }
-
-
-           charUI.transform.SetParent(hud.transform);
-           //Positionning
-           charUI.transform.position = hudCenter + new Vector3(startpointX+x*horizontalSpacing,startpointY+y*-verticalSpacing,0);
-         }
-       }
-
+      renderer.UpdateDisplay();
     }
 
-    public void Clear()
-    {
-      //Clear all UI elements
-       GameObject[] uis = GameObject.FindGameObjectsWithTag("BabaUI");
-       foreach(GameObject ui in uis)
-       {
-         GameObject.Destroy(ui);
-       }
-    }
 
-}
+  }
 
 
 
