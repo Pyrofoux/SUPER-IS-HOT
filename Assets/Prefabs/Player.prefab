@@ -176,6 +176,7 @@ MonoBehaviour:
   height: 0
   baba: {x: 0, y: 0}
   lastMove: {x: 0, y: -1}
+  activatedWords: []
 --- !u!114 &5062934358785970782
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -221,6 +222,18 @@ MonoBehaviour:
   WallSprite: {fileID: 11442893378838041, guid: e8f6988542c6aa746b3f275f69dd0d1b,
     type: 3}
   EmptySprite: {fileID: -1762573714345474896, guid: e8f6988542c6aa746b3f275f69dd0d1b,
+    type: 3}
+  Lock1Sprite: {fileID: -2426843357703420916, guid: e8f6988542c6aa746b3f275f69dd0d1b,
+    type: 3}
+  Lock2Sprite: {fileID: -3642208251427772964, guid: e8f6988542c6aa746b3f275f69dd0d1b,
+    type: 3}
+  Lock3Sprite: {fileID: 3985221016008397036, guid: e8f6988542c6aa746b3f275f69dd0d1b,
+    type: 3}
+  Lock4Sprite: {fileID: 5778961287088506303, guid: e8f6988542c6aa746b3f275f69dd0d1b,
+    type: 3}
+  Lock5Sprite: {fileID: 8758155216525550727, guid: e8f6988542c6aa746b3f275f69dd0d1b,
+    type: 3}
+  Lock6Sprite: {fileID: 6116080786932476827, guid: e8f6988542c6aa746b3f275f69dd0d1b,
     type: 3}
 --- !u!1 &3460660920331530078
 GameObject:

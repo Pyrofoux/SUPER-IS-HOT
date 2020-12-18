@@ -4,6 +4,9 @@
 
 # Bugfix
 
+- Don't recreate image each time it is updated
+only if it has been cleared before + babaMode isnt activated
+
 - Time is Move by default might change ?
 Clearer that Time is Move impacts time, an objective to remove
 
@@ -12,13 +15,16 @@ Clearer that Time is Move impacts time, an objective to remove
 
 # Roadmap
 
+
+
 - [ ] Ergonomy
+  - [ ] Display controls: Arrow keys, E for Baba Mode, R to restart, Undo with back space <=]
   - [X] Sphere cast instead of raycast for picking objects ?
-  - [ ] See rules activated
+  - [X] See rules activated
   - [ ] Cancel button for baba
   - [X] Choose: images (style) or text (have to scale, can make them lit)
   ==> Todo fix: create individual images for doodle shader to work
-    OR add black outlines 
+    OR add black outlines
 
 
 - Gameplay Loop:
@@ -103,6 +109,7 @@ Coupling
 * Interaction Design: Which keys are common, behave the same -- coherence in UI
 + Two UIs to make with different target action spaces
 * Level Design: Be interesting in interaction between the two design spaces
+* Graphical Design: Recreate both aethetics and make them coexist
 
 Time management => Can interrupt things, use unusual ways
 Logic breaking => everything had to be flexible, detectable, manipulatable which is not that easy in Unity (JavaScript.. ;n;)

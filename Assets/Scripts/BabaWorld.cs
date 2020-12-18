@@ -63,14 +63,23 @@ _____________
 _____________
 Y=MY=ss=M_T=M
 ";
+
+just everything
+_____Y=s_____
+T= D__________
+_____T=M<Y=M_
+_@____$=H__#_
+Y=M____S=T__#
+
+
 */
 
 [Header("DO NOT TOUCH")]
 
 [TextArea(8,12)]
 private string layout =@"
-_____Y=s_____
-T= D__________
+__2__Y=s___1_
+T=2D__________
 _____T=M<Y=M_
 _@____$=H__#_
 Y=M____S=T__#
@@ -82,15 +91,19 @@ Y=M____S=T__#
   static float inputRate = 1f;
   //static float inputRate = 0.03f;
   //static float inputRateStop = inputRate*0.0001f;
-  static string[] wordList = new string[]{"Time","Move","You","Super","Hot","Shoot","Stop","Dead"};
+  private string[] validWords = new string[]{"Time","Move","You","Super","Hot","Shoot","Stop","Dead","Is","When"};
+  private string[] validRules = new string[]
+  {
+    "You is Move","Time is Move","Shoot is Move","You is Stop","Time is Stop","Shoot is Stop","You is Dead","Time is Dead","Shoot is Dead","Super is Hot","You is Shoot","Shoot is You"
+  };
 
   public int width =0;
   public int height =0;
   private Tile[,] map;
   public Vector2Int baba = new Vector2Int(0,0);
   private int currentUnlockId = 1;
-  public Vector2Int lastMove = Vector2Int.down;
-
+  public Vector2Int lastMove = Vector2Int.left;
+  public List<Vector2Int> activatedWords = new List<Vector2Int>();
 
   // GameObjects
   private EffectsApplicator effectsApplicator;
@@ -255,6 +268,8 @@ Y=M____S=T__#
   private void ParseRules()
   { // Parse rules logic from tiles on map
 
+    activatedWords = new List<Vector2Int>();
+
     Dictionary<string,bool> asserts = new Dictionary<string,bool>();
     Dictionary<string,Dictionary<string,bool>> implies = new Dictionary<string,Dictionary<string,bool>>();
 
@@ -265,6 +280,7 @@ Y=M____S=T__#
     //Set of "IS" words that are in a valid "WHEN" statement
     //and should not be used to make an assert
     List<Vector2Int> blacklist = new List<Vector2Int>();
+
 
     for(int y = 0; y < height; y++)
     {
@@ -330,9 +346,10 @@ Y=M____S=T__#
     }
 
 
-    if(text[1] == "is" && text[3] == "when" && text[5] == "is") //Implication detection
+     //Trigger + Effect detection
+    if(text[1] == "is" && text[3] == "when" && text[5] == "is")
     {
-      if(wordList.Contains(text[0]) && wordList.Contains(text[2]) && wordList.Contains(text[4]) && wordList.Contains(text[6]))
+      if(validWords.Contains(text[0]) && validWords.Contains(text[2]) && validWords.Contains(text[4]) && validWords.Contains(text[6]))
       {
         string effect = text[0]+" is "+text[2];
         string trigger = text[4]+" is "+text[6];
@@ -346,16 +363,46 @@ Y=M____S=T__#
           implies[trigger] = new Dictionary<string,bool>();
         }
         implies[trigger][effect] = true;
+
+        //Add to activated words
+        if(isValidRule(effect))
+        {
+          activatedWords.Add(line[0]);
+          activatedWords.Add(line[1]);
+          activatedWords.Add(line[2]);
+        }
+
+        if(isValidRule(trigger))
+        {
+          activatedWords.Add(line[4]);
+          activatedWords.Add(line[5]);
+          activatedWords.Add(line[6]);
+        }
+
+        if(isValidRule(trigger) && isValidRule(effect))
+        activatedWords.Add(line[3]);
+
+
       }
     }
 
-    //If issue in order: check all whens then all is in another loop
-    if(blacklist.Contains(line[1]) == false && text[1] == "is") // Assert detection
+     // Assertion detection
+    //If issue in order: check all "when" then all "is" in another loop
+    if(blacklist.Contains(line[1]) == false && text[1] == "is")
     {
-      if(wordList.Contains(text[0]) && wordList.Contains(text[2]))
+      if(validWords.Contains(text[0]) && validWords.Contains(text[2]))
       {
         string assert = text[0]+" is "+text[2];
         asserts[assert] = true;
+
+        //Add to activated words
+        if(isValidRule(assert))
+        {
+          activatedWords.Add(line[0]);
+          activatedWords.Add(line[1]);
+          activatedWords.Add(line[2]);
+        }
+
       }
     }
 
@@ -456,6 +503,17 @@ Y=M____S=T__#
     public void UpdateDisplay()
     {
       renderer.UpdateDisplay();
+    }
+
+    public bool isValidRule(string rule)
+    {
+      return validRules.Contains(rule);
+    }
+
+    public bool isValidWord(string word)
+    {
+      string titleCaseWord = word[0].ToString().ToUpper()+word.Substring(1).ToLower();
+      return validWords.Contains(titleCaseWord);
     }
 
 

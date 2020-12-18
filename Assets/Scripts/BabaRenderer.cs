@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine;
+using System.Linq;
 
 public class BabaRenderer : MonoBehaviour
 {
@@ -26,6 +27,12 @@ public class BabaRenderer : MonoBehaviour
   public Sprite HotSprite;
   public Sprite WallSprite;
   public Sprite EmptySprite;
+  public Sprite Lock1Sprite;
+  public Sprite Lock2Sprite;
+  public Sprite Lock3Sprite;
+  public Sprite Lock4Sprite;
+  public Sprite Lock5Sprite;
+  public Sprite Lock6Sprite;
 
 
 
@@ -81,6 +88,8 @@ public class BabaRenderer : MonoBehaviour
        {
 
          Image tileUI = (Image)Instantiate(tilePrefab, new Vector3(0, 0, 0), Quaternion.identity);
+         string name = babaWorld.getTile(x,y).name;
+         name = name[0].ToString().ToUpper()+name.Substring(1).ToLower();
 
          if(x == babaWorld.baba.x && babaWorld.baba.y == y)
          {
@@ -91,25 +100,45 @@ public class BabaRenderer : MonoBehaviour
          }
          else
          {
-           string name = babaWorld.getTile(x,y).name.ToUpper();
 
-           if(name == "TIME"){tileUI.sprite = TimeSprite;}else
-           if(name == "YOU"){tileUI.sprite = YouSprite;}else
-           if(name == "SHOOT"){tileUI.sprite = ShootSprite;}else
-           if(name == "MOVE"){tileUI.sprite = MoveSprite;}else
-           if(name == "STOP"){tileUI.sprite = StopSprite;}else
-           if(name == "DEAD"){tileUI.sprite = DeadSprite;}else
-           if(name == "IS"){tileUI.sprite = IsSprite;}else
-           if(name == "WHEN"){tileUI.sprite = WhenSprite;}else
-           if(name == "SUPER"){tileUI.sprite = SuperSprite;}else
-           if(name == "HOT"){tileUI.sprite = HotSprite;}else
+           if(name == "Time"){tileUI.sprite = TimeSprite;}else
+           if(name == "You"){tileUI.sprite = YouSprite;}else
+           if(name == "Shoot"){tileUI.sprite = ShootSprite;}else
+           if(name == "Move"){tileUI.sprite = MoveSprite;}else
+           if(name == "Stop"){tileUI.sprite = StopSprite;}else
+           if(name == "Dead"){tileUI.sprite = DeadSprite;}else
+           if(name == "Is"){tileUI.sprite = IsSprite;}else
+           if(name == "When"){tileUI.sprite = WhenSprite;}else
+           if(name == "Super"){tileUI.sprite = SuperSprite;}else
+           if(name == "Hot"){tileUI.sprite = HotSprite;}else
            if(name == "#"){tileUI.sprite = WallSprite;}else
+           if(name == "[1]"){tileUI.sprite = Lock1Sprite;}else
+           if(name == "[2]"){tileUI.sprite = Lock2Sprite;}else
+           if(name == "[3]"){tileUI.sprite = Lock3Sprite;}else
+           if(name == "[4]"){tileUI.sprite = Lock4Sprite;}else
+           if(name == "[5]"){tileUI.sprite = Lock5Sprite;}else
+           if(name == "[6]"){tileUI.sprite = Lock6Sprite;}else
            {
              tileUI.sprite = EmptySprite;
            }
 
 
          }
+
+         // Set active or disactivated shade
+         BabaTileDoodleFix tileScript = tileUI.GetComponent<BabaTileDoodleFix>();
+
+         // Warning: if Baba's corresponding tile happens to be in the list of words
+         // it will be considered in activated words check
+         if(!babaWorld.isValidWord(name) || babaWorld.activatedWords.Contains(new Vector2Int(x,y)))
+         {
+           tileScript.activated = true;
+         }
+         else
+         {
+           tileScript.activated = false;
+         }
+
 
 
          tileUI.transform.SetParent(hud.transform);
