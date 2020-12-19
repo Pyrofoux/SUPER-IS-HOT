@@ -103,12 +103,11 @@ public class EffectsApplicator : MonoBehaviour
         babaMode = !babaMode;
         if(babaMode)
         {
-          hud.SetActive(true);
-          babaWorld.UpdateDisplay();
+          babaWorld.OpenDisplay();
         }
         else
         {
-          hud.SetActive(false);
+          babaWorld.CloseDisplay();
         }
       }
 
@@ -117,6 +116,11 @@ public class EffectsApplicator : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.R))
         {
             UnityEngine.SceneManagement.SceneManager.LoadSceneAsync(UnityEngine.SceneManagement.SceneManager.GetActiveScene().name);
+        }
+
+        if(Input.GetKeyUp(KeyCode.Backspace))
+        {
+          babaWorld.Undo();
         }
 
 

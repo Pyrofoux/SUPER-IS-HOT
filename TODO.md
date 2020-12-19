@@ -21,9 +21,9 @@ Clearer that Time is Move impacts time, an objective to remove
   - [ ] Display controls: Arrow keys, E for Baba Mode, R to restart, Undo with back space <=]
   - [X] Sphere cast instead of raycast for picking objects ?
   - [X] See rules activated
-  - [ ] Cancel button for baba
+  - [X] Cancel button for baba
   - [X] Choose: images (style) or text (have to scale, can make them lit)
-  ==> Todo fix: create individual images for doodle shader to work
+    [X] create individual images for doodle shader to work
     OR add black outlines
 
 

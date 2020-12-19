@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using System.Linq;
+using System.IO;
 
 public class BabaWorld : MonoBehaviour
 {
@@ -102,8 +103,12 @@ Y=M____S=T__#
   private Tile[,] map;
   public Vector2Int baba = new Vector2Int(0,0);
   private int currentUnlockId = 1;
+  [System.NonSerialized]
   public Vector2Int lastMove = Vector2Int.left;
   public List<Vector2Int> activatedWords = new List<Vector2Int>();
+
+  private List<Tile[,]> pastMaps = new List<Tile[,]>();
+  private List<Vector2Int> pastMoves = new List<Vector2Int>();
 
   // GameObjects
   private EffectsApplicator effectsApplicator;
@@ -151,6 +156,10 @@ Y=M____S=T__#
 
         }
       }
+
+      pastMaps.Add(Tile.cloneMap(map, width, height));
+      pastMoves.Add(lastMove);
+
       ParseRules();
       renderer.UpdateDisplay();
     }
@@ -170,9 +179,13 @@ Y=M____S=T__#
           needReload = ApplyMove(move);
         }
 
-        //Update ruls and display accordingly
+        //Update rules, past maps and display accordingly
         if(needReload)
         {
+          pastMaps.Add(Tile.cloneMap(map, width, height));
+          pastMoves.Add(lastMove);
+
+
           ParseRules();
           renderer.UpdateDisplay();
         }
@@ -432,11 +445,37 @@ Y=M____S=T__#
 
     if(didReplace)
     {
+      EraseHistory();
       ParseRules();
-      //UpdateDisplay();
       currentUnlockId++;
     }
   }
+
+  public void Undo()
+  {
+    if(pastMaps.Count > 1)
+    {
+      pastMaps.RemoveAt(pastMaps.Count - 1);
+      pastMoves.RemoveAt(pastMoves.Count - 1);
+
+      map = pastMaps[pastMaps.Count-1];
+      baba -= lastMove;
+      lastMove = pastMoves[pastMoves.Count-1];
+
+      ParseRules();
+      UpdateDisplay();
+    }
+  }
+
+  public void EraseHistory()
+  {
+    pastMaps = new List<Tile[,]>();
+    pastMaps.Add(Tile.cloneMap(map,width,height));
+    pastMoves = new List<Vector2Int>();
+    pastMoves.Add(lastMove);
+  }
+
+
 
 
    //The actual time the player will be able to fire input.
@@ -500,9 +539,22 @@ Y=M____S=T__#
       return Vector2Int.zero;
     }
 
+
+    // Various utilitary
     public void UpdateDisplay()
     {
       renderer.UpdateDisplay();
+    }
+
+    public void OpenDisplay()
+    {
+      renderer.OpenDisplay();
+    }
+
+    public void CloseDisplay()
+    {
+      EraseHistory();
+      renderer.CloseDisplay();
     }
 
     public bool isValidRule(string rule)
@@ -515,7 +567,6 @@ Y=M____S=T__#
       string titleCaseWord = word[0].ToString().ToUpper()+word.Substring(1).ToLower();
       return validWords.Contains(titleCaseWord);
     }
-
 
   }
 
@@ -542,7 +593,6 @@ public class Tile
 
   }
 
-
   public static Tile convert(char ascii)
   {
     if(ascii == '#') return new Wall();
@@ -563,6 +613,31 @@ public class Tile
 
     // TODO: rechange to "*"
     return new Tile("*",true,true);
+  }
+
+  public Tile clone()
+  {
+    Tile clone = new Tile(name, empty, statik);
+    clone.name = name;
+    clone.spawn = spawn;
+    clone.empty = empty;
+    clone.statik = statik;
+    clone.txt  = txt;
+    clone.lockedId  = lockedId;
+    return clone;
+  }
+
+  public static Tile[,] cloneMap(Tile[,] originalMap, int width, int height)
+  {
+    Tile[,] cloneMap = new Tile[width,height];
+    for(int y = 0; y < height; y++)
+    {
+      for(int x = 0; x < width; x++)
+      {
+        cloneMap[x,y] = originalMap[x,y].clone();
+      }
+    }
+    return cloneMap;
   }
 
 }

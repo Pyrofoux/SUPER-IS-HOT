@@ -37,23 +37,25 @@ public class BabaRenderer : MonoBehaviour
 
 
 
-
-  [Header("DO NOT TOUCH")]
-
-
   //Private
   private GameObject hud;
   private Vector3 hudCenter;
   private BabaWorld babaWorld;
 
   //Display Settings
-  float startpointX = 0;
-  float startpointY = 0;
-  float horizontalSpacing = 80;
-  float verticalSpacing = 50;
 
-  float tileWidth = 60;
-  float tileHeight = 60;
+  float tileWidth;
+  float tileHeight;
+
+  float startpointX;
+  float startpointY;
+  float horizontalSpacing;
+  float verticalSpacing;
+
+  Image[,] tileSprites;
+
+  private bool updatedResolution = false;
+  private bool createdSprites = false;
 
 
     // Start is called before the first frame update
@@ -64,6 +66,7 @@ public class BabaRenderer : MonoBehaviour
       hud = (GameObject) GameObject.Find("HUD_Baba");
       hudCenter = hud.transform.position;
       babaWorld = GetComponent<BabaWorld>();
+
     }
 
     // Update is called once per frame
@@ -73,21 +76,39 @@ public class BabaRenderer : MonoBehaviour
     }
 
 
+    public void UpdateResolution()
+    {
+      if(updatedResolution)return ;
+
+      updatedResolution = true;
+
+      // TODO: check tiles resize or fixed size ? 10px
+      tileWidth = Screen.height/10;
+      tileHeight = Screen.height/10;
+      tilePrefab.rectTransform.sizeDelta = new Vector2(tileWidth, tileHeight);
+
+
+      //Update there because of script order
+      startpointX = -(babaWorld.width*tileWidth)/2+tileWidth/2; // horizontal middle
+      startpointY = Screen.height/4; // 1/3 of the screen
+      horizontalSpacing = tileWidth;
+      verticalSpacing = tileHeight;
+    }
+
   public void UpdateDisplay()
   {
-    Clear();
 
-    startpointX = -babaWorld.width *tileWidth/2;
-    startpointY = Screen.height/4;
-    horizontalSpacing = tileWidth;
-    verticalSpacing = tileHeight;
+
+    UpdateResolution();
+    CreateSprites();
+    //Clear();
 
      for(int y = 0; y < babaWorld.height ; y++)
      {
        for(int x = 0; x < babaWorld.width ; x++)
        {
 
-         Image tileUI = (Image)Instantiate(tilePrefab, new Vector3(0, 0, 0), Quaternion.identity);
+         Image tileUI = tileSprites[x,y];
          string name = babaWorld.getTile(x,y).name;
          name = name[0].ToString().ToUpper()+name.Substring(1).ToLower();
 
@@ -138,14 +159,36 @@ public class BabaRenderer : MonoBehaviour
          {
            tileScript.activated = false;
          }
-
-
-
-         tileUI.transform.SetParent(hud.transform);
-         //Positionning
-         tileUI.transform.position = hudCenter + new Vector3(startpointX+x*horizontalSpacing,startpointY+y*-verticalSpacing,0);
        }
      }
+
+  }
+
+  public Vector3 TileToSpace(int x, int y)
+  {
+    return hudCenter + new Vector3(startpointX+x*horizontalSpacing,startpointY+y*-verticalSpacing,0);
+  }
+
+
+  public void CreateSprites()
+  {
+    if(createdSprites)return;
+    createdSprites = true;
+
+    tileSprites = new Image[babaWorld.width,babaWorld.height];
+    for(int y = 0; y < babaWorld.height ; y++)
+    {
+      for(int x = 0; x < babaWorld.width ; x++)
+      {
+        Image tileUI = (Image)Instantiate(tilePrefab, new Vector3(0, 0, 0), Quaternion.identity);
+        tileUI.transform.SetParent(hud.transform);
+        //Positionning
+        tileUI.transform.position = TileToSpace(x,y);
+        tileSprites[x,y] = tileUI;
+        tileUI.sprite = EmptySprite;
+      }
+    }
+
 
   }
 
@@ -157,6 +200,17 @@ public class BabaRenderer : MonoBehaviour
      {
        GameObject.Destroy(ui);
      }
+  }
+
+  public void OpenDisplay()
+  {
+    hud.SetActive(true);
+    UpdateDisplay(); // specific order or can't erase them
+  }
+
+  public void CloseDisplay()
+  {
+    hud.SetActive(false);
   }
 
 }
