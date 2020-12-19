@@ -88,11 +88,12 @@ _____________
 
 [TextArea(8,12)]
 private string layout =@"
-_____Y=s_
-T= D_____
-_____T=M<
-_@____$=H
-Y=M____S=
+@____________
+____Y=M<T=S__
+____Y=S<T=M__
+____T=M<s=M__
+_______T=S___
+____Y=s=M____
 ";
 
 
@@ -113,7 +114,7 @@ Y=M____S=
   public Vector2Int baba = new Vector2Int(0,0);
   private int currentUnlockId = 1;
   [System.NonSerialized]
-  public Vector2Int lastMove = Vector2Int.left;
+  public Vector2Int lastMove = Vector2Int.right;
   public List<Vector2Int> activatedWords = new List<Vector2Int>();
 
   private List<Tile[,]> pastMaps = new List<Tile[,]>();
@@ -139,7 +140,15 @@ Y=M____S=
 
       //Convert ASCII to tiles
       char[] n = {'\n'};
-      string[] templines = layout.Split(n); // remove last item here
+      string[] templines = layout.Split(n);
+
+      // Removing last item which would be parsed from a \n
+      for(int i = 0; i < templines.Length;i++)
+      {
+        if(templines[i].Length > 0)
+        templines[i] = templines[i].Remove(templines[i].Length - 1);
+      }
+
       string[] lines = new string[templines.Length-2];
 
        // Don't count first and last line

@@ -4,8 +4,6 @@
 
 # Bugfix
 
-- Lighting words can be strange (stuffed level)
-
 - Time is Move by default might change ?
 Clearer that Time is Move impacts time, an objective to remove
 
