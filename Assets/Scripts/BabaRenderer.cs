@@ -8,7 +8,10 @@ using System.Linq;
 public class BabaRenderer : MonoBehaviour
 {
 
+  [Header("Prefabs")]
   public Image tilePrefab;
+  public Image ControlsLeft;
+  public Image ControlsRight;
 
   [Header("Sprites")]
   public Sprite BabaUpSprite;
@@ -33,6 +36,8 @@ public class BabaRenderer : MonoBehaviour
   public Sprite Lock4Sprite;
   public Sprite Lock5Sprite;
   public Sprite Lock6Sprite;
+  public Sprite CornerSprite;
+  public Sprite LineSprite;
 
 
 
@@ -51,6 +56,10 @@ public class BabaRenderer : MonoBehaviour
   float startpointY;
   float horizontalSpacing;
   float verticalSpacing;
+
+  float maxHTiles = 13;
+  float maxVtiles = 8;
+  float sidePanelTileSize = 3;
 
   Image[,] tileSprites;
 
@@ -82,15 +91,26 @@ public class BabaRenderer : MonoBehaviour
 
       updatedResolution = true;
 
+      //Smallest taken values
+      //float neededHorizontalSize = maxHTiles+sidePanelTileSize*2+2+2+1;
+
+      float neededHorizontalSize = babaWorld.width+sidePanelTileSize*2+2+2+1;
+
       // TODO: check tiles resize or fixed size ? 10px
-      tileWidth = Screen.height/10;
-      tileHeight = Screen.height/10;
+      tileWidth = Screen.width/neededHorizontalSize;
+      tileHeight = tileWidth;
+
+      // Update tile prefab dimensions
       tilePrefab.rectTransform.sizeDelta = new Vector2(tileWidth, tileHeight);
+
+      // Update control panels dimensions, relative to tiles
+      ControlsLeft.rectTransform.sizeDelta = new Vector2(tileWidth*sidePanelTileSize, tileHeight*sidePanelTileSize*2);
+      ControlsRight.rectTransform.sizeDelta = new Vector2(tileWidth*sidePanelTileSize, tileHeight*sidePanelTileSize*2);
 
 
       //Update there because of script order
       startpointX = -(babaWorld.width*tileWidth)/2+tileWidth/2; // horizontal middle
-      startpointY = Screen.height/4; // 1/3 of the screen
+      startpointY = Screen.height/4+tileWidth/2; // 1/3 of the screen
       horizontalSpacing = tileWidth;
       verticalSpacing = tileHeight;
     }
@@ -164,9 +184,15 @@ public class BabaRenderer : MonoBehaviour
 
   }
 
-  public Vector3 TileToSpace(int x, int y)
+
+  public Vector3 TileToSpace(float x, float y)
   {
     return hudCenter + new Vector3(startpointX+x*horizontalSpacing,startpointY+y*-verticalSpacing,0);
+  }
+
+  public Vector3 TileToSpace(int x, int y)
+  {
+    return TileToSpace((float) x, (float) y);
   }
 
 
@@ -175,7 +201,24 @@ public class BabaRenderer : MonoBehaviour
     if(createdSprites)return;
     createdSprites = true;
 
+    // Load Controls panels
+    Image panelLeft = (Image)Instantiate(ControlsLeft, new Vector3(0, 0, 0), Quaternion.identity);
+    panelLeft.transform.SetParent(hud.transform);
+    //Position is set to number of tiles associated to control panel in UpdateResolution
+    panelLeft.transform.position = TileToSpace((float)-sidePanelTileSize-0.5f,(float) babaWorld.height/2);
+    panelLeft.GetComponent<BabaTileDoodleFix>().activated = true;
+
+
+    Image panelRight = (Image)Instantiate(ControlsRight, new Vector3(0, 0, 0), Quaternion.identity);
+    panelRight.transform.SetParent(hud.transform);
+    //Position is set to number of tiles associated to control panel in UpdateResolution
+    panelRight.transform.position = TileToSpace((float)babaWorld.width-0.5f+sidePanelTileSize,(float) babaWorld.height/2);
+    panelRight.GetComponent<BabaTileDoodleFix>().activated = true;
+
+    //Load center tiles
+
     tileSprites = new Image[babaWorld.width,babaWorld.height];
+
     for(int y = 0; y < babaWorld.height ; y++)
     {
       for(int x = 0; x < babaWorld.width ; x++)
@@ -187,6 +230,80 @@ public class BabaRenderer : MonoBehaviour
         tileSprites[x,y] = tileUI;
         tileUI.sprite = EmptySprite;
       }
+    }
+
+    //Outline
+
+    //vertical Lines
+    for(int y = 0; y < babaWorld.height ; y++)
+    {
+      //Line 1
+      Image tileUI1 = (Image)Instantiate(tilePrefab, new Vector3(0, 0, 0), Quaternion.identity);
+      tileUI1.transform.SetParent(hud.transform);
+      tileUI1.transform.position = TileToSpace(-1,y);
+      tileUI1.sprite = LineSprite;
+      tileUI1.GetComponent<BabaTileDoodleFix>().activated = true;
+
+      //Line 2
+      Image tileUI2 = (Image)Instantiate(tilePrefab, new Vector3(0, 0, 0), Quaternion.identity);
+      tileUI2.transform.SetParent(hud.transform);
+      tileUI2.transform.position = TileToSpace(babaWorld.width,y);
+      tileUI2.sprite = LineSprite;
+      tileUI2.GetComponent<BabaTileDoodleFix>().activated = true;
+    }
+
+    //Horizontal
+    for(int x = 0; x < babaWorld.width ; x++)
+    {
+      //Line 1
+      Image tileUI1 = (Image)Instantiate(tilePrefab, new Vector3(0, 0, 0), Quaternion.identity);
+      tileUI1.transform.SetParent(hud.transform);
+      tileUI1.transform.position = TileToSpace(x,-1);
+      tileUI1.sprite = LineSprite;
+      tileUI1.GetComponent<BabaTileDoodleFix>().activated = true;
+      tileUI1.transform.Rotate(Vector3.forward * -90);
+
+      //Line 2
+      Image tileUI2 = (Image)Instantiate(tilePrefab, new Vector3(0, 0, 0), Quaternion.identity);
+      tileUI2.transform.SetParent(hud.transform);
+      tileUI2.transform.position = TileToSpace(x,babaWorld.height);
+      tileUI2.sprite = LineSprite;
+      tileUI2.GetComponent<BabaTileDoodleFix>().activated = true;
+      tileUI2.transform.Rotate(Vector3.forward * -90);
+    };
+
+    // Corners
+    for(int i=0; i < 4; i++)
+    {
+      Image tileUI1 = (Image)Instantiate(tilePrefab, new Vector3(0, 0, 0), Quaternion.identity);
+      tileUI1.transform.SetParent(hud.transform);
+
+      int x; int y;
+
+      if(i%2 == 0)
+      {
+        x = -1;
+      }
+      else
+      {
+        x = babaWorld.width;
+      }
+
+      if(i%3 == 0)
+      {
+        y = -1;
+      }
+      else
+      {
+        y = babaWorld.height;
+      }
+
+      int[] rotations = new int[]{0,-180,90,-90};
+
+      tileUI1.transform.position = TileToSpace(x, y);
+      tileUI1.sprite = CornerSprite;
+      tileUI1.GetComponent<BabaTileDoodleFix>().activated = true;
+      tileUI1.transform.Rotate(Vector3.forward * rotations[i]);
     }
 
 

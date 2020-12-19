@@ -118,7 +118,7 @@ public class EffectsApplicator : MonoBehaviour
             UnityEngine.SceneManagement.SceneManager.LoadSceneAsync(UnityEngine.SceneManagement.SceneManager.GetActiveScene().name);
         }
 
-        if(Input.GetKeyUp(KeyCode.Backspace))
+        if(Input.GetKeyUp(KeyCode.U))
         {
           babaWorld.Undo();
         }

@@ -73,17 +73,26 @@ _@____$=H__#_
 Y=M____S=T__#
 
 
+__2__Y=s___1_
+T=2D_________
+_____T=M<Y=M_
+_@____$=H__#_
+Y=M____S=T__#
+_____________
+_____________
+_____________
+
 */
 
 [Header("DO NOT TOUCH")]
 
 [TextArea(8,12)]
 private string layout =@"
-__2__Y=s___1_
-T=2D__________
-_____T=M<Y=M_
-_@____$=H__#_
-Y=M____S=T__#
+_____Y=s_
+T= D_____
+_____T=M<
+_@____$=H
+Y=M____S=
 ";
 
 
@@ -378,22 +387,17 @@ Y=M____S=T__#
         implies[trigger][effect] = true;
 
         //Add to activated words
-        if(isValidRule(effect))
+        if(isValidRule(trigger) && isValidRule(effect))
         {
           activatedWords.Add(line[0]);
           activatedWords.Add(line[1]);
           activatedWords.Add(line[2]);
-        }
-
-        if(isValidRule(trigger))
-        {
+          activatedWords.Add(line[3]);
           activatedWords.Add(line[4]);
           activatedWords.Add(line[5]);
           activatedWords.Add(line[6]);
         }
 
-        if(isValidRule(trigger) && isValidRule(effect))
-        activatedWords.Add(line[3]);
 
 
       }

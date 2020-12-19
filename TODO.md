@@ -4,8 +4,7 @@
 
 # Bugfix
 
-- Don't recreate image each time it is updated
-only if it has been cleared before + babaMode isnt activated
+- Lighting words can be strange (stuffed level)
 
 - Time is Move by default might change ?
 Clearer that Time is Move impacts time, an objective to remove

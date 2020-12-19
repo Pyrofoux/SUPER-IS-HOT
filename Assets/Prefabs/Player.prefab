@@ -175,7 +175,6 @@ MonoBehaviour:
   width: 0
   height: 0
   baba: {x: 0, y: 0}
-  lastMove: {x: 0, y: -1}
   activatedWords: []
 --- !u!114 &5062934358785970782
 MonoBehaviour:
@@ -190,6 +189,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   tilePrefab: {fileID: 45532683776483607, guid: 09dccf5766327084e9197f50a8f27b9d,
+    type: 3}
+  ControlsLeft: {fileID: 7332028306249591829, guid: be1e6431befc52743b74ce57c0f6e641,
+    type: 3}
+  ControlsRight: {fileID: 4680169414386904323, guid: d04a89c7b99ce514c9ed58e9c8ab1bcd,
     type: 3}
   BabaUpSprite: {fileID: -7486092956772349302, guid: e8f6988542c6aa746b3f275f69dd0d1b,
     type: 3}
@@ -234,6 +237,10 @@ MonoBehaviour:
   Lock5Sprite: {fileID: 8758155216525550727, guid: e8f6988542c6aa746b3f275f69dd0d1b,
     type: 3}
   Lock6Sprite: {fileID: 6116080786932476827, guid: e8f6988542c6aa746b3f275f69dd0d1b,
+    type: 3}
+  CornerSprite: {fileID: -1385786070971223102, guid: e8f6988542c6aa746b3f275f69dd0d1b,
+    type: 3}
+  LineSprite: {fileID: -538331831730588137, guid: e8f6988542c6aa746b3f275f69dd0d1b,
     type: 3}
 --- !u!1 &3460660920331530078
 GameObject:

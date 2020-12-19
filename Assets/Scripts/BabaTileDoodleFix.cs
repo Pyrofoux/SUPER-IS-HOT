@@ -6,7 +6,7 @@ using UnityEngine.UI;
 public class BabaTileDoodleFix : MonoBehaviour
 {
   Material m_Material;
-  public bool activated;
+  public bool activated = false;
     // Start is called before the first frame update
     void Start()
     {
@@ -28,6 +28,7 @@ public class BabaTileDoodleFix : MonoBehaviour
     void Update()
     {
       m_Material.SetFloat( "_BabaTime", Time.unscaledTime );
+      setActivated();
 
     }
 
@@ -35,7 +36,7 @@ public class BabaTileDoodleFix : MonoBehaviour
     {
       if(activated)
       {
-        //m_Material.SetColor( "_Color",  new Color(255f,255f,255f,1f));
+        m_Material.color = Color.white;
       }
       else
       {
