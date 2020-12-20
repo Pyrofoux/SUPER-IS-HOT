@@ -8,6 +8,9 @@ public class EnemyScript : MonoBehaviour
 {
     Animator anim;
 
+    public AudioClip EnnemyDeathClip;
+    public AudioClip GunShotClip;
+
     [Header("Prefabs")]
     public Transform weaponHolder;
     public TextMeshPro wordDisplayed;
@@ -23,12 +26,17 @@ public class EnemyScript : MonoBehaviour
 
     private float stopped_time = 0.01f;
     private float rotSpeed = 0.000002f;
-
+    private float maxRandomDelay = 30f;
     private float randomDelay;
+
+    private AudioSource audioSource;
 
 
     void Start()
     {
+
+        audioSource = GetComponent<AudioSource>();
+
         anim = GetComponent<Animator>();
         anim.enabled = true;
 
@@ -47,7 +55,7 @@ public class EnemyScript : MonoBehaviour
         }
 
         // Might cause some T-posing
-        randomDelay = Random.Range(0, 5f);
+        randomDelay = Random.Range(0, maxRandomDelay);
     }
 
     void Update()
@@ -98,6 +106,11 @@ public class EnemyScript : MonoBehaviour
             w.Release();
         }
 
+        //Play ennemy death sound
+        audioSource.PlayOneShot(EnnemyDeathClip, 0.7f);
+
+
+        // Hide word
         if(lockWord != "" && lockWord != "none")
         {
           string titleCaseWord = lockWord[0].ToString().ToUpper()+lockWord.Substring(1).ToLower();
@@ -125,5 +138,8 @@ public class EnemyScript : MonoBehaviour
         // Actually shoot
         if (weaponHolder.GetComponentInChildren<WeaponScript>() != null)
             weaponHolder.GetComponentInChildren<WeaponScript>().Shoot(GetComponentInChildren<ParticleSystem>().transform.position, transform.rotation, true);
+
+        // Play gunshot sound
+        audioSource.PlayOneShot(GunShotClip, 0.5f);
     }
 }

@@ -13,8 +13,9 @@ public class EffectsApplicator : MonoBehaviour
     public float pickupSphereRadius = 0.5f;
     public float charge;
     //public bool canShoot = true;
-    public bool action;
-    public bool babaMode = false;
+    public bool fading;
+
+    public bool babaMode = true;
     public GameObject bullet;
     public Transform bulletSpawner;
 
@@ -28,11 +29,12 @@ public class EffectsApplicator : MonoBehaviour
     [Header("Prefabs")]
     public GameObject hitParticlePrefab;
     public GameObject bulletPrefab;
-    public Image weaponCursor;
+
 
     private GameObject hud;
     private RuleHandler ruleHandler;
     private BabaWorld babaWorld;
+    private FpsRenderer fpsRenderer;
 
 
     // Time constants
@@ -65,19 +67,13 @@ public class EffectsApplicator : MonoBehaviour
       hud = (GameObject) GameObject.Find("HUD_Baba");
       ruleHandler = GetComponent<RuleHandler>();
       babaWorld = GetComponent<BabaWorld>();
+      fpsRenderer = GetComponent<FpsRenderer>();
 
 
       bulletList = new List<GameObject>();
 
-      // Disable Canvas at first
-      // if(babaMode)
-      // {
-      //   hud.SetActive(true);
-      // }
-      // else
-      // {
-      //   hud.SetActive(false);
-      // }
+      DisplayMenu();
+
     }
 
     // Update is called once per frame
@@ -90,32 +86,51 @@ public class EffectsApplicator : MonoBehaviour
       //ApplyEffects();
         //ApplyEffects();
 
-      UpdateCursor();
+      fpsRenderer.UpdateCursor();
+      CheckWinLoose();
 
+    }
+
+    public void CheckWinLoose()
+    {
+      if(ruleHandler.CheckEffectAndAssert("You is Dead"))
+      {
+        //fpsRenderer.Die();
+      }
+    }
+
+    public void DisplayMenu()
+    {
+      if(babaMode)
+      {
+        babaWorld.OpenDisplay();
+        fpsRenderer.CloseDisplay();
+      }
+      else
+      {
+        babaWorld.CloseDisplay();
+        fpsRenderer.OpenDisplay();
+      }
     }
 
     public void ApplyEffects()
     {
 
+      if(fading) return;
+
       //Switch baba mode
       if(Input.GetKeyDown(KeyCode.E))
       {
         babaMode = !babaMode;
-        if(babaMode)
-        {
-          babaWorld.OpenDisplay();
-        }
-        else
-        {
-          babaWorld.CloseDisplay();
-        }
+        DisplayMenu();
       }
 
 
         //Restart
         if (Input.GetKeyDown(KeyCode.R))
         {
-            UnityEngine.SceneManagement.SceneManager.LoadSceneAsync(UnityEngine.SceneManagement.SceneManager.GetActiveScene().name);
+            //fpsRenderer.Win();
+            fpsRenderer.ReloadLevel();
         }
 
         if(Input.GetKeyUp(KeyCode.U))
@@ -158,11 +173,7 @@ public class EffectsApplicator : MonoBehaviour
             /*StopCoroutine(ShootWaitCoroutine(.4f));
             StartCoroutine(ShootWaitCoroutine(.4f));*/
 
-            if(weapon != null)
-            {
-                weapon.Throw();
-                weapon = null;
-            }
+            ThrowWeapon();
         }
 
         //Pick up weapons
@@ -188,6 +199,9 @@ public class EffectsApplicator : MonoBehaviour
 
         // Time move rules + check game not paused
         bool timeIsMove = !babaMode && ruleHandler.CanXMove("Time");
+
+        //Let time moving when transitionning
+        //if(fading) timeIsMove = true;
 
         float timeSpeed;
         float lerpTime;
@@ -221,12 +235,20 @@ public class EffectsApplicator : MonoBehaviour
       }
     }
 
+    public void ThrowWeapon()
+    {
+      if(weapon != null)
+      {
+          weapon.Throw();
+          weapon = null;
+      }
+    }
 
     IEnumerator ShootWaitCoroutine(float time)
     {
-        action = true;
+        //action = true;
         yield return new WaitForSecondsRealtime(time);
-        action = false;
+        //action = false;
     }
 
     //Spawn position for bullets
@@ -235,26 +257,18 @@ public class EffectsApplicator : MonoBehaviour
         return Camera.main.transform.position + (Camera.main.transform.forward * .5f) + (Camera.main.transform.up * -.02f);
     }
 
-
-    // Gun UI stuff, could be placed somewhere else ideally
-    public void ResetCursor()
+    public void PlaySound(string soundName)
     {
-      weaponCursor.transform.localEulerAngles = new Vector3(0,0,0);
-      weaponCursor.transform.localScale = WeaponScript.baseScale;
+      PlaySound(soundName, new Vector3(0,0,0));
     }
 
-    public void UpdateCursor()
+    public void PlaySound(string soundName, Vector3 position)
     {
-      if(weapon == null)
-      {
-        ResetCursor();
-      }
-      else
-      {
-        weaponCursor.transform.localEulerAngles = weapon.cursorTransform.transform.localEulerAngles;
-        weaponCursor.transform.localScale = weapon.cursorTransform.transform.localScale;
-      }
+      fpsRenderer.PlaySound(soundName, position);
     }
+
+
+
 
 
 }

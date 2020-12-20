@@ -52,7 +52,7 @@ public class RuleHandler : MonoBehaviour
        //deadOnce["Shoot"] = false;
 
        triggerFrame = new Dictionary<string, int>();
-       triggerFrameEvents = new string[]{"Shoot is Dead", "You is Shoot", "Shoot is You", "You is Move"};
+       triggerFrameEvents = new string[]{"Shoot is Dead", "You is Shoot", "Shoot is You", "You is Move", "You is Dead"};
        for(int i =0; i < triggerFrameEvents.Length; i++)
        {
          triggerFrame[triggerFrameEvents[i]] = 0;
@@ -75,16 +75,9 @@ public class RuleHandler : MonoBehaviour
       //ex: player is move VS player is move when time is move
       // ---> difference between assertions (fact) and implications (trigger => effect)
 
+      //Triggers checks
 
-
-      // Once You or Time is dead, its always dead
-      if(!deadOnce["Time"]) deadOnce["Time"] = CheckEffectAndAssert("Time is Dead");
-      if(!deadOnce["You"]) deadOnce["You"] = CheckEffectAndAssert("You is Dead");
-
-
-        //Triggers checks
-
-      //Detect every trigger once and apply it
+      //Detect every frame trigger apply it while it lasts
       for(int i =0; i < triggerFrameEvents.Length; i++)
       {
         string eventName= triggerFrameEvents[i];
@@ -100,8 +93,14 @@ public class RuleHandler : MonoBehaviour
 
       }
 
-      triggers["Time is Dead"] = deadOnce["Time"];
-      triggers["You is Dead"] = deadOnce["You"];
+      // Once You or Time is dead, its always dead
+      if(!deadOnce["Time"]) deadOnce["Time"] = CheckEffectAndAssert("Time is Dead");
+      if(!deadOnce["You"]) deadOnce["You"] = CheckEffectAndAssert("You is Dead");
+
+
+
+      triggers["Time is Dead"] = CheckEvent("Time is Dead") ||  deadOnce["Time"];
+      triggers["You is Dead"]  = CheckEvent("You is Dead")  || deadOnce["You"];
 
         //Time is always flowing, unless it is stopped
         //and it can only be stopped by killing it
@@ -166,8 +165,9 @@ public class RuleHandler : MonoBehaviour
         effects["Time is Stop"] = true;
         triggers["Time is Stop"] = true;
       }
-      if(CheckEvent("You is Dead"))
+      if(CheckEvent("You is Dead")) // This one happens late so we can use You is Dead => Super is Hot at some point (before this check)
       {
+        effects["You is Dead"] = true;
         effects["You is Stop"] = true;
         triggers["You is Stop"] = true;
       }

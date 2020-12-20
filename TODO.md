@@ -1,46 +1,48 @@
 # Todo
 
+- Test player sounds
+- Switch E to "Edit Rules"
+- consider order of panels ?
+- test music switch ?
+- MAKE LEVELS
 
 
 # Bugfix
 
+
+TO CHECK
 - Time is Move by default might change ?
 Clearer that Time is Move impacts time, an objective to remove
-
-- "*" tile at each end of line
 
 
 # Roadmap
 
 
-
-- [ ] Ergonomy
-  - [ ] Display controls: Arrow keys, E for Baba Mode, R to restart, Undo with back space <=]
-  - [X] Sphere cast instead of raycast for picking objects ?
-  - [X] See rules activated
-  - [X] Cancel button for baba
-  - [X] Choose: images (style) or text (have to scale, can make them lit)
-    [X] create individual images for doodle shader to work
-    OR add black outlines
-
-
 - Gameplay Loop:
   - [ ] Win condition
-  - [ ] Loose condition
+  - [X] Loose condition
 
 - [ ] Levels
+  - [ ] Handy levels system
   - [ ] Map out ~10 levels
   - [ ] Level selection screen
 
--  General Design
-  - [X] Bullet limit in guns (3 to 6)
-  - [X] Sphere cast for picking gun
-    [X] Highlighting pickable gun
-  - [X] Ennemy shoot you if there's a line of sight
-  - [X] Parametrizable frequency and delay for shooting
-    ===> can only delay animation
-  - [X] Controls for Baba: FixedUpdate, check frequency and consistency
-  ==> kinda no choice but to use a key up way
+- Menu and transitions
+  - [X] Death transition
+    Red fade -- restart
+  - [X] Restart transition (= Death ?)
+    White fade
+  - [ ] Win transition
+    [X] Stop - [X] Voice clip - [X] White fade
+    [ ]"SUPER HOT" text (?)
+
+- Polish sounds
+  - [X] Time Deformation effect
+  - [X] Space Deformation effect
+  - [ ] Gun shoot sounds player + [X] ennemy
+  - [ ] Gun reload sounds
+  - [ ] Gun pick up sounds
+  - [X] Ennemy death sound
 
 
 - [ ] Implement all interactions as Assert, Trigger and Effect (EAT)
@@ -50,7 +52,7 @@ Clearer that Time is Move impacts time, an objective to remove
   - [X] You   is Stop
   - [X] Time  is Stop
   - [X] Shoot is Stop
-  - [?T] You   is Dead
+  - [X] You   is Dead
   - [X] Time  is Dead
   - [X] Shoot is Dead
   - [ ] Super is Hot
@@ -61,12 +63,6 @@ Clearer that Time is Move impacts time, an objective to remove
 
   - [X] Shoot is You
     => Teleport you to the (last) bullet
-
-
-  - Dead is Shoot
-  Makes bullets deadly ?
-  - Dead is You (?)
-  Makes you kill on touch ?
 
 # Notes
 
@@ -113,6 +109,26 @@ Logic breaking => everything had to be flexible, detectable, manipulatable which
 
 # Done
 
+-  General Design
+  - [X] Bullet limit in guns (3 to 6)
+  - [X] Sphere cast for picking gun
+    [X] Highlighting pickable gun
+  - [X] Ennemy shoot you if there's a line of sight
+  - [X] Parametrizable frequency and delay for shooting
+    ===> can only delay animation
+  - [X] Controls for Baba: FixedUpdate, check frequency and consistency
+  ==> kinda no choice but to use a key up way
+
+- [X] Ergonomy
+  - [X] Display controls: Arrow keys, E for Baba Mode, R to restart, Undo with back space <=]
+  - [X] Sphere cast instead of raycast for picking objects ?
+  - [X] See rules activated
+  - [X] Cancel button for baba
+  - [X] Choose: images (style) or text (have to scale, can make them lit)
+    [X] create individual images for doodle shader to work
+    OR add black outlines
+
+
 - [x] Unlocking mechanic
   - [X] Variable tile
   - [X] Name on top of enemy
@@ -145,10 +161,18 @@ Logic breaking => everything had to be flexible, detectable, manipulatable which
 
 
 
+  - Dead is Shoot
+  Makes bullets deadly ?
+  - Dead is You (?)
+  Makes you kill on touch ?
+
+
+
 #Credits
 - Pyrofoux
 - Baba is You dev
 - Superhot team
+- Guy's Unity code base
 - Guy's music
-- The Spriter Ressource
+- The Spriter Ressource guy
 - Shader guy - https://www.youtube.com/watch?v=GXE0VqH08sc

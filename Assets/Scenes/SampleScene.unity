@@ -4008,6 +4008,21 @@ PrefabInstance:
       propertyPath: m_LocalPosition.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4045861229666450963, guid: 043fcee430ad10244b5986bff06aa7a0,
+        type: 3}
+      propertyPath: m_Color.r
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4045861229666450963, guid: 043fcee430ad10244b5986bff06aa7a0,
+        type: 3}
+      propertyPath: m_Color.g
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4045861229666450963, guid: 043fcee430ad10244b5986bff06aa7a0,
+        type: 3}
+      propertyPath: m_Color.b
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 5684430943689645942, guid: 043fcee430ad10244b5986bff06aa7a0,
         type: 3}
       propertyPath: m_LocalPosition.z
