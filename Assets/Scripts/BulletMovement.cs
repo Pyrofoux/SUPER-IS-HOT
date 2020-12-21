@@ -49,13 +49,6 @@ public class BulletMovement : MonoBehaviour
 
     }
 
-
-    // public void SetScripts(RuleHandler ruleHandler, effectsApplicator effectsApplicator)
-    // {
-    //   this.ruleHandler = ruleHandler;
-    //   this.effectsApplicator = effectsApplicator;
-    // }
-
     private void OnCollisionEnter(Collision collision)
     {
       CollisionEffect(collision.gameObject);
@@ -91,7 +84,7 @@ public class BulletMovement : MonoBehaviour
 
           bp.HidePartAndReplace();
           bp.enemy.Kill();
-          
+
           DestroyMyself();
           return;
       }

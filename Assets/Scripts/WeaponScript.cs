@@ -81,6 +81,9 @@ public class WeaponScript : MonoBehaviour
           bullet.tag = "PlayerBullet";
           bullet.layer = LayerMask.NameToLayer("Player Bullet");
           effectsApplicator.bulletList.Add(bullet);
+
+          effectsApplicator.PlaySound("gunshot");
+
         }
         else
         {
@@ -117,6 +120,8 @@ public class WeaponScript : MonoBehaviour
         s.AppendCallback(() => rb.AddForce(Camera.main.transform.forward * 10, ForceMode.Impulse));
         s.AppendCallback(() => rb.AddTorque(transform.transform.right + transform.transform.up * 20, ForceMode.Impulse));
 
+        effectsApplicator.PlaySound("gun throw");
+
     }
 
     public void Pickup()
@@ -131,6 +136,8 @@ public class WeaponScript : MonoBehaviour
 
         transform.DOLocalMove(Vector3.zero, .25f).SetEase(Ease.OutBack).SetUpdate(true);
         transform.DOLocalRotate(Vector3.zero, .25f).SetUpdate(true);
+
+        effectsApplicator.PlaySound("gun pickup");
     }
 
     public void Release()
@@ -154,6 +161,7 @@ public class WeaponScript : MonoBehaviour
 
         yield return new WaitForSeconds(reloadTime);
         reloading = false;
+        effectsApplicator.PlaySound("gun reload");
     }
 
     //Reloading icon

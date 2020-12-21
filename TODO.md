@@ -36,12 +36,17 @@ Clearer that Time is Move impacts time, an objective to remove
     [X] Stop - [X] Voice clip - [X] White fade
     [ ]"SUPER HOT" text (?)
 
+- Music
+  [X] Create normal/remix track
+  [ ] Loop through them
+  [ ] Switch between them
+
 - Polish sounds
   - [X] Time Deformation effect
   - [X] Space Deformation effect
-  - [ ] Gun shoot sounds player + [X] ennemy
-  - [ ] Gun reload sounds
-  - [ ] Gun pick up sounds
+  - [X] Gun shoot sounds player + [X] ennemy
+  - [X] Gun reload sounds
+  - [X] Gun pick up sounds
   - [X] Ennemy death sound
 
 

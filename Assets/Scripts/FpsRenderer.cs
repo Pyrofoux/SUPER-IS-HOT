@@ -16,7 +16,8 @@ public class FpsRenderer : MonoBehaviour
     public AudioClip GunThrowClip;
     public AudioClip DeathClip;
 
-    private AudioSource audioSource;
+    public AudioSource audioSourceTimeDeformed;
+    public AudioSource audioSourceClassic;
     private GameObject hud;
     private WeaponScript weapon;
 
@@ -30,7 +31,7 @@ public class FpsRenderer : MonoBehaviour
       effectsApplicator = GetComponent<EffectsApplicator>();
       weapon = effectsApplicator.weapon;
 
-      audioSource= GetComponent<AudioSource>();
+      //audioSource= GetComponent<AudioSource>();
     }
 
     // Update is called once per frame
@@ -86,28 +87,36 @@ public class FpsRenderer : MonoBehaviour
     }
 
 
-    public void PlaySound(string soundName, Vector3 position)
+    public void PlaySound(string soundName)
     {
       float baseVolume = 0.9f;
       if(soundName == "gunshot")
       {
-        audioSource.PlayOneShot(GunShotClip, baseVolume);
+        audioSourceClassic.PlayOneShot(GunShotClip, baseVolume);
+        if(!effectsApplicator.CheckTimeMoves())
+        audioSourceTimeDeformed.PlayOneShot(GunShotClip, baseVolume);
       }
       else if(soundName == "gun reload")
       {
-        audioSource.PlayOneShot(GunReloadClip, baseVolume);
+        audioSourceClassic.PlayOneShot(GunReloadClip, baseVolume);
       }
       else if(soundName == "gun throw")
       {
-        audioSource.PlayOneShot(GunThrowClip, baseVolume);
+        audioSourceClassic.PlayOneShot(GunThrowClip, baseVolume);
+        if(!effectsApplicator.CheckTimeMoves())
+        audioSourceTimeDeformed.PlayOneShot(GunThrowClip, baseVolume);
       }
       else if(soundName == "gun pickup")
       {
-        audioSource.PlayOneShot(GunPickUpClip, baseVolume);
+        audioSourceClassic.PlayOneShot(GunPickUpClip, baseVolume);
       }
       else if(soundName == "death")
       {
-        audioSource.PlayOneShot(DeathClip, baseVolume);
+        audioSourceClassic.PlayOneShot(DeathClip, baseVolume);
+      }
+      else if(soundName == "SUPERHOT")
+      {
+        audioSourceClassic.PlayOneShot(SuperHotClip, baseVolume);
       }
     }
 
@@ -115,8 +124,11 @@ public class FpsRenderer : MonoBehaviour
     {
       if(effectsApplicator.fading) return;
         effectsApplicator.fading = true;
+
+        float duration = 1f;
+
         string sceneName = UnityEngine.SceneManagement.SceneManager.GetActiveScene().name;
-        Initiate.Fade(sceneName, Color.white, 1.0f);
+        Initiate.Fade(sceneName, Color.white, 1/duration);
 
     }
 
@@ -129,18 +141,21 @@ public class FpsRenderer : MonoBehaviour
 
       dying = true;
 
+      PlaySound("death");
+
       string sceneName = UnityEngine.SceneManagement.SceneManager.GetActiveScene().name;
-      Initiate.Fade(sceneName, Color.red, 1.5f);
+      float duration = 1.5f;
+      Initiate.Fade(sceneName, Color.red, 1/duration);
     }
 
     public void Win()
     {
       effectsApplicator.fading = true;
-      audioSource.PlayOneShot(SuperHotClip, 1.0f);
+      PlaySound("SUPERHOT");
 
       string sceneName = UnityEngine.SceneManagement.SceneManager.GetActiveScene().name;
-      float time = 5f;
-      Initiate.Fade(sceneName, Color.white, 1/time);
+      float duration = 5f;
+      Initiate.Fade(sceneName, Color.white, 1/duration);
     }
 
     public void OpenDisplay()

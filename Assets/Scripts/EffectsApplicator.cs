@@ -95,7 +95,7 @@ public class EffectsApplicator : MonoBehaviour
     {
       if(ruleHandler.CheckEffectAndAssert("You is Dead"))
       {
-        //fpsRenderer.Die();
+        fpsRenderer.Die();
       }
     }
 
@@ -257,16 +257,16 @@ public class EffectsApplicator : MonoBehaviour
         return Camera.main.transform.position + (Camera.main.transform.forward * .5f) + (Camera.main.transform.up * -.02f);
     }
 
+
     public void PlaySound(string soundName)
     {
-      PlaySound(soundName, new Vector3(0,0,0));
+      fpsRenderer.PlaySound(soundName);
     }
 
-    public void PlaySound(string soundName, Vector3 position)
+    public bool CheckTimeMoves()
     {
-      fpsRenderer.PlaySound(soundName, position);
+      return ruleHandler.CanXMove("Time");
     }
-
 
 
 

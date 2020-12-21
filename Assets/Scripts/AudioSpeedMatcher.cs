@@ -4,12 +4,12 @@ using UnityEngine;
 public class AudioSpeedMatcher : MonoBehaviour
 {
 
-  AudioSource audioSource;
+  public AudioSource audioSource;
 
 
   public void Start()
   {
-      audioSource = GetComponent<AudioSource>();
+      
   }
 
   public void Update()
