@@ -32,7 +32,6 @@ public class EffectsApplicator : MonoBehaviour
     public GameObject bulletPrefab;
 
 
-    private GameObject hud;
     private RuleHandler ruleHandler;
     private BabaWorld babaWorld;
     private FpsRenderer fpsRenderer;
@@ -68,8 +67,7 @@ public class EffectsApplicator : MonoBehaviour
       Application.targetFrameRate = 60;
 
 
-      hud = (GameObject) GameObject.Find("HUD_Baba");
-      levelManager = GameObject.Find("Level Manager").GetComponent<LevelManager>();
+      levelManager = GameObject.FindWithTag("LevelManager").GetComponent<LevelManager>();
       ruleHandler = GetComponent<RuleHandler>();
       babaWorld = GetComponent<BabaWorld>();
       fpsRenderer = GetComponent<FpsRenderer>();
@@ -145,7 +143,7 @@ public class EffectsApplicator : MonoBehaviour
 
       // No key actions during title screen
       //TODO: except E
-      if(levelManager.IsTitleScreen()) return;
+      if(isTitleScreen()) return;
 
       //Switch baba mode
       if(Input.GetKeyDown(KeyCode.E))
@@ -306,6 +304,11 @@ public class EffectsApplicator : MonoBehaviour
     public void ManualTimeStop(bool stop)
     {
       forceTimeStop = stop;
+    }
+
+    public bool isTitleScreen()
+    {
+      return levelManager.isTitleScreen();
     }
 
 

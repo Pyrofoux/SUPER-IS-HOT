@@ -198,6 +198,8 @@ MonoBehaviour:
     type: 3}
   ControlsRight: {fileID: 4680169414386904323, guid: d04a89c7b99ce514c9ed58e9c8ab1bcd,
     type: 3}
+  Title: {fileID: 3523174641156656307, guid: 4d4a15dea6857394ebdc4b46bfa7b7f2, type: 3}
+  hud: {fileID: 6301939464768589788}
   BabaUpSprite: {fileID: -7486092956772349302, guid: e8f6988542c6aa746b3f275f69dd0d1b,
     type: 3}
   BabaDownSprite: {fileID: -3627264120405484348, guid: e8f6988542c6aa746b3f275f69dd0d1b,
@@ -259,6 +261,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   weaponCursor: {fileID: 4045861229666450963}
+  hud: {fileID: 6742378823037371836}
   SuperHotClip: {fileID: 8300000, guid: b777db248e483724895c317fee5e1734, type: 3}
   GunShotClip: {fileID: 8300000, guid: d455dacc33019514caaa57b1ecd950cb, type: 3}
   GunReloadClip: {fileID: 8300000, guid: db85d8019b59bdd479a3707e91235e93, type: 3}
@@ -848,7 +851,7 @@ Canvas:
   m_SortingBucketNormalizedSize: 0
   m_AdditionalShaderChannelsFlag: 25
   m_SortingLayerID: 0
-  m_SortingOrder: 0
+  m_SortingOrder: -2
   m_TargetDisplay: 0
 --- !u!114 &5026760157429804894
 MonoBehaviour:

@@ -12,6 +12,8 @@ public class BabaRenderer : MonoBehaviour
   public Image tilePrefab;
   public Image ControlsLeft;
   public Image ControlsRight;
+  public Image Title;
+  public GameObject hud;
 
   [Header("Sprites")]
   public Sprite BabaUpSprite;
@@ -43,7 +45,6 @@ public class BabaRenderer : MonoBehaviour
 
 
   //Private
-  private GameObject hud;
   private Vector3 hudCenter;
   private BabaWorld babaWorld;
 
@@ -56,6 +57,9 @@ public class BabaRenderer : MonoBehaviour
   float startpointY;
   float horizontalSpacing;
   float verticalSpacing;
+
+  float startpointXTitleScreen;
+  float startpointYTitleScreen;
 
   float maxHTiles = 13;
   float maxVtiles = 8;
@@ -72,7 +76,6 @@ public class BabaRenderer : MonoBehaviour
     {
 
       //get canvas HUD
-      hud = (GameObject) GameObject.Find("HUD_Baba");
       hudCenter = hud.transform.position;
       babaWorld = GetComponent<BabaWorld>();
 
@@ -110,9 +113,12 @@ public class BabaRenderer : MonoBehaviour
 
       //Update there because of script order
       startpointX = -(babaWorld.width*tileWidth)/2+tileWidth/2; // horizontal middle
-      startpointY = Screen.height/4+tileWidth/2; // 1/3 of the screen
+      startpointY = Screen.height/4+tileWidth/2; // 1/4 of the screen
       horizontalSpacing = tileWidth;
       verticalSpacing = tileHeight;
+
+      startpointXTitleScreen = startpointX;
+      startpointYTitleScreen = 0;
     }
 
   public void UpdateDisplay()
@@ -187,7 +193,15 @@ public class BabaRenderer : MonoBehaviour
 
   public Vector3 TileToSpace(float x, float y)
   {
-    return hudCenter + new Vector3(startpointX+x*horizontalSpacing,startpointY+y*-verticalSpacing,0);
+    if(babaWorld.isTitleScreen()) // Title screen coordinates are slightly lower than usual
+    {
+      return hudCenter + new Vector3(startpointXTitleScreen+x*horizontalSpacing,startpointYTitleScreen+y*-verticalSpacing,0);
+    }
+    else
+    {
+      return hudCenter + new Vector3(startpointX+x*horizontalSpacing,startpointY+y*-verticalSpacing,0);
+    }
+
   }
 
   public Vector3 TileToSpace(int x, int y)
@@ -201,21 +215,33 @@ public class BabaRenderer : MonoBehaviour
     if(createdSprites)return;
     createdSprites = true;
 
-    //if(babaWorld.IsTitleScreen())
-    // Load Controls panels
-    Image panelLeft = (Image)Instantiate(ControlsLeft, new Vector3(0, 0, 0), Quaternion.identity);
-    panelLeft.transform.SetParent(hud.transform);
-    //Position is set to number of tiles associated to control panel in UpdateResolution
-    panelLeft.transform.position = TileToSpace((float)-sidePanelTileSize-0.5f,(float) babaWorld.height/2);
-    panelLeft.GetComponent<BabaTileDoodleFix>().activated = true;
+    if(babaWorld.isTitleScreen())
+    {
+
+      Title.rectTransform.sizeDelta = new Vector2(tileWidth*8*1.5f, tileHeight*3*1.5f);
+
+      Image titleScreen = (Image)Instantiate(Title, new Vector3(0, 0, 0), Quaternion.identity);
+      titleScreen.transform.SetParent(hud.transform);
+      titleScreen.transform.position = TileToSpace((float)(babaWorld.width-1)/2,(float)-4);
+      //titleScreen.GetComponent<BabaTileDoodleFix>().activated = true;
+    }
+    else
+    {
+
+      // Load Controls panels
+      Image panelLeft = (Image)Instantiate(ControlsLeft, new Vector3(0, 0, 0), Quaternion.identity);
+      panelLeft.transform.SetParent(hud.transform);
+      //Position is set to number of tiles associated to control panel in UpdateResolution
+      panelLeft.transform.position = TileToSpace((float)-sidePanelTileSize-0.5f,(float) babaWorld.height/2);
+      panelLeft.GetComponent<BabaTileDoodleFix>().activated = true;
 
 
-    Image panelRight = (Image)Instantiate(ControlsRight, new Vector3(0, 0, 0), Quaternion.identity);
-    panelRight.transform.SetParent(hud.transform);
-    //Position is set to number of tiles associated to control panel in UpdateResolution
-    panelRight.transform.position = TileToSpace((float)babaWorld.width-0.5f+sidePanelTileSize,(float) babaWorld.height/2);
-    panelRight.GetComponent<BabaTileDoodleFix>().activated = true;
-
+      Image panelRight = (Image)Instantiate(ControlsRight, new Vector3(0, 0, 0), Quaternion.identity);
+      panelRight.transform.SetParent(hud.transform);
+      //Position is set to number of tiles associated to control panel in UpdateResolution
+      panelRight.transform.position = TileToSpace((float)babaWorld.width-0.5f+sidePanelTileSize,(float) babaWorld.height/2);
+      panelRight.GetComponent<BabaTileDoodleFix>().activated = true;
+    }
     //Load center tiles
 
     tileSprites = new Image[babaWorld.width,babaWorld.height];

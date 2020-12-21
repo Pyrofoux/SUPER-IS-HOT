@@ -93,14 +93,7 @@ Y=M_Y=s=M____
 
 [Header("DO NOT TOUCH")]
 
-[TextArea(8,12)]
-private string layout =@"
-_____________
-___T=M<Y=M___
-_____@___$_=H
-__________T=S
-Y=M_Y=s______
-";
+private string layout; // Level to be loaded
 
 
   //Config
@@ -130,6 +123,7 @@ Y=M_Y=s______
   private EffectsApplicator effectsApplicator;
   private RuleHandler ruleHandler;
   private BabaRenderer renderer;
+  private LevelManager levelManager;
 
 
     // Start is called before the first frame update
@@ -143,6 +137,10 @@ Y=M_Y=s______
        ruleHandler = GetComponent<RuleHandler>();
 
        renderer = GetComponent<BabaRenderer>();
+
+       levelManager = GameObject.FindWithTag("LevelManager").GetComponent<LevelManager>();
+
+       layout = levelManager.levelsLayout[levelManager.currentLevel];
 
       //Convert ASCII to tiles
       char[] n = {'\n'};
@@ -585,6 +583,11 @@ Y=M_Y=s______
     {
       string titleCaseWord = word[0].ToString().ToUpper()+word.Substring(1).ToLower();
       return validWords.Contains(titleCaseWord);
+    }
+
+    public bool isTitleScreen()
+    {
+      return levelManager.isTitleScreen();
     }
 
   }

@@ -9,6 +9,7 @@ TagManager:
   - EnnemyBullet
   - BabaUI
   - Gun
+  - LevelManager
   layers:
   - Default
   - TransparentFX

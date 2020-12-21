@@ -7,6 +7,7 @@ public class FpsRenderer : MonoBehaviour
 {
 
     public Image weaponCursor;
+    public GameObject hud;
 
     [Header("Audio clips")]
     public AudioClip SuperHotClip;
@@ -24,7 +25,6 @@ public class FpsRenderer : MonoBehaviour
     public AudioSource audioSourceTimeDeformed;
     public AudioSource audioSourceClassic;
     public AudioSource audioSourceBackgroundTheme;
-    private GameObject hud;
     private WeaponScript weapon;
 
     bool dying = false;
@@ -38,7 +38,6 @@ public class FpsRenderer : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-      hud = (GameObject) GameObject.Find("HUD_SuperHot");
       effectsApplicator = GetComponent<EffectsApplicator>();
       weapon = effectsApplicator.weapon;
 

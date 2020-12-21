@@ -9,16 +9,17 @@ public class LevelManager : MonoBehaviour
   public int maxLevels;
 
 
-  void Awake()
+  void Start()
       {
 
           DontDestroyOnLoad(this.gameObject);
           LoadLevels();
 
           maxLevels = levelsLayout.Count;
+          Debug.Log(levelsLayout.Count);
       }
 
-      public bool IsTitleScreen()
+      public bool isTitleScreen()
       {
         return currentLevel == 0;
       }
@@ -26,29 +27,27 @@ public class LevelManager : MonoBehaviour
 
       public void LoadLevels()
       {
-        levelsLayout[0] =@"
-        _____________
-        ___T=M<Y=M___
-        _____@___$_=H
-        __________T=S
-        Y=M_Y=s______
-        ";
+levelsLayout.Add(@"
+_______@_____
+#1#2#3#4#5#6#
+_____________
+");
 
-        levelsLayout[1] =@"
-        _____________
-        _____________
-        _____@___$_=H
-        __________T=S
-        Y=M_Y=s______
-        ";
+levelsLayout.Add(@"
+_____________
+_____________
+_____@___$_=H
+__________T=S
+Y=M_Y=s______
+");
 
-        levelsLayout[2] =@"
-        _____________
-        _____T=M<Y=M_
-        _________$_=H
-        __________T=S
-        Y=M_Y=s___@__
-        ";
+levelsLayout.Add(@"
+_____________
+_____T=M<Y=M_
+_________$_=H
+__________T=S
+Y=M_Y=s___@__
+");
       }
 
 
