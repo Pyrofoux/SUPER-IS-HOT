@@ -16,12 +16,23 @@ public class FpsRenderer : MonoBehaviour
     public AudioClip GunThrowClip;
     public AudioClip DeathClip;
 
+    [Header("Themes")]
+    public AudioClip BabaOriginalTheme;
+    public AudioClip BabaRemixTheme;
+
+    [Header("Audio Sources")]
     public AudioSource audioSourceTimeDeformed;
     public AudioSource audioSourceClassic;
+    public AudioSource audioSourceBackgroundTheme;
     private GameObject hud;
     private WeaponScript weapon;
 
     bool dying = false;
+    bool winning = false;
+    bool firstThemePlay = false;
+
+    private float bgVolume = 0.75f;
+    private float soundsVolume = 0.9f;
 
     EffectsApplicator effectsApplicator;
     // Start is called before the first frame update
@@ -31,7 +42,10 @@ public class FpsRenderer : MonoBehaviour
       effectsApplicator = GetComponent<EffectsApplicator>();
       weapon = effectsApplicator.weapon;
 
-      //audioSource= GetComponent<AudioSource>();
+
+      // Fade in Background theme
+      StartCoroutine(FadeIn(audioSourceBackgroundTheme, 0.1f, bgVolume));
+
     }
 
     // Update is called once per frame
@@ -44,6 +58,8 @@ public class FpsRenderer : MonoBehaviour
       {
         transform.Rotate(new Vector3(0, 0, 1) * Time.deltaTime * 10);
       }
+      //Stop time when Win
+      //
 
     }
 
@@ -89,7 +105,7 @@ public class FpsRenderer : MonoBehaviour
 
     public void PlaySound(string soundName)
     {
-      float baseVolume = 0.9f;
+      float baseVolume = soundsVolume;
       if(soundName == "gunshot")
       {
         audioSourceClassic.PlayOneShot(GunShotClip, baseVolume);
@@ -116,8 +132,53 @@ public class FpsRenderer : MonoBehaviour
       }
       else if(soundName == "SUPERHOT")
       {
-        audioSourceClassic.PlayOneShot(SuperHotClip, baseVolume);
+        audioSourceClassic.PlayOneShot(SuperHotClip, 1f);
       }
+    }
+
+    public void PlayClassicTheme()
+    {
+      float position = audioSourceBackgroundTheme.time+0.0f;
+      audioSourceBackgroundTheme.Stop();
+      audioSourceBackgroundTheme.loop = true;
+      audioSourceBackgroundTheme.clip = BabaOriginalTheme;
+      audioSourceBackgroundTheme.Play();
+      audioSourceBackgroundTheme.time = position;
+    }
+
+    public void PlayRemixTheme()
+    {
+      float position = audioSourceBackgroundTheme.time+0.0f;
+      audioSourceBackgroundTheme.Stop();
+      audioSourceBackgroundTheme.loop = true;
+      audioSourceBackgroundTheme.clip = BabaRemixTheme;
+      audioSourceBackgroundTheme.Play();
+      audioSourceBackgroundTheme.time = position;
+
+    }
+
+    public static IEnumerator FadeOut (AudioSource audioSource, float FadeStep)
+    {
+
+        while (audioSource.volume > 0) {
+            audioSource.volume -= FadeStep;
+
+            yield return null;
+        }
+        audioSource.volume = 0;
+    }
+
+    public static IEnumerator FadeIn (AudioSource audioSource, float FadeStep, float targetVolume)
+    {
+        audioSource.volume = 0;
+
+        while (audioSource.volume < targetVolume) {
+            audioSource.volume += FadeStep;
+
+            yield return null;
+        }
+
+        audioSource.volume = targetVolume;
     }
 
     public void ReloadLevel()
@@ -136,8 +197,8 @@ public class FpsRenderer : MonoBehaviour
     {
       if(effectsApplicator.fading) return;
       effectsApplicator.fading = true;
-      //effectsApplicator.ThrowWeapon();
-      // Camera "fall" effect
+      effectsApplicator.ThrowWeapon();
+      // + Camera "fall" effect in effectsApplicator
 
       dying = true;
 
@@ -150,21 +211,41 @@ public class FpsRenderer : MonoBehaviour
 
     public void Win()
     {
+      if(effectsApplicator.fading) return;
       effectsApplicator.fading = true;
+
+      winning = true;
+
+      effectsApplicator.ManualTimeStop(true);
+
       PlaySound("SUPERHOT");
 
       string sceneName = UnityEngine.SceneManagement.SceneManager.GetActiveScene().name;
       float duration = 5f;
       Initiate.Fade(sceneName, Color.white, 1/duration);
+
+      effectsApplicator.ManualTimeStop(true);
+
     }
+
 
     public void OpenDisplay()
     {
+      PlayRemixTheme();
       hud.SetActive(true);
     }
 
     public void CloseDisplay()
     {
+
+
+      PlayClassicTheme();
       hud.SetActive(false);
+    }
+
+    //Usage: StartCoroutine(Wait(float time))
+    IEnumerator Wait(float time)
+    {
+        yield return new WaitForSecondsRealtime(time);
     }
 }

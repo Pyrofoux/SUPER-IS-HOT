@@ -1,9 +1,5 @@
 # Todo
 
-- Test player sounds
-- Switch E to "Edit Rules"
-- consider order of panels ?
-- test music switch ?
 - MAKE LEVELS
 
 
@@ -14,13 +10,15 @@ TO CHECK
 - Time is Move by default might change ?
 Clearer that Time is Move impacts time, an objective to remove
 
+# Tweaks
+
+- consider order of panels ?
+- Make gun do a first dull tick before throwing
+- highlight gun when pickable ?
+-
+
 
 # Roadmap
-
-
-- Gameplay Loop:
-  - [ ] Win condition
-  - [X] Loose condition
 
 - [ ] Levels
   - [ ] Handy levels system
@@ -34,40 +32,7 @@ Clearer that Time is Move impacts time, an objective to remove
     White fade
   - [ ] Win transition
     [X] Stop - [X] Voice clip - [X] White fade
-    [ ]"SUPER HOT" text (?)
-
-- Music
-  [X] Create normal/remix track
-  [ ] Loop through them
-  [ ] Switch between them
-
-- Polish sounds
-  - [X] Time Deformation effect
-  - [X] Space Deformation effect
-  - [X] Gun shoot sounds player + [X] ennemy
-  - [X] Gun reload sounds
-  - [X] Gun pick up sounds
-  - [X] Ennemy death sound
-
-
-- [ ] Implement all interactions as Assert, Trigger and Effect (EAT)
-  - [X] You   is Move => Detects when falling
-  - [X] Time  is Move
-  - [X] Shoot is Move
-  - [X] You   is Stop
-  - [X] Time  is Stop
-  - [X] Shoot is Stop
-  - [X] You   is Dead
-  - [X] Time  is Dead
-  - [X] Shoot is Dead
-  - [ ] Super is Hot
-
-  - [X] You is Shoot
-    => Activates only when you shoot (~once = 30 frames)
-    => Makes you shoot once
-
-  - [X] Shoot is You
-    => Teleport you to the (last) bullet
+    [o]"SUPER HOT" text (?)
 
 # Notes
 
@@ -113,6 +78,44 @@ Time management => Can interrupt things, use unusual ways
 Logic breaking => everything had to be flexible, detectable, manipulatable which is not that easy in Unity (JavaScript.. ;n;)
 
 # Done
+
+- Gameplay Loop:
+  - [X] Win condition
+  - [X] Loose condition
+
+
+- Music
+  [X] Create normal/remix track
+  [X] Loop through them
+  [X] Switch between them
+
+- Polish sounds
+  - [X] Time Deformation effect
+  - [X] Space Deformation effect
+  - [X] Gun shoot sounds player + [X] ennemy
+  - [X] Gun reload sounds
+  - [X] Gun pick up sounds
+  - [X] Ennemy death sound
+
+
+- [X] Implement all interactions as Assert, Trigger and Effect (EAT)
+  - [X] You   is Move => Detects when falling
+  - [X] Time  is Move
+  - [X] Shoot is Move
+  - [X] You   is Stop
+  - [X] Time  is Stop
+  - [X] Shoot is Stop
+  - [X] You   is Dead
+  - [X] Time  is Dead
+  - [X] Shoot is Dead
+  - [X] Super is Hot
+
+  - [X] You is Shoot
+    => Activates only when you shoot (~once = 30 frames)
+    => Makes you shoot once
+
+  - [X] Shoot is You
+    => Teleport you to the (last) bullet
 
 -  General Design
   - [X] Bullet limit in guns (3 to 6)

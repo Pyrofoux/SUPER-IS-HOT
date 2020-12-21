@@ -201,6 +201,7 @@ public class BabaRenderer : MonoBehaviour
     if(createdSprites)return;
     createdSprites = true;
 
+    //if(babaWorld.IsTitleScreen())
     // Load Controls panels
     Image panelLeft = (Image)Instantiate(ControlsLeft, new Vector3(0, 0, 0), Quaternion.identity);
     panelLeft.transform.SetParent(hud.transform);

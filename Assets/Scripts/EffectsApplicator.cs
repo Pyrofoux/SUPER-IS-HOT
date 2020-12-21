@@ -13,7 +13,8 @@ public class EffectsApplicator : MonoBehaviour
     public float pickupSphereRadius = 0.5f;
     public float charge;
     //public bool canShoot = true;
-    public bool fading;
+    public bool fading = false;
+    private bool forceTimeStop = false;
 
     public bool babaMode = true;
     public GameObject bullet;
@@ -35,6 +36,7 @@ public class EffectsApplicator : MonoBehaviour
     private RuleHandler ruleHandler;
     private BabaWorld babaWorld;
     private FpsRenderer fpsRenderer;
+    private LevelManager levelManager;
 
 
     // Time constants
@@ -52,6 +54,8 @@ public class EffectsApplicator : MonoBehaviour
 
     private void Awake()
     {
+
+        // Detect starting weapon
         instance = this;
         if (weaponHolder.GetComponentInChildren<WeaponScript>() != null)
             weapon = weaponHolder.GetComponentInChildren<WeaponScript>();
@@ -65,6 +69,7 @@ public class EffectsApplicator : MonoBehaviour
 
 
       hud = (GameObject) GameObject.Find("HUD_Baba");
+      levelManager = GameObject.Find("Level Manager").GetComponent<LevelManager>();
       ruleHandler = GetComponent<RuleHandler>();
       babaWorld = GetComponent<BabaWorld>();
       fpsRenderer = GetComponent<FpsRenderer>();
@@ -82,9 +87,6 @@ public class EffectsApplicator : MonoBehaviour
 
       ruleHandler.CalculateRules();
       ApplyEffects();
-      //ruleHandler.CalculateRules();
-      //ApplyEffects();
-        //ApplyEffects();
 
       fpsRenderer.UpdateCursor();
       CheckWinLoose();
@@ -93,7 +95,14 @@ public class EffectsApplicator : MonoBehaviour
 
     public void CheckWinLoose()
     {
-      if(ruleHandler.CheckEffectAndAssert("You is Dead"))
+      // No winning or losing while in Baba mode
+      if(babaMode) return;
+
+      if(ruleHandler.CheckEffectAndAssert("Super is Hot"))
+      {
+        fpsRenderer.Win();
+      }
+      else if(ruleHandler.CheckEffectAndAssert("You is Dead"))
       {
         fpsRenderer.Die();
       }
@@ -116,7 +125,27 @@ public class EffectsApplicator : MonoBehaviour
     public void ApplyEffects()
     {
 
-      if(fading) return;
+      if(fading)
+      {
+          ChangeTimeSpeed();
+          return;
+      }
+
+      CheckKeysInput();
+
+      CheckGunActions();
+
+      ChangeTimeSpeed();
+
+      ShootIsYouTrigger();
+    }
+
+    public void CheckKeysInput()
+    {
+
+      // No key actions during title screen
+      //TODO: except E
+      if(levelManager.IsTitleScreen()) return;
 
       //Switch baba mode
       if(Input.GetKeyDown(KeyCode.E))
@@ -124,104 +153,81 @@ public class EffectsApplicator : MonoBehaviour
         babaMode = !babaMode;
         DisplayMenu();
       }
+      //Restart
+      if (Input.GetKeyDown(KeyCode.R))
+      {
+          //fpsRenderer.Win();
+          fpsRenderer.ReloadLevel();
+      }
 
+      //  Undo
+      if(Input.GetKeyUp(KeyCode.U))
+      {
+        babaWorld.Undo();
+      }
+    }
 
-        //Restart
-        if (Input.GetKeyDown(KeyCode.R))
-        {
-            //fpsRenderer.Win();
-            fpsRenderer.ReloadLevel();
-        }
+    public void CheckGunActions()
+    {
+      int bulletAmount = -1;
+      if(weapon != null)bulletAmount = weapon.bulletAmount;
+      //Shoot
+      bool canShoot = ruleHandler.CheckAssert("You is Shoot") &&  bulletAmount > 0;
+      bool canThrow = true;
 
-        if(Input.GetKeyUp(KeyCode.U))
-        {
-          babaWorld.Undo();
-        }
+      bool askShoot = Input.GetMouseButtonDown(0);
+      bool askThrow = (Input.GetMouseButtonDown(1) || (Input.GetMouseButtonDown(0) && bulletAmount <= 0));
 
+      // Shooting
+      if (!babaMode && canShoot)
+      {
+          // Check wants to shoot or is forced too
+          if (askShoot || (ruleHandler.CheckEffect("You is Shoot"))) //Forced shooting
+          {
+              // Might have to rework how time affects this
+              StopCoroutine(ShootWaitCoroutine(.03f));
+              StartCoroutine(ShootWaitCoroutine(.03f));
+              if (weapon != null)
+              {
+                  weapon.Shoot(SpawnPos(), Camera.main.transform.rotation, false);
+                  GameObject lastBullet = weapon.lastBullet;
 
-        int bulletAmount = -1;
-        if(weapon != null)bulletAmount = weapon.bulletAmount;
-        //Shoot
-        bool canShoot = ruleHandler.CheckAssert("You is Shoot") &&  bulletAmount > 0;
-        bool canThrow = true;
+                  ruleHandler.triggerFrame["You is Shoot"] = 30;
+              }
+          }
+      }
 
-        bool askShoot = Input.GetMouseButtonDown(0);
-        bool askThrow = (Input.GetMouseButtonDown(1) || (Input.GetMouseButtonDown(0) && bulletAmount <= 0));
+      // Throwing
+      if ( !babaMode && askThrow && canThrow)
+      {
+          /*StopCoroutine(ShootWaitCoroutine(.4f));
+          StartCoroutine(ShootWaitCoroutine(.4f));*/
 
-        if (!babaMode && canShoot)
-        {
-            // Check wants to shoot or is forced too
-            if (askShoot || (ruleHandler.CheckEffect("You is Shoot"))) //Forced shooting
-            {
-                // Might have to rework how time affects this
-                StopCoroutine(ShootWaitCoroutine(.03f));
-                StartCoroutine(ShootWaitCoroutine(.03f));
-                if (weapon != null)
-                {
-                    weapon.Shoot(SpawnPos(), Camera.main.transform.rotation, false);
-                    GameObject lastBullet = weapon.lastBullet;
+          ThrowWeapon();
+      }
 
-                    ruleHandler.triggerFrame["You is Shoot"] = 30;
-                }
-            }
-        }
+      //Picking up
+      RaycastHit hit;
 
-        //Throw
-        //bool canThrow = !action;
-        if ( !babaMode && askThrow && canThrow)
-        {
-            /*StopCoroutine(ShootWaitCoroutine(.4f));
-            StartCoroutine(ShootWaitCoroutine(.4f));*/
+      //try with ray first then Sphere
+      if(Physics.Raycast(Camera.main.transform.position, Camera.main.transform.forward, out hit, pickupDistance, weaponLayer))
+      {
+          if (Input.GetMouseButtonDown(0) && weapon == null)
+          {
+              hit.transform.GetComponent<WeaponScript>().Pickup();
+          }
+      }
+      else if(Physics.SphereCast(Camera.main.transform.position, pickupSphereRadius, Camera.main.transform.forward, out hit, pickupDistance, weaponLayer))
+      {
+          if (Input.GetMouseButtonDown(0) && weapon == null)
+          {
+              hit.transform.GetComponent<WeaponScript>().Pickup();
+          }
+      }
+    }
 
-            ThrowWeapon();
-        }
-
-        //Pick up weapons
-        RaycastHit hit;
-
-        //try with ray first then Sphere
-        if(Physics.Raycast(Camera.main.transform.position, Camera.main.transform.forward, out hit, pickupDistance, weaponLayer))
-        {
-            if (Input.GetMouseButtonDown(0) && weapon == null)
-            {
-                hit.transform.GetComponent<WeaponScript>().Pickup();
-            }
-        }
-        else if(Physics.SphereCast(Camera.main.transform.position, pickupSphereRadius, Camera.main.transform.forward, out hit, pickupDistance, weaponLayer))
-        {
-            if (Input.GetMouseButtonDown(0) && weapon == null)
-            {
-                hit.transform.GetComponent<WeaponScript>().Pickup();
-            }
-        }
-
-
-
-        // Time move rules + check game not paused
-        bool timeIsMove = !babaMode && ruleHandler.CanXMove("Time");
-
-        //Let time moving when transitionning
-        //if(fading) timeIsMove = true;
-
-        float timeSpeed;
-        float lerpTime;
-        if(timeIsMove)
-        {
-          timeSpeed = timeFastConst;
-          lerpTime = lerpSlow;
-        }
-        else
-        {
-          timeSpeed = timeSlowConst;
-          lerpTime = lerpFast;
-        }
-
-
-        //Smoothen time acceleration or deceleration
-        Time.timeScale = Mathf.Lerp(Time.timeScale, timeSpeed, lerpTime);
-
-      //Shoot is You effect & trigger
-
+    public void ShootIsYouTrigger()
+    {
       if(!babaMode && ruleHandler.CheckEffectAndAssert("Shoot is You"))
       {
         if(bulletList.Count > 0)
@@ -233,6 +239,35 @@ public class EffectsApplicator : MonoBehaviour
         }
 
       }
+    }
+
+    public void ChangeTimeSpeed()
+    {
+      // Time move rules + check game not paused
+      bool movingTime = !babaMode && ruleHandler.CanXMove("Time");
+
+      if(forceTimeStop)
+      {
+        movingTime = false;
+      }
+
+
+      float timeSpeed;
+      float lerpTime;
+      if(movingTime)
+      {
+        timeSpeed = timeFastConst;
+        lerpTime = lerpSlow;
+      }
+      else
+      {
+        timeSpeed = timeSlowConst;
+        lerpTime = lerpFast;
+      }
+
+
+      //Smoothen time acceleration or deceleration
+      Time.timeScale = Mathf.Lerp(Time.timeScale, timeSpeed, lerpTime);
     }
 
     public void ThrowWeapon()
@@ -266,6 +301,11 @@ public class EffectsApplicator : MonoBehaviour
     public bool CheckTimeMoves()
     {
       return ruleHandler.CanXMove("Time");
+    }
+
+    public void ManualTimeStop(bool stop)
+    {
+      forceTimeStop = stop;
     }
 
 

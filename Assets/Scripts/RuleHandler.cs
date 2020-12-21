@@ -52,7 +52,7 @@ public class RuleHandler : MonoBehaviour
        //deadOnce["Shoot"] = false;
 
        triggerFrame = new Dictionary<string, int>();
-       triggerFrameEvents = new string[]{"Shoot is Dead", "You is Shoot", "Shoot is You", "You is Move", "You is Dead"};
+       triggerFrameEvents = new string[]{"Shoot is Dead", "You is Shoot", "Shoot is You", "You is Move", "You is Dead", "Time is Stop"};
        for(int i =0; i < triggerFrameEvents.Length; i++)
        {
          triggerFrame[triggerFrameEvents[i]] = 0;
@@ -105,7 +105,7 @@ public class RuleHandler : MonoBehaviour
         //Time is always flowing, unless it is stopped
         //and it can only be stopped by killing it
         //getting existentialist vibes rn
-        triggers["Time is Stop"] = !CanXMove("Time");
+        triggers["Time is Stop"] = triggers["Time is Stop"] || !CanXMove("Time");
         //|| triggers["Time is Dead"];
         triggers["Time is Move"] = CanXMove("Time");
 
