@@ -9,14 +9,14 @@ public class LevelManager : MonoBehaviour
   public int maxLevels;
 
 
-  void Start()
+  void Awake()
       {
 
           DontDestroyOnLoad(this.gameObject);
           LoadLevels();
 
           maxLevels = levelsLayout.Count;
-          Debug.Log(levelsLayout.Count);
+          //Debug.Log(levelsLayout.Count);
       }
 
       public bool isTitleScreen()
@@ -26,10 +26,12 @@ public class LevelManager : MonoBehaviour
 
       public void SwitchLevel(int id)
       {
+        Debug.Log("Switching to "+id.ToString());
         if(id >= maxLevels)
         {
           id = 0;
         }
+        Debug.Log("Switched to "+id.ToString());
 
         currentLevel = id;
 

@@ -5,6 +5,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using System.Linq;
 using System.IO;
+using UnityEngine.SceneManagement;
 
 public class BabaWorld : MonoBehaviour
 {
@@ -138,7 +139,18 @@ private string layout; // Level to be loaded
 
        renderer = GetComponent<BabaRenderer>();
 
-       levelManager = GameObject.FindWithTag("LevelManager").GetComponent<LevelManager>();
+       GameObject levelManagerGo = GameObject.FindWithTag("LevelManager");
+       if(levelManagerGo != null)
+       {
+         levelManager = levelManagerGo.GetComponent<LevelManager>();
+       }
+       else// for testing single level
+       {
+         levelManager = createLevelManager();
+       }
+
+
+
 
        layout = levelManager.levelsLayout[levelManager.currentLevel];
 
@@ -212,6 +224,20 @@ private string layout; // Level to be loaded
           renderer.UpdateDisplay();
         }
       }
+    }
+
+    public LevelManager createLevelManager()
+    {
+      LevelManager levelManager = gameObject.AddComponent<LevelManager>();
+      levelManager.tag = "LevelManager";
+      string sceneName = SceneManager.GetActiveScene().name;
+      int currentLevelInt;
+      currentLevelInt = int.Parse(sceneName.Split('-')[1]);
+      Debug.Log("Loaded");
+      Debug.Log(currentLevelInt);
+      levelManager.SwitchLevel(currentLevelInt);
+
+      return levelManager;
     }
 
 

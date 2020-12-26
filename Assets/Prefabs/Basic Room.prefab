@@ -103,7 +103,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5326169244093841500}
   m_Layer: 0
-  m_Name: Env
+  m_Name: Basic Room
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -156,8 +156,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5326169244306294057}
   m_LocalRotation: {x: -0, y: -0, z: -0.7071068, w: 0.7071068}
-  m_LocalPosition: {x: -32.68, y: 17.23, z: -133.44582}
-  m_LocalScale: {x: 19.124352, y: 0.14338006, z: 57.116997}
+  m_LocalPosition: {x: -32.68, y: 22.065, z: -131.625}
+  m_LocalScale: {x: 9.453604, y: 0.14338006, z: 53.4761}
   m_Children: []
   m_Father: {fileID: 5326169244093841500}
   m_RootOrder: 2
@@ -423,12 +423,12 @@ PrefabInstance:
     - target: {fileID: 1180940891911196096, guid: b67282095f4043e4bb5f67531888d6a7,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 17.2
+      value: 22.558
       objectReference: {fileID: 0}
     - target: {fileID: 1180940891911196096, guid: b67282095f4043e4bb5f67531888d6a7,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: -133.44582
+      value: -133.635
       objectReference: {fileID: 0}
     - target: {fileID: 1180940891911196096, guid: b67282095f4043e4bb5f67531888d6a7,
         type: 3}
@@ -469,6 +469,16 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: -90
+      objectReference: {fileID: 0}
+    - target: {fileID: 1180940891911196096, guid: b67282095f4043e4bb5f67531888d6a7,
+        type: 3}
+      propertyPath: m_LocalScale.x
+      value: 8.319086
+      objectReference: {fileID: 0}
+    - target: {fileID: 1180940891911196096, guid: b67282095f4043e4bb5f67531888d6a7,
+        type: 3}
+      propertyPath: m_LocalScale.z
+      value: 57.495537
       objectReference: {fileID: 0}
     - target: {fileID: 1180940891911196159, guid: b67282095f4043e4bb5f67531888d6a7,
         type: 3}

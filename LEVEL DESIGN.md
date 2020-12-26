@@ -8,6 +8,15 @@ Legend:
 
 Main Theme ideas:
 
+- Tutorial
+3 ennemies (Super, Is, Hot)
+(v) Time is Stop
+Use the gun to kill them but bullets are stopped
+Must make Time is Move
+and then use Super is Hot
+Makes understand: main time stop mechanic, main unlocking mechanic,
+main gameloop win mechanic, main death mechanic
+
 - Suicide
   Solution = counter-intuitive use of
   Super is Hot < You is Dead
@@ -24,10 +33,15 @@ Main Theme ideas:
   You is Move to make You Move
 
 -  
+(cf notebook)
 Time is Move < You is Shoot
 
 
 
+- Friendly Fire
+Can't shoot
+Let ennemies kill each other
+They have the needed Super is Hot
 
 - Gather levels ideas from notes and notebook
 1 - Tutorial

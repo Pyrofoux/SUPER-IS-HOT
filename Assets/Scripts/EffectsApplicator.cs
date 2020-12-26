@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using DG.Tweening;
 
+
 public class EffectsApplicator : MonoBehaviour
 {
 
@@ -67,7 +68,13 @@ public class EffectsApplicator : MonoBehaviour
       Application.targetFrameRate = 60;
 
 
-      levelManager = GameObject.FindWithTag("LevelManager").GetComponent<LevelManager>();
+      GameObject levelManagerGo = GameObject.FindWithTag("LevelManager");
+      if(levelManagerGo != null)
+      {
+        levelManager = levelManagerGo.GetComponent<LevelManager>();
+      }
+
+
       ruleHandler = GetComponent<RuleHandler>();
       babaWorld = GetComponent<BabaWorld>();
       fpsRenderer = GetComponent<FpsRenderer>();
@@ -353,8 +360,6 @@ public class EffectsApplicator : MonoBehaviour
       levelManager.SwitchNextLevel();
       return "Level-"+levelManager.currentLevel.ToString();
     }
-
-
 
 
 }
