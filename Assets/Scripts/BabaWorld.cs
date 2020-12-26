@@ -590,6 +590,11 @@ private string layout; // Level to be loaded
       return levelManager.isTitleScreen();
     }
 
+    public int getSelectedLevelId()
+    {
+      return getTile(baba.x, baba.y+1).lockedId;
+    }
+
   }
 
 

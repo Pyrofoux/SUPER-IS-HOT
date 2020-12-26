@@ -26,6 +26,7 @@ public class WeaponScript : MonoBehaviour
     EffectsApplicator effectsApplicator;
     public bool active = true;
     public bool reloading;
+    public bool realizedEmpty = false; // player must realize a gun is empty before throwing it
     public GameObject cursorTransform;
     public GameObject lastBullet;
 
@@ -120,6 +121,7 @@ public class WeaponScript : MonoBehaviour
         s.AppendCallback(() => rb.AddForce(Camera.main.transform.forward * 10, ForceMode.Impulse));
         s.AppendCallback(() => rb.AddTorque(transform.transform.right + transform.transform.up * 20, ForceMode.Impulse));
 
+        realizedEmpty = false; //FOrget that a gun is empty when throwing it
         effectsApplicator.PlaySound("gun throw");
 
     }

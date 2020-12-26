@@ -3,6 +3,7 @@
 - MAKE LEVELS
 
 
+
 # Bugfix
 
 
@@ -13,7 +14,7 @@ Clearer that Time is Move impacts time, an objective to remove
 # Tweaks
 
 - consider order of panels ?
-- Make gun do a first dull tick before throwing
+[X] Make gun do a first dull tick before throwing
 - highlight gun when pickable ?
 -
 
@@ -21,16 +22,16 @@ Clearer that Time is Move impacts time, an objective to remove
 # Roadmap
 
 - [ ] Levels
-  - [ ] Handy levels system
+  - [X] Handy levels system
   - [ ] Map out ~10 levels
-  - [ ] Level selection screen
+  - [X] Level selection screen
 
 - Menu and transitions
   - [X] Death transition
     Red fade -- restart
   - [X] Restart transition (= Death ?)
     White fade
-  - [ ] Win transition
+  - [X] Win transition
     [X] Stop - [X] Voice clip - [X] White fade
     [o]"SUPER HOT" text (?)
 
@@ -76,6 +77,14 @@ Coupling
 
 Time management => Can interrupt things, use unusual ways
 Logic breaking => everything had to be flexible, detectable, manipulatable which is not that easy in Unity (JavaScript.. ;n;)
+
+Level design:
+- Puzzle in the sense of having to find a solution to create in the rules
+- Puzzle in the sense of understanding the specific actions to take to win with specific rules
+- Challenges in the form of dexterity, aiming, speed
+  under specific rules
+
+dexterity + Puzzle = "mental gymnastic"
 
 # Done
 

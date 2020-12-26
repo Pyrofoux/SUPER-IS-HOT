@@ -24,11 +24,27 @@ public class LevelManager : MonoBehaviour
         return currentLevel == 0;
       }
 
+      public void SwitchLevel(int id)
+      {
+        if(id >= maxLevels)
+        {
+          id = 0;
+        }
+
+        currentLevel = id;
+
+      }
+
+      public void SwitchNextLevel()
+      {
+        SwitchLevel(currentLevel+1);
+      }
+
 
       public void LoadLevels()
       {
 levelsLayout.Add(@"
-_______@_____
+_@___________
 #1#2#3#4#5#6#
 _____________
 ");

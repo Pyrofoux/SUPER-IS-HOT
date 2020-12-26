@@ -5,9 +5,12 @@ using UnityEngine.UI;
 
 public class FpsRenderer : MonoBehaviour
 {
-
+  [Header("HUD thingies")]
     public Image weaponCursor;
     public GameObject hud;
+    public GameObject TextSUPER;
+    public GameObject TextIS;
+    public GameObject TextHOT;
 
     [Header("Audio clips")]
     public AudioClip SuperHotClip;
@@ -15,6 +18,7 @@ public class FpsRenderer : MonoBehaviour
     public AudioClip GunReloadClip;
     public AudioClip GunPickUpClip;
     public AudioClip GunThrowClip;
+    public AudioClip GunEmptyClip;
     public AudioClip DeathClip;
 
     [Header("Themes")]
@@ -41,6 +45,9 @@ public class FpsRenderer : MonoBehaviour
       effectsApplicator = GetComponent<EffectsApplicator>();
       weapon = effectsApplicator.weapon;
 
+      TextSUPER.SetActive(false);
+      TextIS.SetActive(false);
+      TextHOT.SetActive(false);
 
       // Fade in Background theme
       StartCoroutine(FadeIn(audioSourceBackgroundTheme, 0.1f, bgVolume));
@@ -125,6 +132,10 @@ public class FpsRenderer : MonoBehaviour
       {
         audioSourceClassic.PlayOneShot(GunPickUpClip, baseVolume);
       }
+      else if(soundName == "gun empty")
+      {
+        audioSourceClassic.PlayOneShot(GunEmptyClip, baseVolume);
+      }
       else if(soundName == "death")
       {
         audioSourceClassic.PlayOneShot(DeathClip, baseVolume);
@@ -192,6 +203,22 @@ public class FpsRenderer : MonoBehaviour
 
     }
 
+    public void LoadLevel(int from, int to)
+    {
+
+        float duration = 1f;
+        string sceneName;
+        Color colorFade = Color.white;
+
+        if(from == 0 || to == 0)colorFade = Color.black;
+
+          sceneName = "Level-"+to.ToString();
+          Initiate.Fade(sceneName, colorFade, 1/duration);
+
+
+
+    }
+
     public void Die()
     {
       if(effectsApplicator.fading) return;
@@ -216,17 +243,42 @@ public class FpsRenderer : MonoBehaviour
       winning = true;
 
       effectsApplicator.ManualTimeStop(true);
+      string nextLevel = effectsApplicator.getNextLevel();
 
-      PlaySound("SUPERHOT");
-
-      string sceneName = UnityEngine.SceneManagement.SceneManager.GetActiveScene().name;
-      float duration = 5f;
-      Initiate.Fade(sceneName, Color.white, 1/duration);
-
-      effectsApplicator.ManualTimeStop(true);
+      StartCoroutine(EndAnimation(3, nextLevel));
 
     }
 
+    //Usage: StartCoroutine(Wait(float time))
+    IEnumerator EndAnimation(int times, string sceneName)
+    {
+      float durationA = 0.5f;
+      float durationB = 1f;
+      float durationC = 0.8f;
+      float durationD = 0.68f;
+        for(int i = 0; i < times; i++)
+        {
+          TextSUPER.SetActive(false);
+          TextIS.SetActive(false);
+          TextHOT.SetActive(false);
+
+          yield return new WaitForSecondsRealtime(durationA);
+          PlaySound("SUPERHOT");
+          TextSUPER.SetActive(true);
+          yield return new WaitForSecondsRealtime(durationB);
+          TextIS.SetActive(true);
+          yield return new WaitForSecondsRealtime(durationC);
+          TextHOT.SetActive(true);
+          yield return new WaitForSecondsRealtime(durationD);
+
+          if(i == times-2)
+          {
+            Initiate.Fade(sceneName, Color.white, 1/(durationA+durationB+durationC+durationD));
+          }
+
+        }
+
+    }
 
     public void OpenDisplay()
     {
@@ -242,9 +294,5 @@ public class FpsRenderer : MonoBehaviour
       hud.SetActive(false);
     }
 
-    //Usage: StartCoroutine(Wait(float time))
-    IEnumerator Wait(float time)
-    {
-        yield return new WaitForSecondsRealtime(time);
-    }
+
 }

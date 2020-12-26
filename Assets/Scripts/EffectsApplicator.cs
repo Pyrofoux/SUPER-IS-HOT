@@ -140,10 +140,39 @@ public class EffectsApplicator : MonoBehaviour
 
     public void CheckKeysInput()
     {
+      if(fading) return; // No actions during fading
 
-      // No key actions during title screen
-      //TODO: except E
-      if(isTitleScreen()) return;
+      //Special actions during title screen
+      if(isTitleScreen())
+      {
+        if(Input.GetKeyDown(KeyCode.E))
+        {
+          int selected = babaWorld.getSelectedLevelId();
+          if(selected != -1)
+          {
+            int current = levelManager.currentLevel;
+            levelManager.SwitchLevel(selected);
+            fpsRenderer.LoadLevel(current, selected);
+          }
+        }
+
+        if(Input.GetKeyDown(KeyCode.Escape)) // Quit when pressed Escape on title screen
+        {
+          Application.Quit();
+        }
+
+        return;
+      }
+
+
+      //In-game actions
+
+      if(Input.GetKeyDown(KeyCode.Escape))
+      {
+        int current = levelManager.currentLevel;
+        levelManager.SwitchLevel(0);
+        fpsRenderer.LoadLevel(current, 0);
+      }
 
       //Switch baba mode
       if(Input.GetKeyDown(KeyCode.E))
@@ -168,13 +197,15 @@ public class EffectsApplicator : MonoBehaviour
     public void CheckGunActions()
     {
       int bulletAmount = -1;
+      bool realizedEmpty = true;
       if(weapon != null)bulletAmount = weapon.bulletAmount;
+      if(weapon != null)realizedEmpty = weapon.realizedEmpty;
       //Shoot
       bool canShoot = ruleHandler.CheckAssert("You is Shoot") &&  bulletAmount > 0;
       bool canThrow = true;
 
       bool askShoot = Input.GetMouseButtonDown(0);
-      bool askThrow = (Input.GetMouseButtonDown(1) || (Input.GetMouseButtonDown(0) && bulletAmount <= 0));
+      bool askThrow = (Input.GetMouseButtonDown(1) || (Input.GetMouseButtonDown(0) && bulletAmount <= 0 && realizedEmpty));
 
       // Shooting
       if (!babaMode && canShoot)
@@ -193,6 +224,12 @@ public class EffectsApplicator : MonoBehaviour
                   ruleHandler.triggerFrame["You is Shoot"] = 30;
               }
           }
+      }
+
+      if(!babaMode && askShoot && bulletAmount == 0 && !weapon.realizedEmpty)
+      {
+        weapon.realizedEmpty = true;
+        fpsRenderer.PlaySound("gun empty");
       }
 
       // Throwing
@@ -309,6 +346,12 @@ public class EffectsApplicator : MonoBehaviour
     public bool isTitleScreen()
     {
       return levelManager.isTitleScreen();
+    }
+
+    public string getNextLevel()
+    {
+      levelManager.SwitchNextLevel();
+      return "Level-"+levelManager.currentLevel.ToString();
     }
 
 
