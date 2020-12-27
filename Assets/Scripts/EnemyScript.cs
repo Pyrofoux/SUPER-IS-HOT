@@ -113,9 +113,9 @@ public class EnemyScript : MonoBehaviour
         // Hide word
         if(lockWord != "" && lockWord != "none")
         {
-          string titleCaseWord = lockWord[0].ToString().ToUpper()+lockWord.Substring(1).ToLower();
-          babaWorld.UnlockNext(titleCaseWord);
-          Debug.Log("Unlocked "+titleCaseWord);
+          //string titleCaseWord = lockWord[0].ToString().ToUpper()+lockWord.Substring(1).ToLower();
+          babaWorld.UnlockNext(lockWord);
+          Debug.Log("Unlocked "+lockWord);
         }
 
         //Unlock word

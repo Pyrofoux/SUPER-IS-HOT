@@ -57,7 +57,6 @@ Y=M___s=M_T=M
 
 idea: clusterlevel with lots of text and very few space
 
-
 mitraillette
 @____________
 ___Y=s<Y=s____
@@ -102,7 +101,7 @@ private string layout; // Level to be loaded
   static float inputRate = 1f;
   //static float inputRate = 0.03f;
   //static float inputRateStop = inputRate*0.0001f;
-  private string[] validWords = new string[]{"Time","Move","You","Super","Hot","Shoot","Stop","Dead","Is","When"};
+  private string[] validWords = new string[]{"Time","Move","You","Super","Hot","Shoot","Stop","Dead","is","when"};
   private string[] validRules = new string[]
   {
     "You is Move","Time is Move","Shoot is Move","You is Stop","Time is Stop","Shoot is Stop","You is Dead","Time is Dead","Shoot is Dead","Super is Hot","You is Shoot","Shoot is You"
@@ -479,7 +478,8 @@ private string layout; // Level to be loaded
         if(tile.lockedId == currentUnlockId)
         {
           Debug.Log("Unlocked lock "+tile.lockedId.ToString()+ " for "+currentUnlockId.ToString());
-          Tile replacement = new Word(unlockedWord);
+          string safeWord = parseWord(unlockedWord);
+          Tile replacement = new Word(safeWord);
           setTile(x,y, replacement);
           didReplace = true;
         }
@@ -607,8 +607,17 @@ private string layout; // Level to be loaded
 
     public bool isValidWord(string word)
     {
+      string parsed = parseWord(word);
+      return validWords.Contains(parsed);
+    }
+
+    public string parseWord(string word)
+    {
+      string lower = word.ToLower();
+      if(lower == "is" || lower == "when")return lower;
       string titleCaseWord = word[0].ToString().ToUpper()+word.Substring(1).ToLower();
-      return validWords.Contains(titleCaseWord);
+
+      return titleCaseWord;
     }
 
     public bool isTitleScreen()

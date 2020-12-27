@@ -7,10 +7,21 @@ public class LevelManager : MonoBehaviour
   public List<string> levelsLayout = new List<string>();
   public int currentLevel = 0;
   public int maxLevels;
+  LevelManager instance;
 
 
   void Awake()
       {
+        //Make sure there's only one by scene
+        if(instance == null)
+        {
+             instance = this;
+             DontDestroyOnLoad(gameObject);
+        }else if(instance != this)
+        {
+             Destroy(gameObject);
+        }
+
 
           DontDestroyOnLoad(this.gameObject);
           LoadLevels();
@@ -51,20 +62,32 @@ _@___________
 _____________
 ");
 
+// First Steps
 levelsLayout.Add(@"
-_____________
-_____________
-_____@___$_=H
-__________T=S
-Y=M_Y=s______
+__Y=s____#_____
+__=______#_1___
+__M__T=S____=__
+_________#___2_
+_____@___#_____
 ");
 
+//Naked
+//Time is Move When You is Move
 levelsLayout.Add(@"
+@____________
 _____________
-_____T=M<Y=M_
-_________$_=H
-__________T=S
-Y=M_Y=s___@__
+___T=M<_Y_=M_
+___=___=_____
+___S___M_____
+");
+
+
+levelsLayout.Add(@"
+@____________
+____Y=S<s=M__
+____s=M<Y=S__
+_____________
+Y=M___s=S____
 ");
       }
 

@@ -6,12 +6,20 @@
 
 # Bugfix
 
+Only when starting from level directly:
+- Player can't be killed -- When loading level directly
+- Starting directly from a level and coming back to menu creates two Instances of LevelHandler + Player
+
+- A is B w is (X)
+makes "A is B" not parsed if (X) isn't valid.
+==> acceptable
 
 TO CHECK
 - Time is Move by default might change ?
 Clearer that Time is Move impacts time, an objective to remove
 
 # Tweaks
+- M to mute
 
 - consider order of panels ?
 [X] Make gun do a first dull tick before throwing
@@ -85,6 +93,12 @@ Level design:
   under specific rules
 
 dexterity + Puzzle = "mental gymnastic"
+
+Puzzle parts & Emergence:
+Mapping how the possible rules can combine to create mechanics, puzzle parts or challenges.
+It was helpful to then decide which puzzles pieces or challenges combo to feature in a level.
+Rules < Mechanics < Level Design
+emergence of higher gameplay structures through combination of smaller parts
 
 # Done
 

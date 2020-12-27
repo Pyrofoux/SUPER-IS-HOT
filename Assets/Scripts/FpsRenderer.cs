@@ -81,6 +81,7 @@ public class FpsRenderer : MonoBehaviour
 
     public void UpdateCursor()
     {
+      if(effectsApplicator.fading) return;
 
       if(weapon == null)
       {
