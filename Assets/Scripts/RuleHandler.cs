@@ -113,7 +113,7 @@ public class RuleHandler : MonoBehaviour
 
         // if(!babaWorld.isBabaMode()) // Check game unpaused
         // {
-          if(!CheckEffectAndAssert("You is Stop")) //Check movement is controlled + currently moving
+          if(CanXMove("You")) //Check movement is controlled + currently moving
           {
             float x = Input.GetAxisRaw("Horizontal");
             float y = Input.GetAxisRaw("Vertical");

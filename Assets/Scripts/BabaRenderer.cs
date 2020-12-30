@@ -62,7 +62,7 @@ public class BabaRenderer : MonoBehaviour
   float startpointYTitleScreen;
 
   float maxHTiles = 13;
-  float maxVtiles = 8;
+  float maxVtiles = 9;
   float sidePanelTileSize = 3;
 
   Image[,] tileSprites;
@@ -98,10 +98,14 @@ public class BabaRenderer : MonoBehaviour
       //float neededHorizontalSize = maxHTiles+sidePanelTileSize*2+2+2+1;
 
       float neededHorizontalSize = babaWorld.width+sidePanelTileSize*2+2+2+1;
+      float neededVerticalSize = babaWorld.height+3;
 
       // TODO: check tiles resize or fixed size ? 10px
-      tileWidth = Screen.width/neededHorizontalSize;
-      tileHeight = tileWidth;
+      float maxtileWidth = Screen.width/neededHorizontalSize;
+      float maxtileHeight = Screen.height/neededVerticalSize;
+
+      // Taking the smallest displayable tile size, fitted to vertical+horizontal space
+      tileWidth = tileHeight = Mathf.Min(maxtileWidth, maxtileHeight);
 
       // Update tile prefab dimensions
       tilePrefab.rectTransform.sizeDelta = new Vector2(tileWidth, tileHeight);
@@ -113,7 +117,7 @@ public class BabaRenderer : MonoBehaviour
 
       //Update there because of script order
       startpointX = -(babaWorld.width*tileWidth)/2+tileWidth/2; // horizontal middle
-      startpointY = Screen.height/4+tileWidth/2; // 1/4 of the screen
+      startpointY = Screen.height/4+tileWidth; // 1/4 of the screen
       horizontalSpacing = tileWidth;
       verticalSpacing = tileHeight;
 

@@ -20,6 +20,7 @@ Rank them according to concepts or mastery
 ## Main Theme ideas:
 
 - [x] *First steps*
+
 3 ennemies (Super, Is, Hot)
 (v) Time is Stop, You is Move
 (!u) You is Shoot
@@ -30,19 +31,30 @@ and then create Super is Hot
 Makes understand: rule making, time stop mechanic, unlocking mechanic,
 win mechanic, death mechanic, gun shooting
 
-- [ ] *Naked*
+- [ ] *Classic*
+
 Lots of enemies (6), can't be passed without slowmo.
-No gun in your hand.
-Only the last ennemy unlocks "Hot"
-Lock 1 to 5 are inacessible
 
 Mech: Locked time. Sol = Slow mo + Kill order
 Makes understand: Kill order, rule making, When mechanic
 
+Final:
+```
+@___________
+__________M_
+__T=M<Y=S___
+____________
+_#####T=M##_
+____________
+1_____Y=s___
+2_____=_____
+3_____S_____
+```
+
 - [ ] *Reversal*
+
 Revert the implication created before.
-Helps you understand how things can be rearranged to create new
-opportunities or challenges.
+Helps you understand how things can be rearranged to create new opportunities or challenges.
 
 Mech: Locked movement. Sol = Sliding + (Reloading latency ?) + (Friendly Fire ?)
 Friendly Fire to get first gun (possible to pause with editing rules)
@@ -50,15 +62,43 @@ Reloading latency to help shooting after that
 
 -
 
-- *Flipper*
+- [ ] *Flipper*
+
+Activate the "Shoot is You"
+
+In the main room to kill multiple enemies, "Rocket Me" style, like a pool ball.
+
+Might have to use Time is Stop to aim
+==> unlock it first ?
+
+Mech: Mitraillette + Teleport Gun or Rocket Me
+
+- [ ] *Self-termination*
+
+Give words available to try combinations but the only one working should be
+Super is Hot < You is Die
 
 
-Mech: Mitraillette + Teleport Gun
 
-- *Let me die*
+(its ok if there's other clever solutions)
 
 Mech: Locked movement or shoot. Gravity to create bullet, Suicide to win.
 
+Makes understand: "DEAD" word, ability to pause whenever
+
+- *Just in time*
+
+(v) Time is Move < Shoot is Move #Necessary
+(v) You is Dead < Shoot is Stop  #Killswitch
+
+Shoot one bullet to activate time moving, but when it stops you die. You have to make the trajectory very long before impact.
+
+Use this time to kill the right enemy,
+and write "Shoot is You" making the shoot never stopping
+
+Mech: Create the window, Teleport Gun
+
+Note: Need to have seen Teleport Gun before
 
 ## Mechanics / Puzzle Pieces:
 
@@ -133,25 +173,33 @@ Mech: Locked movement or shoot. Gravity to create bullet, Suicide to win.
 
   Solution: Shoot is You < Shoot is Dead
 
-- *I am bullet*
+- *Rocket move*
   Unlocks:    Movement
   Challenge:  Hard to control
   Requires:   Shooting bullet, Time moving
 
   Solution:   Shoot is You
 
-- *Limited Time*
+- *Rocket move*
+  Unlocks:    Movement
+  Challenge:  Hard to control
+  Requires:   Shooting bullet, Time moving
+
+  Solution:   Shoot is You
+
+- *Time charges*
   Challenge: Time passing/pausing is a bullet-dependent resource
   Requires: Shooting bullet
   (!u) Time is Move/Stop < You is Shoot
 
-- *Limited Movement*
+- *Run charges*
   Challenge: Movement is a bullet-dependent resource
   Requires: Shooting bullet
   (!u) You is Move/Stop < You is Shoot
 
 - *Create the window*
   Challenge: Rule activation in a time dependent of bullet travelling distance
+  Long trajectory = Long activation time
   Requires: Shooting bullet
 
   (Undesired Rule activation)  < Shoot is Dead
@@ -169,6 +217,11 @@ Mech: Locked movement or shoot. Gravity to create bullet, Suicide to win.
   (v) You is Stop < You is Shoot
   Negative if you can control your movement, or under pressure
   Positive if movement is out of control and out of threat
+
+- *Frozen Bridge*
+  Unlocks:    Access to height or passing over an obstacle
+  Challenge:  Hard to jump precisely on an item, hard to control where the item will be
+  Solution: Stopping time for bullets or for a gun, and then jumping over it
 
 ## Natural implications:
 
