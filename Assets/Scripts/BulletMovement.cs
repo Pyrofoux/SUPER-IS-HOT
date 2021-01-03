@@ -139,7 +139,17 @@ public class BulletMovement : MonoBehaviour
   {
     if(gameObject.CompareTag("PlayerBullet"))
     {
-      ruleHandler.triggerFrame["Shoot is Dead"] = 1;
+      if(ruleHandler.CheckEffectAndAssert("Shoot is You"))
+      {
+        // Avoid triggering Shoot is Dead if you're being a bullet
+        // Ideally should only prevent for the current bullet
+        // but its good enough for the currents levels
+      }
+      else
+      {
+        ruleHandler.triggerFrame["Shoot is Dead"] = 1;
+      }
+
     }
     destroyingMyself = true;
 

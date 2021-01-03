@@ -84,6 +84,8 @@ public class MovementController : MonoBehaviour
       //Handle pause and control stop
       m_IsPaused = effectsApplicator.babaMode;
 
+      bool gravityEnabled = !effectsApplicator.babaMode;
+
 
         bool wasGrounded = m_Grounded;
         bool loosedGrounding = false;
@@ -187,13 +189,16 @@ public class MovementController : MonoBehaviour
         }
 
         // Fall down / gravity
-        m_VerticalSpeed = m_VerticalSpeed - 10.0f * Time.fixedDeltaTime;
-        if (m_VerticalSpeed < -10.0f)
-            m_VerticalSpeed = -10.0f; // max fall speed
-        var verticalMove = new Vector3(0, m_VerticalSpeed * Time.fixedDeltaTime, 0);
-        var flag = m_CharacterController.Move(verticalMove);
-        if ((flag & CollisionFlags.Below) != 0)
-            m_VerticalSpeed = 0;
+        if(gravityEnabled)
+        {
+          m_VerticalSpeed = m_VerticalSpeed - 10.0f * Time.fixedDeltaTime;
+          if (m_VerticalSpeed < -10.0f)
+              m_VerticalSpeed = -10.0f; // max fall speed
+          var verticalMove = new Vector3(0, m_VerticalSpeed * Time.fixedDeltaTime, 0);
+          var flag = m_CharacterController.Move(verticalMove);
+          if ((flag & CollisionFlags.Below) != 0)
+              m_VerticalSpeed = 0;
+        }
 
     }
 

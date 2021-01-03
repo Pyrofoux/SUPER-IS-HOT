@@ -136,6 +136,7 @@ public class EffectsApplicator : MonoBehaviour
           return;
       }
 
+
       CheckKeysInput();
 
       CheckGunActions();
@@ -144,6 +145,7 @@ public class EffectsApplicator : MonoBehaviour
 
       ShootIsYouTrigger();
     }
+
 
     public void CheckKeysInput()
     {
@@ -208,7 +210,7 @@ public class EffectsApplicator : MonoBehaviour
       if(weapon != null)bulletAmount = weapon.bulletAmount;
       if(weapon != null)realizedEmpty = weapon.realizedEmpty;
       //Shoot
-      bool canShoot = ruleHandler.CheckAssert("You is Shoot") &&  bulletAmount > 0;
+      bool canShoot = ruleHandler.CheckEffectAndAssert("You is Shoot")  &&  bulletAmount > 0;
       bool canThrow = true;
 
       bool askShoot = Input.GetMouseButtonDown(0);
@@ -274,9 +276,11 @@ public class EffectsApplicator : MonoBehaviour
       {
         if(bulletList.Count > 0)
         {
+          // Apply Shoot is You effect
           GameObject lastShotBullet = bulletList[bulletList.Count -1];
           gameObject.transform.position = lastShotBullet.transform.position;
 
+          // Apply Shoot is You trigger
           ruleHandler.triggerFrame["Shoot is You"] = 1;
         }
 

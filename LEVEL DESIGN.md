@@ -51,7 +51,7 @@ ____________
 3_____S_____
 ```
 
-- [ ] *Reversal*
+- [X] *Reversal*
 
 Revert the implication created before.
 Helps you understand how things can be rearranged to create new opportunities or challenges.
@@ -60,7 +60,15 @@ Mech: Locked movement. Sol = Sliding + (Reloading latency ?) + (Friendly Fire ?)
 Friendly Fire to get first gun (possible to pause with editing rules)
 Reloading latency to help shooting after that
 
--
+Final:
+```
+___#__##__#___T__Y
+@__#T=M<Y=M___=__=
+___#Y###T##___S__S
+__________________
+____2_=_1_________
+______________Y=#s
+```
 
 - [ ] *Flipper*
 
@@ -78,13 +86,15 @@ Mech: Mitraillette + Teleport Gun or Rocket Me
 Give words available to try combinations but the only one working should be
 Super is Hot < You is Die
 
-
-
 (its ok if there's other clever solutions)
 
 Mech: Locked movement or shoot. Gravity to create bullet, Suicide to win.
 
 Makes understand: "DEAD" word, ability to pause whenever
+
++ Puzzle where need movement to shoot a bullet ?
+
+Note: Gravity is a bit too hard to apply  
 
 - *Just in time*
 
@@ -93,8 +103,9 @@ Makes understand: "DEAD" word, ability to pause whenever
 
 Shoot one bullet to activate time moving, but when it stops you die. You have to make the trajectory very long before impact.
 
-Use this time to kill the right enemy,
+Use this time to kill the right enemy by throwing your gun,
 and write "Shoot is You" making the shoot never stopping
+==> Shoot is You doesn't replace killing a bullet
 
 Mech: Create the window, Teleport Gun
 

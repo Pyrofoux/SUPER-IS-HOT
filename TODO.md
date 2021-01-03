@@ -2,13 +2,27 @@
 
 - MAKE LEVELS
 
+- Decide what to do with "You is You" rules
+==> Baba is You use it to enforce not moving you.
+==> Decide not to enable it here
 
 
 # Bugfix
 
+[ ] When finishing all levels, selecting levels from title screen fails
+==> probably because current level is set wrognly
 
-[ ] Highlighting is wrong for one frame when moving words (?? => Default highlighting for words is set to true, for numbers. Could change it by detecting "[" as first character )
-[ ] "Super is Hot" win message is shaded when cursor is shaded to
+
+Level 4:
+[X] Can fall when In baba Mode pause (how to change that?? Disable gravity)
+[X] You is Shoot as effect is only triggered if also You is Shoot as assert
+[?] You is Move is still triggered by arrow key presses -- if no "You is Move" or "You is Stop" is enabled
+
+
+[X] Highlighting is wrong for one frame when moving words
+==> Script order issue
+
+[?] "Super is Hot" win message is shaded when cursor is shaded to
   ==> Because they have the same material and its linked. Create Material copy in cursor/weapon code
 
 [X] Vertical overflow: check the height and use the smallest vertical/horizontal decomposition

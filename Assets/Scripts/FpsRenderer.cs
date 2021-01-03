@@ -49,6 +49,9 @@ public class FpsRenderer : MonoBehaviour
       TextIS.SetActive(false);
       TextHOT.SetActive(false);
 
+      // Set material to instance instead of shared material
+      weaponCursor.material = Instantiate<Material>(weaponCursor.material);
+
       // Fade in Background theme
       StartCoroutine(FadeIn(audioSourceBackgroundTheme, 0.1f, bgVolume));
 
@@ -69,7 +72,6 @@ public class FpsRenderer : MonoBehaviour
 
     }
 
-    // Gun UI stuff, could be placed somewhere else ideally
     public void ResetCursor()
     {
       weaponCursor.transform.localEulerAngles = new Vector3(0,0,0);
