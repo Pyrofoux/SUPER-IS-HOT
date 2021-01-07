@@ -198,7 +198,10 @@ MonoBehaviour:
     type: 3}
   ControlsRight: {fileID: 4680169414386904323, guid: d04a89c7b99ce514c9ed58e9c8ab1bcd,
     type: 3}
-  Title: {fileID: 3523174641156656307, guid: 4d4a15dea6857394ebdc4b46bfa7b7f2, type: 3}
+  StartKeys: {fileID: 3523174641156656307, guid: 822ed3b0b725ece44abfcf7cf6419641,
+    type: 3}
+  StartE: {fileID: 3523174641156656307, guid: cf8f212c0f817ba428eae974cd5d1c97, type: 3}
+  Title: {fileID: 3523174641156656307, guid: c58f6d840ef66274eaab6d9f53c4c6d2, type: 3}
   hud: {fileID: 6301939464768589788}
   BabaUpSprite: {fileID: -7486092956772349302, guid: e8f6988542c6aa746b3f275f69dd0d1b,
     type: 3}

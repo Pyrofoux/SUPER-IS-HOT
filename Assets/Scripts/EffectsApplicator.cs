@@ -51,6 +51,7 @@ public class EffectsApplicator : MonoBehaviour
     [Header("DO NOT TOUCH")]
     public List<GameObject> bulletList;
 
+    private float sceneStartTime;
 
     private void Awake()
     {
@@ -66,7 +67,7 @@ public class EffectsApplicator : MonoBehaviour
     {
       //IMPORTANT: set framerate or the speed will be whatever the machine can handle
       Application.targetFrameRate = 60;
-
+      sceneStartTime = Time.unscaledTime;
 
       GameObject levelManagerGo = GameObject.FindWithTag("LevelManager");
       if(levelManagerGo != null)
@@ -130,7 +131,7 @@ public class EffectsApplicator : MonoBehaviour
     public void ApplyEffects()
     {
 
-      if(fading)
+      if(Initiate.areWeFading)
       {
           ChangeTimeSpeed();
           return;

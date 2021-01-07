@@ -12,6 +12,8 @@ public class BabaRenderer : MonoBehaviour
   public Image tilePrefab;
   public Image ControlsLeft;
   public Image ControlsRight;
+  public Image StartKeys;
+  public Image StartE;
   public Image Title;
   public GameObject hud;
 

@@ -1,6 +1,13 @@
 # Todo
 
-- MAKE LEVELS
+- End screen
+- Start screen with pseudo
+- adapt to joystick
+- create builds
+- test windows build
+- itch.io page with all credits
+
+- MAKE LEVELS [5/6]
 
 - Decide what to do with "You is You" rules
 ==> Baba is You use it to enforce not moving you.
@@ -10,7 +17,13 @@
 # Bugfix
 
 [ ] When finishing all levels, selecting levels from title screen fails
-==> probably because current level is set wrognly
+==> probably because current level is set wrongly
+
+[X] Calling Restart or Escape when fading at start causes issues
+==> prevent R or Escp during the first few seconds of a level
+
+[ ] Ennemies have weird rotation when player is above
+==> Hard to fix right now
 
 
 Level 4:

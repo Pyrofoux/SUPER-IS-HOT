@@ -31,7 +31,7 @@ and then create Super is Hot
 Makes understand: rule making, time stop mechanic, unlocking mechanic,
 win mechanic, death mechanic, gun shooting
 
-- [ ] *Classic*
+- [X] *Classic*
 
 Lots of enemies (6), can't be passed without slowmo.
 
@@ -81,7 +81,17 @@ Might have to use Time is Stop to aim
 
 Mech: Mitraillette + Teleport Gun or Rocket Me
 
-- [ ] *Self-termination*
+Note: I intended to do this level with "Shoot is Move > Time is Move"
+but "You is Shoot  > Time is Move" is quite nice too
+
+Note: Friendly fire makes you cautious about your path, nice
+Note: Might be frustrating to redo the rules each try
+
+Bug: Can't pick up gun sometimes ?
+Bug: fast restart fucks thing sup > Restart when fading (initial scene) fucks things up.
+prevent it during fading = the first few seconds (along with escape)
+
+- [X] *Self-termination*
 
 Give words available to try combinations but the only one working should be
 Super is Hot < You is Die
@@ -96,7 +106,7 @@ Makes understand: "DEAD" word, ability to pause whenever
 
 Note: Gravity is a bit too hard to apply  
 
-- *Just in time*
+- [X] *Just in time*
 
 (v) Time is Move < Shoot is Move #Necessary
 (v) You is Dead < Shoot is Stop  #Killswitch
@@ -107,9 +117,12 @@ Use this time to kill the right enemy by throwing your gun,
 and write "Shoot is You" making the shoot never stopping
 ==> Shoot is You doesn't replace killing a bullet
 
-Mech: Create the window, Teleport Gun
+Mech: Create the window, Teleport/Rocket Gun
 
 Note: Need to have seen Teleport Gun before
+Note: Final design is super challenging and very interesting in terms of mechanics usage
+Note: Need to close roof if we don't the player to go anywhere
+Note: Player may clip through walls, but not win this way
 
 ## Mechanics / Puzzle Pieces:
 

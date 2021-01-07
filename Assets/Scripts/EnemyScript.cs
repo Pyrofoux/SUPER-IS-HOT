@@ -77,6 +77,7 @@ public class EnemyScript : MonoBehaviour
 
           // Smoothly rotate towards the target point.
           transform.LookAt(Vector3.Slerp(destination, transform.position, rotSpeed*Time.deltaTime));
+          //transform.rotation = new Vector3(transform.rotation.x, transform.rotation.y, transform.rotation.z);
         }
 
 
