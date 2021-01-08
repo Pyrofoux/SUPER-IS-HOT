@@ -155,7 +155,7 @@ public class EffectsApplicator : MonoBehaviour
       //Special actions during title screen
       if(isTitleScreen())
       {
-        if(Input.GetKeyDown(KeyCode.E))
+        if(Input.GetButtonDown("Menu E"))
         {
           int selected = babaWorld.getSelectedLevelId();
           if(selected != -1)
@@ -166,7 +166,7 @@ public class EffectsApplicator : MonoBehaviour
           }
         }
 
-        if(Input.GetKeyDown(KeyCode.Escape)) // Quit when pressed Escape on title screen
+        if(Input.GetButtonDown("Escape")) // Quit when pressed Escape on title screen
         {
           Application.Quit();
         }
@@ -177,7 +177,7 @@ public class EffectsApplicator : MonoBehaviour
 
       //In-game actions
 
-      if(Input.GetKeyDown(KeyCode.Escape))
+      if(Input.GetButtonDown("Escape"))
       {
         int current = levelManager.currentLevel;
         levelManager.SwitchLevel(0);
@@ -185,20 +185,20 @@ public class EffectsApplicator : MonoBehaviour
       }
 
       //Switch baba mode
-      if(Input.GetKeyDown(KeyCode.E))
+      if(Input.GetButtonDown("Menu E"))
       {
         babaMode = !babaMode;
         DisplayMenu();
       }
       //Restart
-      if (Input.GetKeyDown(KeyCode.R))
+      if (Input.GetButtonDown("Restart"))
       {
           //fpsRenderer.Win();
           fpsRenderer.ReloadLevel();
       }
 
       //  Undo
-      if(Input.GetKeyUp(KeyCode.U))
+      if(Input.GetButtonUp("Undo"))
       {
         babaWorld.Undo();
       }
@@ -214,8 +214,8 @@ public class EffectsApplicator : MonoBehaviour
       bool canShoot = ruleHandler.CheckEffectAndAssert("You is Shoot")  &&  bulletAmount > 0;
       bool canThrow = true;
 
-      bool askShoot = Input.GetMouseButtonDown(0);
-      bool askThrow = (Input.GetMouseButtonDown(1) || (Input.GetMouseButtonDown(0) && bulletAmount <= 0 && realizedEmpty));
+      bool askShoot = Input.GetButtonDown("Fire1");
+      bool askThrow = (Input.GetButtonDown("Fire2") || (Input.GetButtonDown("Fire1") && bulletAmount <= 0 && realizedEmpty));
 
       // Shooting
       if (!babaMode && canShoot)
@@ -257,14 +257,14 @@ public class EffectsApplicator : MonoBehaviour
       //try with ray first then Sphere
       if(Physics.Raycast(Camera.main.transform.position, Camera.main.transform.forward, out hit, pickupDistance, weaponLayer))
       {
-          if (Input.GetMouseButtonDown(0) && weapon == null)
+          if (Input.GetButtonDown("Fire1") && weapon == null)
           {
               hit.transform.GetComponent<WeaponScript>().Pickup();
           }
       }
       else if(Physics.SphereCast(Camera.main.transform.position, pickupSphereRadius, Camera.main.transform.forward, out hit, pickupDistance, weaponLayer))
       {
-          if (Input.GetMouseButtonDown(0) && weapon == null)
+          if (Input.GetButtonDown("Fire1") && weapon == null)
           {
               hit.transform.GetComponent<WeaponScript>().Pickup();
           }

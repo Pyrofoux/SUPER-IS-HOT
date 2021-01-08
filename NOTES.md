@@ -20,6 +20,10 @@ Because of reloading time. ==> Make cursor in another color when ready/not
 In flipper level, this means the Teleportations stop if you're teleporting too quickly !
 
 
+- Decide what to do with "You is You" rules
+==> Baba is You use it to enforce not moving you.
+==> Decide not to enable it here
+
 
  - You is Stop could be bypassed when falling. Could be an interesting puzzle
   ==> need to implement movement detection based on speed or if falling

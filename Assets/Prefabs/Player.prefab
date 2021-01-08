@@ -201,6 +201,7 @@ MonoBehaviour:
   StartKeys: {fileID: 3523174641156656307, guid: 822ed3b0b725ece44abfcf7cf6419641,
     type: 3}
   StartE: {fileID: 3523174641156656307, guid: cf8f212c0f817ba428eae974cd5d1c97, type: 3}
+  Author: {fileID: 3523174641156656307, guid: c3aa7f8c039b01748ac6a29d990419cc, type: 3}
   Title: {fileID: 3523174641156656307, guid: c58f6d840ef66274eaab6d9f53c4c6d2, type: 3}
   hud: {fileID: 6301939464768589788}
   BabaUpSprite: {fileID: -7486092956772349302, guid: e8f6988542c6aa746b3f275f69dd0d1b,

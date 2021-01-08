@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 7778741788172829517}
   - component: {fileID: 3523174641156656307}
   m_Layer: 5
-  m_Name: TitleScreen prefab
+  m_Name: Title
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

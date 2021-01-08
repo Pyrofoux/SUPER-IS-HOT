@@ -124,7 +124,7 @@ public class MovementController : MonoBehaviour
                 //FootstepPlayer.PlayClip(JumpingAudioCLip, 0.8f,1.1f);
             }
 
-            bool running = Input.GetKeyDown(KeyCode.LeftShift);
+            bool running = false;
             float actualSpeed = running ? RunningSpeed : PlayerSpeed;
 
             if (loosedGrounding)

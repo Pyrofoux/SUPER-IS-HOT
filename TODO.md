@@ -2,22 +2,16 @@
 
 - End screen
 - Start screen with pseudo
-- adapt to joystick
+- [X] Adapt to joystick -> Xbox controller support on Windows
 - create builds
 - test windows build
 - itch.io page with all credits
 
-- MAKE LEVELS [5/6]
 
-- Decide what to do with "You is You" rules
-==> Baba is You use it to enforce not moving you.
-==> Decide not to enable it here
+
 
 
 # Bugfix
-
-[ ] When finishing all levels, selecting levels from title screen fails
-==> probably because current level is set wrongly
 
 [X] Calling Restart or Escape when fading at start causes issues
 ==> prevent R or Escp during the first few seconds of a level

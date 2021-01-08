@@ -14,6 +14,7 @@ public class BabaRenderer : MonoBehaviour
   public Image ControlsRight;
   public Image StartKeys;
   public Image StartE;
+  public Image Author;
   public Image Title;
   public GameObject hud;
 
@@ -229,7 +230,26 @@ public class BabaRenderer : MonoBehaviour
       Image titleScreen = (Image)Instantiate(Title, new Vector3(0, 0, 0), Quaternion.identity);
       titleScreen.transform.SetParent(hud.transform);
       titleScreen.transform.position = TileToSpace((float)(babaWorld.width-1)/2,(float)-4);
-      //titleScreen.GetComponent<BabaTileDoodleFix>().activated = true;
+
+      // Control panels at startup
+
+      Image panelLeft = (Image)Instantiate(StartKeys, new Vector3(0, 0, 0), Quaternion.identity);
+      panelLeft.transform.SetParent(hud.transform);
+      //Position is set to number of tiles associated to control panel in UpdateResolution
+      panelLeft.transform.position = TileToSpace((float)-sidePanelTileSize-0.5f,(float) babaWorld.height/2);
+      panelLeft.GetComponent<BabaTileDoodleFix>().activated = true;
+
+      Image panelRight = (Image)Instantiate(StartE, new Vector3(0, 0, 0), Quaternion.identity);
+      panelRight.transform.SetParent(hud.transform);
+      //Position is set to number of tiles associated to control panel in UpdateResolution
+      panelRight.transform.position = TileToSpace((float)babaWorld.width-0.5f+sidePanelTileSize,(float) babaWorld.height/2);
+      panelRight.GetComponent<BabaTileDoodleFix>().activated = true;
+
+      Image credit = (Image)Instantiate(Author, new Vector3(0, 0, 0), Quaternion.identity);
+      credit.transform.SetParent(hud.transform);
+      credit.transform.position = TileToSpace((float)(babaWorld.width-1)/2,(float)4);
+      credit.GetComponent<BabaTileDoodleFix>().activated = true;
+
     }
     else
     {
@@ -240,6 +260,7 @@ public class BabaRenderer : MonoBehaviour
       //Position is set to number of tiles associated to control panel in UpdateResolution
       panelLeft.transform.position = TileToSpace((float)-sidePanelTileSize-0.5f,(float) babaWorld.height/2);
       panelLeft.GetComponent<BabaTileDoodleFix>().activated = true;
+
 
 
       Image panelRight = (Image)Instantiate(ControlsRight, new Vector3(0, 0, 0), Quaternion.identity);
