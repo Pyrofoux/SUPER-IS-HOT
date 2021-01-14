@@ -17,6 +17,10 @@ Download it now at [http://pyrofoux.itch.io/super-is-hot](http://pyrofoux.itch.i
 <p></p>
 <p></p>
 
+## How to edit the game?
+
+Download the project and open it with Unity version 2019.4.13f1 or higher.
+
 ## How to make custom levels?
 
 - Copy an existing level scene and name "Level-X" with `X` being the number of the level
