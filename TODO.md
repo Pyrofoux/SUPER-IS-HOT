@@ -1,15 +1,11 @@
 # Todo
 
-- End screen
-- Start screen with pseudo
-- [X] Adapt to joystick -> Xbox controller support on Windows
-- create builds
-- test windows build
-- itch.io page with all credits
-
-
-
-
+- Code source
+- jam tags
+- meme: started/ended
+- musician guy Twitter
+- RT ?
+- delete 10
 
 # Bugfix
 

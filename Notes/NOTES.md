@@ -64,11 +64,53 @@ Specify which are the aimed Challenges/Puzzles of the level,
 start with a first draft, evualate it on clarity/difficulty/levelof information available tothe player at this point
 Until satisfied
 
-#Credits
-- Pyrofoux
-- Baba is You dev
-- Superhot team
-- Guy's Unity code base
-- Guy's music
-- The Spriter Ressource guy
-- Shader guy - https://www.youtube.com/watch?v=GXE0VqH08sc
+# Special Thanks to
+- Hempuli, dev of the incredible [Baba is You](https://www.hempuli.com/)
+- The whole [Super Hot](https://superhotgame.com/superhot-prototype/) team
+- André Cardoso's [Superhot Bullet](https://github.com/mixandjam/Superhot-BulletTime) time Unity project
+- Caldric Clement for letting me use their [*Baba is You* theme remix](https://www.youtube.com/watch?v=KJd5A739W5E)
+- The [Spriter Ressource](https://www.spriters-resource.com/pc_computer/babaisyou/sheet/115231/)
+- The person who made this [shader tutorial](https://www.youtube.com/watch?v=GXE0VqH08sc)
+- MBoffin for their [Unity controller example](https://github.com/MBoffin/SimpleFPSController) and the Secret Santa coincidences
+- scrummer03 for patiently waiting for me to finish this game ;u;
+
+
+## Outreach
+
+**Comments**
+
+- Do you have the (legal) right to do that ??
+- Did not know I wanted this / cool mashup
+- Mindblowing
+
+
+
+**Articles**
+
+**Streamers**
+
+Very good to see what are the things that work well, that are comprehensible enough, if the learning curve is nice etc.
+
+* Choosing which order to do the levels was useful for at least 1 person who was stuck and then came back
+
+* (Funny memes about Baba, Superhot and even JoJo)
+
+* Level order might be too rough from 1 to 2 but apart from that, seems good => 2 might be too much open-ended with too much implicit
+
+* Some bugs were there (clipping, enemy crouching) but did not render the game unplayable
+
+* Everyone had very surprising ways to finish a level that I didn't expect, and that's GREAT ! Sometimes they are very clever, sometimes the yare totally unexpected but still work
+
+* Curiosity about rules "Can I become Time ? .. oh that would have been cool but what would that mean"
+
+* Feeling that its not just getting the puzzle solution but also overcoming a challenge: Great
+
+* Feeling that's its both short but also self-sufficient
+
+* Appreciated the music transition!
+
+* Confusion about number of bullets and up to which point a gun can be picked but players can get a sense of that
+
+* Experimentation loop
+
+* Players have Idea for levels! a little desire to experiment more
